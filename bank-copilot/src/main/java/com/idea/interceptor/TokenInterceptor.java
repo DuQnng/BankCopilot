@@ -35,7 +35,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             Claims claims=JwtUtils.parseJWT(token);
             Integer id= (Integer)(claims.get("id"));
             CurrentHolder.setCurrentId(id);
-            log.info("当前员工id为：{}",id);
+            log.info("当前用户id为：{}",id);
         }catch (Exception e){
             log.info("token解析失败");
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);

@@ -4,6 +4,7 @@ import IndexView from '@/views/index/index.vue'
 
 import LayoutView from '@/views/layout/index.vue'
 import LoginView from '@/views/login/index.vue'
+import RegisterView from '@/views/register/index.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,8 +19,24 @@ const router = createRouter({
 
      ]
     },
-    {path: '/login', name: 'login', component: LoginView}
+    {path: '/login', name: 'login', component: LoginView},
+    {
+      path: '/register',
+      name:'register',
+      component: RegisterView
+    }
+
+    
   ]
 })
 
+router.beforeEach((to, from, next) => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'))
+
+  if (to.path !== '/login' && to.path !== '/register' && !loginUser) {
+    next('/login')
+  } else {
+    next()
+  }
+})
 export default router

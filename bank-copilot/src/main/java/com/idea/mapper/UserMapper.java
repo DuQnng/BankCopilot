@@ -12,7 +12,6 @@ import java.util.Map;
 public interface UserMapper {
 
 
-
     @Select("select id,username,name from user where username=#{username} and password=#{password}")
     User selectByUsernameAndPassword(User user);
 
@@ -22,4 +21,9 @@ public interface UserMapper {
     @Update("update user set password = #{password} where id = #{id}")
     int updateById(User user);
 
+    @Select("select * from user where username=#{username}")
+    User selectByUsername(String username);
+
+    @Insert("insert into user(username,password,name,phone,create_time,update_time) values(#{username},#{password},#{name},#{phone},#{createTime},#{updateTime})")
+    int insert(User user);
 }

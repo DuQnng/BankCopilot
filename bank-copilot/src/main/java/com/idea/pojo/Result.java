@@ -27,6 +27,15 @@ public class Result {
         return result;
     }
 
+    public static Result success(String msg) {
+        Result result = new Result();
+        result.msg = msg;
+        result.code = 1;
+        return result;
+    }
+
+
+
     public static Result error(String msg) {
         Result result = new Result();
         result.msg = msg;
