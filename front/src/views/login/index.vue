@@ -24,8 +24,8 @@ const login = async () => {
 }
 
 // 重置
-const clear = () => {
-  loginForm.value = {username:'', password:''};
+const goRegister = () => {
+  router.push('/register')
 }
 </script>
 
@@ -44,7 +44,7 @@ const clear = () => {
 
         <el-form-item>
           <el-button class="button" type="primary" @click="login">登 录</el-button>
-          <el-button class="button" type="info" @click="clear">注 册</el-button>
+          <el-button class="button" type="info" @click="goRegister">注 册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -53,33 +53,55 @@ const clear = () => {
 
 <style scoped>
 #container {
-  padding: 10%;
-  height: 410px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background-image: url('../../assets/bg1.jpg');
   background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
+  z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-form {
-  max-width: 400px;
+  max-width: 410px;
+  width: 90%; /* 改为 90% 更合理，110% 会超出 */
   padding: 30px;
-  margin: 0 auto;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: white;
+  box-sizing: border-box;
+  /* 不要在这里写嵌套样式！scoped 下 .title 和 .button 必须在外层定义 */
 }
 
 .title {
   font-size: 30px;
-  font-family: '微软雅黑';
+  font-family: '微软雅黑', sans-serif;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
   font-weight: bold;
 }
 
+/* 关键：强制所有表单项的内容区域居中 */
+:deep(.el-form-item__content) {
+  text-align: center !important;
+}
+
+/* 按钮组居中 */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
 .button {
-  margin-top: 30px;
-  width: 120px;
+  width: 110px;
 }
 </style>
