@@ -12,6 +12,7 @@ public class TransactionRecord {
 
     private Long id;
     private Long accountId;
+    private String counterpartyAccountNo;
     private String type;
     private BigDecimal amount;
     private String description;

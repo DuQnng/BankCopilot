@@ -150,6 +150,9 @@ const submitPwd = async () => {
               <el-icon><Wallet /></el-icon> 账户总览
             </el-menu-item>
 
+            <el-menu-item index="/transfer">
+              <el-icon><Switch  /></el-icon> 转账
+            </el-menu-item>
             
 
             <!-- 数据统计管理 -->
