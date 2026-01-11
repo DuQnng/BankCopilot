@@ -1,8 +1,8 @@
 package com.idea.controller;
 
 import com.idea.mapper.UserMapper;
-import com.idea.pojo.Result;
-import com.idea.pojo.User;
+import com.idea.entity.Result;
+import com.idea.entity.User;
 import com.idea.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

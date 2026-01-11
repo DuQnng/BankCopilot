@@ -1,7 +1,7 @@
 package com.idea.controller;
 
 import com.idea.dto.ChangePasswordDTO;
-import com.idea.pojo.Result;
+import com.idea.entity.Result;
 import com.idea.service.UserService;
 import com.idea.utils.CurrentHolder;
 import lombok.extern.slf4j.Slf4j;

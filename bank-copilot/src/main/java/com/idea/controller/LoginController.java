@@ -1,12 +1,9 @@
 package com.idea.controller;
 
-import com.idea.dto.ChangePasswordDTO;
-import com.idea.pojo.User;
-import com.idea.pojo.LoginInfo;
-import com.idea.pojo.Result;
+import com.idea.entity.User;
+import com.idea.entity.LoginInfo;
+import com.idea.entity.Result;
 import com.idea.service.UserService;
-import com.idea.util.LoginContext;
-import com.idea.utils.CurrentHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

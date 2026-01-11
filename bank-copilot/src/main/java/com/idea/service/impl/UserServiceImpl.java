@@ -2,7 +2,7 @@ package com.idea.service.impl;
 
 import com.idea.dto.ChangePasswordDTO;
 import com.idea.mapper.UserMapper;
-import com.idea.pojo.*;
+import com.idea.entity.*;
 import com.idea.service.UserService;
 import com.idea.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
             claims.put("username",e.getUsername());
             claims.put("name",e.getName());
             String jwt = JwtUtils.generateJwt(claims);
+            log.info("jwt = {}",jwt);
             return new LoginInfo(e.getId(),e.getUsername(),e.getName(),jwt);
         }
         return null;
