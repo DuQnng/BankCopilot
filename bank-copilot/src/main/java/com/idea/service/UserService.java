@@ -1,12 +1,9 @@
 package com.idea.service;
 
 import com.idea.dto.ChangePasswordDTO;
-import com.idea.pojo.Result;
-import com.idea.pojo.User;
-import com.idea.pojo.LoginInfo;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.idea.entity.Result;
+import com.idea.entity.User;
+import com.idea.entity.LoginInfo;
 
 public interface UserService {
 

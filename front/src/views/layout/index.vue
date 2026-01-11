@@ -44,35 +44,35 @@ const logout = () => {
 // 确认按钮点击事件
 const submitPwd = async () => {
 
-// ========= 前端校验 =========
-if (!pwdForm.value.oldPassword || !pwdForm.value.newPassword || !pwdForm.value.confirmPassword) {
-  ElMessage.warning('请填写完整信息')
-  return
-}
-
-if (pwdForm.value.newPassword !== pwdForm.value.confirmPassword) {
-  ElMessage.warning('两次输入的新密码不一致')
-  return
-}
-
-try {
-  const result = await changePasswordApi({
-    oldPassword: pwdForm.value.oldPassword,
-    newPassword: pwdForm.value.newPassword
-  })
-
-  if (result.code) {
-    ElMessage.success('密码修改成功，请重新登录')
-    pwdDialogVisible.value = false
-    localStorage.removeItem('loginUser')
-    router.push('/login')
-  } else {
-    ElMessage.error(result.msg || '修改失败')
+  // ========= 前端校验 =========
+  if (!pwdForm.value.oldPassword || !pwdForm.value.newPassword || !pwdForm.value.confirmPassword) {
+    ElMessage.warning('请填写完整信息')
+    return
   }
 
-} catch (error) {
-  ElMessage.error('修改密码接口异常')
-}
+  if (pwdForm.value.newPassword !== pwdForm.value.confirmPassword) {
+    ElMessage.warning('两次输入的新密码不一致')
+    return
+  }
+
+  try {
+    const result = await changePasswordApi({
+      oldPassword: pwdForm.value.oldPassword,
+      newPassword: pwdForm.value.newPassword
+    })
+
+    if (result.code) {
+      ElMessage.success('密码修改成功，请重新登录')
+      pwdDialogVisible.value = false
+      localStorage.removeItem('loginUser')
+      router.push('/login')
+    } else {
+      ElMessage.error(result.msg || '修改失败')
+    }
+
+  } catch (error) {
+    ElMessage.error('修改密码接口异常')
+  }
 }
 </script>
 
@@ -146,7 +146,9 @@ try {
               <el-icon><Promotion /></el-icon> 首页
             </el-menu-item>
             
-            
+            <el-menu-item index="/account">
+              <el-icon><Wallet /></el-icon> 账户总览
+            </el-menu-item>
 
             
 

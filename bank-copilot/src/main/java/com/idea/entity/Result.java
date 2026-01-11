@@ -1,8 +1,6 @@
-package com.idea.pojo;
+package com.idea.entity;
 
 import lombok.Data;
-
-import java.io.Serializable;
 
 
 @Data

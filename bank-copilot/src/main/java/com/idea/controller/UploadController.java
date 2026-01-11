@@ -1,6 +1,6 @@
 package com.idea.controller;
 
-import com.idea.pojo.Result;
+import com.idea.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;

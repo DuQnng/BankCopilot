@@ -23,7 +23,7 @@ const login = async () => {
   }
 }
 
-// 重置
+
 const goRegister = () => {
   router.push('/register')
 }

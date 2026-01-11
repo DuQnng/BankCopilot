@@ -1,4 +1,4 @@
-package com.idea.pojo;
+package com.idea.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
