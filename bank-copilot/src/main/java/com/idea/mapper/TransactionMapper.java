@@ -1,6 +1,7 @@
 package com.idea.mapper;
 
 import com.idea.entity.TransactionRecord;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -17,4 +18,9 @@ public interface TransactionMapper {
     """)
     List<TransactionRecord> selectRecentByAccountId(Long accountId);
 
+    @Insert("INSERT INTO transaction_record " +
+            "(account_id, counterparty_account_no, type, amount, description, trade_time) " +
+            "VALUES " +
+            "(#{accountId}, #{counterpartyAccountNo}, #{type}, #{amount}, #{description}, #{tradeTime})")
+    void insert(TransactionRecord record);
 }

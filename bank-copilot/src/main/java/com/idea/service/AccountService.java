@@ -1,5 +1,6 @@
 package com.idea.service;
 
+import com.idea.dto.TransferRequestDTO;
 import com.idea.entity.Account;
 import com.idea.entity.TransactionRecord;
 
@@ -11,4 +12,5 @@ public interface AccountService {
 
     List<TransactionRecord> getRecentTransactions(Long userId);
 
+    void transfer(Long fromUserId, TransferRequestDTO request);
 }

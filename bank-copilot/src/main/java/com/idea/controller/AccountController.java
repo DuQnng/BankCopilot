@@ -1,15 +1,11 @@
 package com.idea.controller;
 
-import com.idea.entity.Account;
+import com.idea.dto.TransferRequestDTO;
 import com.idea.entity.Result;
-import com.idea.entity.TransactionRecord;
 import com.idea.service.AccountService;
 import com.idea.utils.CurrentHolder;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,4 +28,14 @@ public class AccountController {
         return Result.success(accountService.getRecentTransactions(userId.longValue()));
     }
 
+    @PostMapping("/transfer")
+    public Result transfer(@RequestBody TransferRequestDTO request) {
+        Integer fromUserId = CurrentHolder.getCurrentId();
+        try {
+            accountService.transfer(fromUserId.longValue(), request);
+            return Result.success("转账成功");
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage());
+        }
+    }
 }
