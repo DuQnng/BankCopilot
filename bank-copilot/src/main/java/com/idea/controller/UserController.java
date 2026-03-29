@@ -1,7 +1,9 @@
 package com.idea.controller;
 
+import com.idea.common.ErrorCode;
 import com.idea.dto.ChangePasswordDTO;
 import com.idea.entity.Result;
+import com.idea.exception.BusinessException;
 import com.idea.service.UserService;
 import com.idea.utils.CurrentHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,8 @@ public class UserController {
 
         Integer userId = CurrentHolder.getCurrentId();
         if (userId == null) {
-            return Result.error("用户未登录");
+            // ✅ 统一交给全局异常处理器
+            throw BusinessException.of(ErrorCode.UNAUTHORIZED, "用户未登录");
         }
         log.info("修改密码，userId={}, dto={}", userId, dto);
         log.info("修改密码，当前用户ID：{}", userId);

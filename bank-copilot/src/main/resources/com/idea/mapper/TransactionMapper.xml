@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.idea.mapper.TransactionMapper">
+
+    <!-- 分页 & 多条件查询 -->
+    <select id="selectTransactions" resultType="com.idea.vo.TransactionVO">
+        select
+        id,
+        trade_time,
+        counterparty_account_no,
+        type,
+        amount,
+        description
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        <if test="query.type != null and query.type != ''">
+            and type = #{query.type}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+        order by trade_time desc
+    </select>
+
+
+
+    <!-- 统计总记录数 -->
+    <select id="countTransactions" resultType="long">
+        SELECT COUNT(1)
+        FROM transaction_record tr
+        JOIN account a ON tr.account_id = a.id
+        WHERE 1 = 1
+
+        <if test="query.accountNo != null and query.accountNo != ''">
+            AND a.account_no = #{query.accountNo}
+        </if>
+        <if test="query.type != null and query.type != ''">
+            AND tr.type = #{query.type}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            AND tr.trade_time &gt;= #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            AND tr.trade_time &lt;= #{query.endTime}
+        </if>
+    </select>
+
+
+    <select id="sumAmount" resultType="java.math.BigDecimal">
+        select
+        COALESCE(
+        SUM(
+        case
+        when #{query.txnType} = '支出' then ABS(amount)
+        else amount
+        end
+        ), 0
+        )
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        <if test="query.txnType != null and query.txnType != ''">
+            and type = #{query.txnType}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+    </select>
+
+
+    <select id="countByStatistics" resultType="java.lang.Long">
+        select COUNT(1)
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        <if test="query.txnType != null and query.txnType != ''">
+            and type = #{query.txnType}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+    </select>
+
+
+    <select id="maxTransaction" resultType="com.idea.vo.StatisticsPointVO">
+        select
+        DATE_FORMAT(trade_time, '%Y-%m-%d %H:%i:%s') as label,
+        ABS(amount) as value
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        <if test="query.txnType != null and query.txnType != ''">
+            and type = #{query.txnType}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+        order by ABS(amount) desc, trade_time desc
+        limit 1
+    </select>
+
+
+    <select id="statisticsTrend" resultType="com.idea.vo.StatisticsPointVO">
+        select
+        DATE_FORMAT(trade_time, '%Y-%m') as label,
+        COALESCE(
+        SUM(
+        case
+        when type = '支出' then ABS(amount)
+        else amount
+        end
+        ), 0
+        ) as value
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        <if test="query.txnType != null and query.txnType != ''">
+            and type = #{query.txnType}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+        group by DATE_FORMAT(trade_time, '%Y-%m')
+        order by DATE_FORMAT(trade_time, '%Y-%m') asc
+    </select>
+
+</mapper>

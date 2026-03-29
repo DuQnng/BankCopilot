@@ -7,6 +7,10 @@ import LoginView from '@/views/login/index.vue'
 import RegisterView from '@/views/register/index.vue'
 import AccountView from '@/views/account/AccountOverview.vue'
 import TransferView from '@/views/account/Transfer.vue'
+import TransactionsView from '@/views/transaction/Transactions.vue'
+
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +35,14 @@ const router = createRouter({
         path: '/transfer',
         name: 'transfer',
         component: TransferView
+      },
+      {
+        path: '/transactions',
+        name: 'transactions',
+        component: TransactionsView
       }
+
+
      ]
     },
     {path: '/login', name: 'login', component: LoginView},

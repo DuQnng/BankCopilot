@@ -1,9 +1,12 @@
 package com.idea.controller;
 
+import com.idea.common.ErrorCode;
 import com.idea.dto.TransferRequestDTO;
 import com.idea.entity.Result;
+import com.idea.exception.BusinessException;
 import com.idea.service.AccountService;
 import com.idea.utils.CurrentHolder;
+import com.idea.vo.TransferValidateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +34,23 @@ public class AccountController {
     @PostMapping("/transfer")
     public Result transfer(@RequestBody TransferRequestDTO request) {
         Integer fromUserId = CurrentHolder.getCurrentId();
-        try {
-            accountService.transfer(fromUserId.longValue(), request);
-            return Result.success("转账成功");
-        } catch (RuntimeException e) {
-            return Result.error(e.getMessage());
+        // ✅ 没登录就抛 UNAUTHORIZED（别返回 Result.error）
+        if (fromUserId == null) {
+            throw BusinessException.of(ErrorCode.UNAUTHORIZED, "用户未登录");
         }
+
+        accountService.transfer(fromUserId.longValue(), request);
+        return Result.success("转账成功");
     }
+
+    @PostMapping("/transfer/validate")
+    public Result validate(@RequestBody TransferRequestDTO request) {
+        Integer fromUserId = CurrentHolder.getCurrentId();
+        if (fromUserId == null) {
+            throw BusinessException.of(ErrorCode.UNAUTHORIZED, "用户未登录");
+        }
+        TransferValidateVO vo = accountService.validateTransfer(fromUserId.longValue(), request);
+        return Result.success(vo);
+    }
+
 }

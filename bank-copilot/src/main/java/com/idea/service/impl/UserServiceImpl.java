@@ -1,6 +1,8 @@
 package com.idea.service.impl;
 
+import com.idea.common.ErrorCode;
 import com.idea.dto.ChangePasswordDTO;
+import com.idea.exception.BusinessException;
 import com.idea.mapper.UserMapper;
 import com.idea.entity.*;
 import com.idea.service.UserService;
@@ -28,33 +30,40 @@ public class UserServiceImpl implements UserService {
             claims.put("username",e.getUsername());
             claims.put("name",e.getName());
             String jwt = JwtUtils.generateJwt(claims);
-            log.info("jwt = {}",jwt);
+            log.info("获取到的token = {}",jwt);
             return new LoginInfo(e.getId(),e.getUsername(),e.getName(),jwt);
         }
         return null;
     }
 
     @Override
+
     public Result changePassword(Integer userId, ChangePasswordDTO dto){
 
-        log.info("Mapper class = {}", userMapper.getClass());
         User user = userMapper.selectById(userId);
-        log.info("新密码 = {},旧密码={}",dto.getNewPassword(),dto.getOldPassword());
-        if (!isPasswordMatch(dto.getOldPassword(), user.getPassword())) {
-            return Result.error("原密码错误");
+        if (user == null) {
+            // 这个属于“参数/用户状态异常”
+            throw BusinessException.of(ErrorCode.PARAM_INVALID, "用户不存在");
         }
 
-        log.info("新密码 = {},旧密码={}",dto.getNewPassword(),user.getPassword());
-        if (dto.getNewPassword().equals(user.getPassword())) {
-            return Result.error("新密码不能与原密码相同");
+        if (!isPasswordMatch(dto.getOldPassword(), user.getPassword())) {
+            throw BusinessException.of(ErrorCode.PARAM_INVALID, "原密码错误");
+        }
+
+        // ⚠️ 这里你原来写的是 newPassword.equals(user.getPassword())
+        // 但 user.getPassword() 可能是旧密码（一般是加密后的），这判断意义不大
+        // 如果你是明文存储，那OK；如果后面你要加密，建议直接用 oldPassword 判断
+        if (dto.getNewPassword() != null && dto.getNewPassword().equals(user.getPassword())) {
+            throw BusinessException.of(ErrorCode.PARAM_INVALID, "新密码不能与原密码相同");
         }
 
         if (!isPasswordStrong(dto.getNewPassword())) {
-            return Result.error("新密码不符合安全规则");
+            throw BusinessException.of(ErrorCode.PARAM_INVALID, "新密码不符合安全规则（至少8位，包含字母和数字）");
         }
 
         user.setPassword(dto.getNewPassword());
         userMapper.updateById(user);
+
         return Result.success("密码修改成功");
     }
 
@@ -64,6 +73,7 @@ public class UserServiceImpl implements UserService {
 
     private boolean isPasswordStrong(String password) {
         // 简单示例：至少8位，包含字母和数字
+        if (password == null) return false;
         return password.length() >= 8 && password.matches("^(?=.*[A-Za-z])(?=.*\\d).+$");
     }
 

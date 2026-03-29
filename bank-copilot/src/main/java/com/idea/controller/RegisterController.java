@@ -1,5 +1,7 @@
 package com.idea.controller;
 
+import com.idea.common.ErrorCode;
+import com.idea.exception.BusinessException;
 import com.idea.mapper.UserMapper;
 import com.idea.entity.Result;
 import com.idea.entity.User;
@@ -31,9 +33,8 @@ public class RegisterController {
         String phone = body.get("phone");
         // 1. 验证手机号格式
         if (phone == null || !phone.matches("^1[3-9]\\d{9}$")) {
-            return Result.error("手机号格式不正确");
+            throw BusinessException.of(ErrorCode.PHONE_INVALID); // 或 PARAM_INVALID + 自定义msg
         }
-
         // 2. 生成 6 位随机验证码
         String code = String.format("%06d", new Random().nextInt(999999));
         // 3. 打印到日志（开发阶段）
@@ -53,24 +54,24 @@ public class RegisterController {
 
         // 1. 校验必填
         if(username==null||password==null||name==null||phone==null||code==null){
-            return Result.error("请填写完整信息");
+            throw BusinessException.of(ErrorCode.PARAM_INVALID, "请填写完整信息");
         }
 
         // 2. 校验手机号格式
         if(!phone.matches("^1[3-9]\\d{9}$")){
-            return Result.error("手机号格式不正确");
+            throw BusinessException.of(ErrorCode.PHONE_INVALID);
         }
 
         // 3. 校验验证码
         String cacheCode = codeMap.get(phone);
         if(cacheCode==null || !cacheCode.equals(code)){
-            return Result.error("验证码错误或已过期");
+            throw BusinessException.of(ErrorCode.CODE_INVALID);
         }
 
         // 4. 检查用户名是否存在
         User existUser = userMapper.selectByUsername(username);
         if(existUser != null){
-            return Result.error("用户名已存在");
+            throw BusinessException.of(ErrorCode.USERNAME_EXISTS);
         }
 
         // 5. 存入数据库
@@ -88,7 +89,7 @@ public class RegisterController {
             codeMap.remove(phone);
             return Result.success("注册成功，请登录");
         }else{
-            return Result.error("注册失败");
+            throw BusinessException.of(ErrorCode.REGISTER_FAILED);
         }
     }
 }

@@ -74,6 +74,76 @@ const submitPwd = async () => {
     ElMessage.error('修改密码接口异常')
   }
 }
+
+//以下为聊天机器人部分逻辑
+import { nextTick } from 'vue'
+import { chatAssistantApi } from '@/api/assistant'
+
+// ====== 智能客服 Drawer ======
+const assistantVisible = ref(false)
+const chatInput = ref('')
+const chatLoading = ref(false)
+
+// 聊天消息列表：role = 'user' | 'assistant'
+const chatList = ref([
+  {
+    role: 'assistant',
+    content:
+      '尊敬的用户您好，我是您的银行智能客服\n' +
+      '我可以帮你查余额、查流水、转账确认，以及做账单统计与分析。\n' +
+      '您可以尝试问：\n' +
+      '1. 查一下我的余额\n' +
+      '2. 查最近3条支出记录\n' +
+      '3. 向6222...转200元，备注午餐费\n' +
+      '4. 统计这个月总支出\n' +
+      '5. 看一下今年每个月的支出趋势'
+  }
+])
+
+
+const chatBodyRef = ref(null)
+
+const scrollToBottom = async () => {
+  await nextTick()
+  const el = chatBodyRef.value
+  if (el) el.scrollTop = el.scrollHeight
+}
+
+const sendChat = async (text) => {
+  const msg = (text ?? chatInput.value).trim()
+  if (!msg || chatLoading.value) return
+
+  chatList.value.push({ role: 'user', content: msg })
+  chatInput.value = ''
+  await scrollToBottom()
+
+  try {
+    chatLoading.value = true
+    const res = await chatAssistantApi(msg)
+
+    if (res.code) {
+      chatList.value.push({ role: 'assistant', content: res.data?.reply || '（机器人没有返回内容）' })
+    } else {
+      chatList.value.push({ role: 'assistant', content: res.msg || '请求失败' })
+    }
+  } catch (e) {
+    chatList.value.push({ role: 'assistant', content: '网络/接口异常，请稍后再试' })
+  } finally {
+    chatLoading.value = false
+    await scrollToBottom()
+  }
+}
+
+const sendConfirm = () => sendChat('确认')
+const sendCancel = () => sendChat('取消')
+
+// 简单判断：最后一条机器人消息是否在等确认
+const needConfirm = () => {
+  const last = [...chatList.value].reverse().find(x => x.role === 'assistant')
+  return last && last.content.includes('回复【确认】')
+}
+
+
 </script>
 
 <template>
@@ -83,12 +153,17 @@ const submitPwd = async () => {
       <el-header class="header">
         <span class="title">银行智能机器人</span>
         <span class="right_tool">
+            <a href="javascript:;" @click="assistantVisible = true">
+              <el-icon><ChatLineRound /></el-icon> 智能客服 &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            </a>
+
             <a href="javascript:;" @click="pwdDialogVisible = true">
               <el-icon><EditPen /></el-icon> 修改密码 &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
             </a>
-          <a href="javascript:;" @click="logout">
-            <el-icon><SwitchButton /></el-icon> 退出登录 【{{loginName}}】
-          </a>
+
+            <a href="javascript:;" @click="logout">
+              <el-icon><SwitchButton /></el-icon> 退出登录 
+            </a>
         </span>
       </el-header>
 
@@ -133,6 +208,47 @@ const submitPwd = async () => {
     </template>
   </el-dialog>
    
+
+<!-- 以下为客服机器人部分css -->
+ <!-- 智能客服 Drawer -->
+      <el-drawer
+        v-model="assistantVisible"
+        title="智能客服"
+        size="420px"
+      >
+        <!-- 消息区 -->
+        <div ref="chatBodyRef" class="chat-body">
+          <div
+            v-for="(m, idx) in chatList"
+            :key="idx"
+            class="chat-item"
+            :class="m.role"
+          >
+            <div class="bubble">{{ m.content }}</div>
+          </div>
+        </div>
+
+        <!-- 快捷按钮：等确认时显示 -->
+        <div v-if="needConfirm()" class="quick-actions">
+          <el-button type="success" @click="sendConfirm" :loading="chatLoading">确认</el-button>
+          <el-button @click="sendCancel" :disabled="chatLoading">取消</el-button>
+        </div>
+
+        <!-- 输入区 -->
+        <div class="chat-input">
+          <el-input
+            v-model="chatInput"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            placeholder="输入一句话，例如：给6222...转200"
+            @keyup.enter.exact.prevent="sendChat()"
+          />
+          <div class="chat-send">
+            <el-button type="primary" @click="sendChat()" :loading="chatLoading">发送</el-button>
+          </div>
+        </div>
+      </el-drawer>
+
      
 
 
@@ -153,7 +269,10 @@ const submitPwd = async () => {
             <el-menu-item index="/transfer">
               <el-icon><Switch  /></el-icon> 转账
             </el-menu-item>
-            
+
+            <el-menu-item index="/transactions">
+              <el-icon><Document /></el-icon> 交易流水
+            </el-menu-item>
 
             <!-- 数据统计管理 -->
             <!-- <el-sub-menu index="/report">
@@ -219,4 +338,58 @@ a {
   border-right: 1px solid #ccc;
   height: 730px;
 }
+
+.chat-body {
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+  padding: 12px;
+  background: #f6f7fb;
+  border-radius: 10px;
+}
+
+.chat-item {
+  display: flex;
+  margin: 8px 0;
+}
+
+.chat-item.user {
+  justify-content: flex-end;
+}
+
+.chat-item.assistant {
+  justify-content: flex-start;
+}
+
+.bubble {
+  max-width: 85%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  line-height: 1.5;
+  white-space: pre-line; /* 关键：让 \n 换行 */
+  background: white;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.chat-item.user .bubble {
+  background: #d9ecff;
+}
+
+.quick-actions {
+  padding: 8px 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-send {
+  display: flex;
+  justify-content: flex-end;
+}
+
 </style>

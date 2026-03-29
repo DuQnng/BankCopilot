@@ -1,8 +1,10 @@
 package com.idea.controller;
 
+import com.idea.common.ErrorCode;
 import com.idea.entity.User;
 import com.idea.entity.LoginInfo;
 import com.idea.entity.Result;
+import com.idea.exception.BusinessException;
 import com.idea.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class LoginController {
         if(info!=null) {
             return Result.success(info);
         }
-        return Result.error("用户名或密码错误");
+        throw BusinessException.of(ErrorCode.LOGIN_FAILED);
     }
 
 

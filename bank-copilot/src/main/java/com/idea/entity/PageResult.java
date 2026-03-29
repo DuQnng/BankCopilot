@@ -8,7 +8,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageResult<T>{
-    private Long total;
-    private List<T> rows;
+public class PageResult<T> {
+    private long total;
+    private int page;
+    private int size;
+    private List<T> list;
 }
+

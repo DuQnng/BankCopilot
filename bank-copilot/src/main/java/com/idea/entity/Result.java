@@ -2,43 +2,44 @@ package com.idea.entity;
 
 import lombok.Data;
 
-
 @Data
 public class Result {
 
-    private Integer code; //编码：1成功，0为失败
-    private String msg; //错误信息
-    private Object data; //数据
+    private Integer code;     // 1成功，0失败
+    private Integer bizCode;  // 业务错误码，成功固定为0
+    private String msg;
+    private Object data;
 
     public static Result success() {
-        Result result = new Result();
-        result.code = 1;
-        result.msg = "success";
-        return result;
+        Result r = new Result();
+        r.code = 1;
+        r.bizCode = 0;
+        r.msg = "success";
+        return r;
     }
 
-    public static Result success(Object object) {
-        Result result = new Result();
-        result.data = object;
-        result.code = 1;
-        result.msg = "success";
-        return result;
+    public static Result success(Object data) {
+        Result r = new Result();
+        r.code = 1;
+        r.bizCode = 0;
+        r.msg = "success";
+        r.data = data;
+        return r;
     }
-
-    public static Result success(String msg) {
-        Result result = new Result();
-        result.msg = msg;
-        result.code = 1;
-        return result;
-    }
-
-
 
     public static Result error(String msg) {
-        Result result = new Result();
-        result.msg = msg;
-        result.code = 0;
-        return result;
+        Result r = new Result();
+        r.code = 0;
+        r.bizCode = 1000; // 默认未知业务错误
+        r.msg = msg;
+        return r;
     }
 
+    public static Result error(Integer bizCode, String msg) {
+        Result r = new Result();
+        r.code = 0;
+        r.bizCode = bizCode;
+        r.msg = msg;
+        return r;
+    }
 }
