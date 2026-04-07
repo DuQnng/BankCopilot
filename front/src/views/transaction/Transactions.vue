@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import dayjs from 'dayjs'
 import { ElMessage } from 'element-plus'
-import { getTransactionsApi } from '@/api/transaction'
+import { getTransactionsApi, exportTransactionsApi } from '@/api/transaction'
 
 // 查询条件
 const filters = ref({
@@ -26,6 +26,7 @@ const loadData = async () => {
       page: page.value,
       size: size.value
     })
+    // 需要注意如果在 request.js 配置了统一处理 res.data，可以按需调整判断
     if (res.code === 1) {
       tableData.value = res.data.list
       total.value = res.data.total
@@ -67,6 +68,44 @@ const handleClear = () => {
   loadData()
 }
 
+// 导出 Excel
+const handleExport = async () => {
+  try {
+    // 构造请求参数，不需要分页信息
+    const params = {
+      ...filters.value
+    }
+    // 如果日期格式需要转换（例如 Date 对象转为 'YYYY-MM-DD' 字符串），请在此处格式化
+    if (params.startTime) {
+      params.startTime = dayjs(params.startTime).format('YYYY-MM-DD')
+    }
+    if (params.endTime) {
+      params.endTime = dayjs(params.endTime).format('YYYY-MM-DD')
+    }
+
+    const res = await exportTransactionsApi(params)
+    
+    // 创建 blob 对象，并使用 a 标签下载
+    // 注意这里 res 可能是原生的 blob (如果 axios 配置了不对 blob 剥离外层)，或者直接是 blob 数据
+    const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', '交易流水.xlsx')
+    document.body.appendChild(link)
+    link.click()
+    
+    // 释放资源
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+    
+    ElMessage.success('导出成功')
+  } catch (error) {
+    console.error('导出失败', error)
+    ElMessage.error('导出失败，请重试')
+  }
+}
+
 onMounted(() => {
   loadData()
 })
@@ -103,6 +142,7 @@ onMounted(() => {
 
         <el-button type="primary" @click="handleSearch">查询</el-button>
         <el-button @click="handleClear">清空</el-button>
+        <el-button type="success" @click="handleExport">导出 Excel</el-button>
       </div>
 
       <el-table :data="tableData" stripe style="width: 100%">

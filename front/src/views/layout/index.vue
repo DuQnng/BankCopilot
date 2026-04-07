@@ -78,6 +78,8 @@ const submitPwd = async () => {
 //以下为聊天机器人部分逻辑
 import { nextTick } from 'vue'
 import { chatAssistantApi } from '@/api/assistant'
+import * as echarts from 'echarts'
+import request from '@/utils/request'
 
 // ====== 智能客服 Drawer ======
 const assistantVisible = ref(false)
@@ -100,13 +102,121 @@ const chatList = ref([
   }
 ])
 
-
 const chatBodyRef = ref(null)
 
 const scrollToBottom = async () => {
   await nextTick()
   const el = chatBodyRef.value
   if (el) el.scrollTop = el.scrollHeight
+}
+
+const initChart = async (idx, type, data) => {
+  await nextTick()
+  const dom = document.getElementById('chart-' + idx)
+  if (!dom) return
+  
+  // 确保图表容器有实际宽高后再初始化
+  const myChart = echarts.init(dom)
+  const xAxisData = data.map(item => item.label)
+  const seriesData = data.map(item => item.value)
+  
+  myChart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: '15%', right: '5%', bottom: '15%', top: '10%' },
+    xAxis: { type: 'category', data: xAxisData },
+    yAxis: { type: 'value' },
+    series: [{
+      data: seriesData,
+      type: type,
+      smooth: true,
+      itemStyle: { color: '#409EFF' },
+      barWidth: '40%'
+    }]
+  })
+}
+
+const initOverviewCharts = async (idx, data) => {
+  await nextTick()
+  
+  // 初始化柱状图 (收入/支出)
+  const barDom = document.getElementById(`chart-bar-${idx}`)
+  if (barDom) {
+    const myChart = echarts.init(barDom)
+    myChart.setOption({
+      title: { text: '收支对比', left: 'center', textStyle: { fontSize: 13, fontWeight: 'normal' } },
+      tooltip: { trigger: 'item' },
+      grid: { left: '15%', right: '5%', bottom: '15%', top: '25%' },
+      xAxis: { type: 'category', data: data.bar.map(item => item.label) },
+      yAxis: { type: 'value' },
+      series: [{
+        data: data.bar.map(item => ({
+          value: item.value,
+          itemStyle: { color: item.label === '收入' ? '#67c23a' : '#f56c6c' }
+        })),
+        type: 'bar',
+        barWidth: '40%'
+      }]
+    })
+  }
+
+  // 初始化支出饼图
+  if (data.expensePie && data.expensePie.length > 0) {
+    const expDom = document.getElementById(`chart-pie-exp-${idx}`)
+    if (expDom) {
+      const myChart = echarts.init(expDom)
+      myChart.setOption({
+        title: { text: '支出占比(按对方)', left: 'center', textStyle: { fontSize: 13, fontWeight: 'normal' } },
+        tooltip: { trigger: 'item' },
+        series: [{
+          type: 'pie',
+          radius: '50%',
+          center: ['50%', '60%'],
+          data: data.expensePie.map(item => ({ name: item.label, value: item.value }))
+        }]
+      })
+    }
+  }
+
+  // 初始化收入饼图
+  if (data.incomePie && data.incomePie.length > 0) {
+    const incDom = document.getElementById(`chart-pie-inc-${idx}`)
+    if (incDom) {
+      const myChart = echarts.init(incDom)
+      myChart.setOption({
+        title: { text: '收入占比(按对方)', left: 'center', textStyle: { fontSize: 13, fontWeight: 'normal' } },
+        tooltip: { trigger: 'item' },
+        series: [{
+          type: 'pie',
+          radius: '50%',
+          center: ['50%', '60%'],
+          data: data.incomePie.map(item => ({ name: item.label, value: item.value }))
+        }]
+      })
+    }
+  }
+}
+
+const handleDownload = async (url) => {
+  try {
+    ElMessage.info('正在生成报表...')
+    const res = await request({
+      url: url,
+      method: 'get',
+      responseType: 'blob'
+    })
+    const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+    const objectUrl = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = objectUrl
+    link.setAttribute('download', '智能统计报表.xlsx')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(objectUrl)
+    ElMessage.success('下载成功')
+  } catch (error) {
+    ElMessage.error('下载失败')
+  }
 }
 
 const sendChat = async (text) => {
@@ -122,7 +232,22 @@ const sendChat = async (text) => {
     const res = await chatAssistantApi(msg)
 
     if (res.code) {
-      chatList.value.push({ role: 'assistant', content: res.data?.reply || '（机器人没有返回内容）' })
+      chatList.value.push({ 
+        role: 'assistant', 
+        content: res.data?.reply || '（机器人没有返回内容）',
+        chartType: res.data?.chartType,
+        chartData: res.data?.chartData,
+        exportUrl: res.data?.exportUrl
+      })
+      
+      // 如果返回了图表数据，渲染图表
+      if (res.data?.chartType === 'bar' || res.data?.chartType === 'line') {
+        const newIdx = chatList.value.length - 1
+        initChart(newIdx, res.data.chartType, res.data.chartData)
+      } else if (res.data?.chartType === 'overview') {
+        const newIdx = chatList.value.length - 1
+        initOverviewCharts(newIdx, res.data.chartData)
+      }
     } else {
       chatList.value.push({ role: 'assistant', content: res.msg || '请求失败' })
     }
@@ -224,7 +349,36 @@ const needConfirm = () => {
             class="chat-item"
             :class="m.role"
           >
-            <div class="bubble">{{ m.content }}</div>
+            <div class="bubble">
+              <div style="white-space: pre-line;">{{ m.content }}</div>
+              
+              <!-- 数字指标 (如求和、计数) -->
+              <div v-if="m.chartType === 'number'" class="chart-number">
+                <span>统计结果：</span>
+                <span class="highlight">{{ m.chartData }}</span>
+              </div>
+
+              <!-- ECharts 图表容器 -->
+              <div 
+                v-if="m.chartType === 'bar' || m.chartType === 'line'" 
+                :id="'chart-' + idx" 
+                class="chart-container"
+              ></div>
+
+              <!-- 概览多图容器 -->
+              <div v-if="m.chartType === 'overview'" class="overview-charts">
+                <div :id="'chart-bar-' + idx" class="chart-container-small"></div>
+                <div v-if="m.chartData.expensePie && m.chartData.expensePie.length > 0" :id="'chart-pie-exp-' + idx" class="chart-container-small"></div>
+                <div v-if="m.chartData.incomePie && m.chartData.incomePie.length > 0" :id="'chart-pie-inc-' + idx" class="chart-container-small"></div>
+              </div>
+
+              <!-- 原始数据下载链接 -->
+              <div v-if="m.exportUrl" class="export-link">
+                <el-button type="success" size="small" plain @click="handleDownload(m.exportUrl)">
+                  <el-icon><Download /></el-icon> 下载明细报表
+                </el-button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -365,9 +519,52 @@ a {
   padding: 10px 12px;
   border-radius: 12px;
   line-height: 1.5;
-  white-space: pre-line; /* 关键：让 \n 换行 */
   background: white;
   box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.chart-number {
+  margin-top: 12px;
+  padding: 10px;
+  background: #f0f9eb;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #67c23a;
+  text-align: center;
+}
+
+.chart-number .highlight {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.chart-container {
+  width: 100%;
+  height: 250px;
+  margin-top: 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ebeef5;
+}
+
+.overview-charts {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chart-container-small {
+  width: 100%;
+  height: 200px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ebeef5;
+}
+
+.export-link {
+  margin-top: 15px;
+  text-align: right;
 }
 
 .chat-item.user .bubble {

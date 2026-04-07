@@ -112,8 +112,46 @@ public class AssistantService {
 
         StatisticsResultVO vo = statisticsService.statistics(q);
         String reply = summarizeStatisticsByQwen(q, vo);
-        return Result.success(new AssistantChatResponse(reply));
+        
+        // 构造返回给前端的响应
+        AssistantChatResponse response = new AssistantChatResponse(reply);
+        
+        // 生成导出流水的基础链接
+        StringBuilder urlBuilder = new StringBuilder("/transactions/export?accountId=").append(q.getAccountId());
+        if (q.getTxnType() != null) {
+            urlBuilder.append("&type=").append(q.getTxnType());
+        }
+        if (q.getStartTime() != null) {
+            urlBuilder.append("&startTime=").append(q.getStartTime().substring(0, 10));
+        }
+        if (q.getEndTime() != null) {
+            urlBuilder.append("&endTime=").append(q.getEndTime().substring(0, 10));
+        }
+        response.setExportUrl(urlBuilder.toString());
+        
+        // 生成图表数据
+        if ("trend".equals(metric) && vo.getTrendList() != null && !vo.getTrendList().isEmpty()) {
+            response.setChartType("bar"); // 默认为柱状图，前端可按需切换为 line
+            response.setChartData(vo.getTrendList());
+        } else if ("sum".equals(metric)) {
+            // 如果返回了概览多图数据
+            if (vo.getIncomeExpenseBar() != null) {
+                response.setChartType("overview");
+                response.setChartData(java.util.Map.of(
+                        "bar", vo.getIncomeExpenseBar(),
+                        "incomePie", vo.getIncomePie() != null ? vo.getIncomePie() : java.util.List.of(),
+                        "expensePie", vo.getExpensePie() != null ? vo.getExpensePie() : java.util.List.of()
+                ));
+            } else {
+                response.setChartType("number");
+                response.setChartData(vo.getValue() != null ? vo.getValue() : vo.getCount());
+            }
+        } else if ("count".equals(metric)) {
+            response.setChartType("number");
+            response.setChartData(vo.getCount());
+        }
 
+        return Result.success(response);
     }
 
 
@@ -468,8 +506,8 @@ public class AssistantService {
    year（年份，例如 2026）
    month（月份，例如 1）
    day（日期，例如 17）
-   timeRange（latest/month/day/recent_days/recent_years/other）
-   rangeValue（数字，例如 3、7）
+   timeRange（latest/month/day/year/week/last_week/quarter/last_quarter/recent_days/recent_years/other）
+   rangeValue（数字，例如 3、7、30）
    needMonth（true/false）
 
 6. 当 intent=statistics 时尽量提取：
@@ -477,8 +515,8 @@ public class AssistantService {
    year（年份，例如 2026）
    month（月份，例如 1）
    day（日期，例如 17）
-   timeRange（latest/month/day/recent_days/recent_years/other）
-   rangeValue（数字，例如 3、7）
+   timeRange（latest/month/day/year/week/last_week/quarter/last_quarter/recent_days/recent_years/other）
+   rangeValue（数字，例如 3、7、30）
    metric（sum/count/max/trend）
    groupBy（none/day/month）
    comparePrevious（true/false）

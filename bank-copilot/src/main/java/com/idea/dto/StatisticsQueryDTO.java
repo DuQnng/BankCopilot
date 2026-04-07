@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class StatisticsQueryDTO {
     private Long accountId;
+    private String accountNo;         // 账户号
     private String txnType;           // 收入 / 支出
     private String metric;            // sum / count / max / trend
     private String groupBy;           // none / day / month

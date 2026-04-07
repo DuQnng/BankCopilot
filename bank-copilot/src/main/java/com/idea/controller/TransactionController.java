@@ -6,6 +6,8 @@ import com.idea.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
@@ -16,5 +18,10 @@ public class TransactionController {
     @GetMapping
     public Result list(TransactionQueryDTO query) {
         return transactionService.getTransactions(query);
+    }
+
+    @GetMapping("/export")
+    public void export(TransactionQueryDTO query, HttpServletResponse response) {
+        transactionService.exportTransactions(query, response);
     }
 }

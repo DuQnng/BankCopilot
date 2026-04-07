@@ -29,6 +29,21 @@ public class StatisticsServiceImpl implements StatisticsService {
                 vo.setValue(sum == null ? BigDecimal.ZERO : sum);
                 vo.setTitle(buildTitle(query, "总金额统计"));
                 vo.setSummary(buildSumSummary(query, vo.getValue()));
+                
+                // 如果没有指定查收入还是支出（说明看的是整体汇总），附加上三张图表所需的数据
+                if (query.getTxnType() == null || query.getTxnType().isBlank()) {
+                    List<StatisticsPointVO> bar = transactionMapper.sumIncomeAndExpense(query);
+                    vo.setIncomeExpenseBar(bar);
+                    
+                    StatisticsQueryDTO incomeQ = cloneQuery(query);
+                    incomeQ.setTxnType("收入");
+                    vo.setIncomePie(transactionMapper.statisticsByCounterparty(incomeQ));
+                    
+                    StatisticsQueryDTO expenseQ = cloneQuery(query);
+                    expenseQ.setTxnType("支出");
+                    vo.setExpensePie(transactionMapper.statisticsByCounterparty(expenseQ));
+                }
+
                 return vo;
 
             case "count":
@@ -102,5 +117,18 @@ public class StatisticsServiceImpl implements StatisticsService {
                     .append(" 元\n");
         }
         return sb.toString();
+    }
+
+    private StatisticsQueryDTO cloneQuery(StatisticsQueryDTO q) {
+        StatisticsQueryDTO dto = new StatisticsQueryDTO();
+        dto.setAccountId(q.getAccountId());
+        dto.setAccountNo(q.getAccountNo());
+        dto.setStartTime(q.getStartTime());
+        dto.setEndTime(q.getEndTime());
+        dto.setMetric(q.getMetric());
+        dto.setTxnType(q.getTxnType());
+        dto.setGroupBy(q.getGroupBy());
+        dto.setComparePrevious(q.getComparePrevious());
+        return dto;
     }
 }

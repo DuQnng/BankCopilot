@@ -14,4 +14,9 @@ public class StatisticsResultVO {
     private Long count;                    // count 时可用
     private List<StatisticsPointVO> trendList; // trend 时可用
     private String summary;                // 给前端/聊天用的总结
+    
+    // 扩展多图表总览功能所需字段
+    private List<StatisticsPointVO> incomeExpenseBar; 
+    private List<StatisticsPointVO> incomePie;        
+    private List<StatisticsPointVO> expensePie;       
 }

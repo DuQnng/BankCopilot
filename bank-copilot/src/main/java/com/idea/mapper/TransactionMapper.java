@@ -52,4 +52,10 @@ public interface TransactionMapper {
     // === 趋势统计
     List<StatisticsPointVO> statisticsTrend(@Param("query") StatisticsQueryDTO query);
 
+    // === 收入支出两柱子汇总统计
+    List<StatisticsPointVO> sumIncomeAndExpense(@Param("query") StatisticsQueryDTO query);
+
+    // === 按对方账号分组统计 (饼图)
+    List<StatisticsPointVO> statisticsByCounterparty(@Param("query") StatisticsQueryDTO query);
+
 }

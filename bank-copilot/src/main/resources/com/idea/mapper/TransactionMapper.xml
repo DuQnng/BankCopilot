@@ -152,4 +152,40 @@
         order by DATE_FORMAT(trade_time, '%Y-%m') asc
     </select>
 
+    <select id="sumIncomeAndExpense" resultType="com.idea.vo.StatisticsPointVO">
+        select type as label, COALESCE(SUM(ABS(amount)), 0) as value
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+        group by type
+    </select>
+
+    <select id="statisticsByCounterparty" resultType="com.idea.vo.StatisticsPointVO">
+        select COALESCE(counterparty_account_no, '未知') as label, COALESCE(SUM(ABS(amount)), 0) as value
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        <if test="query.txnType != null and query.txnType != ''">
+            and type = #{query.txnType}
+        </if>
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+        group by counterparty_account_no
+        order by value desc
+    </select>
+
 </mapper>
