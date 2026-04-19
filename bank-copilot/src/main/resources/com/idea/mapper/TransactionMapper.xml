@@ -125,7 +125,15 @@
 
     <select id="statisticsTrend" resultType="com.idea.vo.StatisticsPointVO">
         select
-        DATE_FORMAT(trade_time, '%Y-%m') as label,
+        <choose>
+            <when test="query.groupBy == 'day'">
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+            </when>
+            <otherwise>
+                DATE_FORMAT(trade_time, '%Y-%m')
+            </otherwise>
+        </choose>
+        as label,
         COALESCE(
         SUM(
         case
@@ -148,8 +156,16 @@
         <if test="query.endTime != null and query.endTime != ''">
             and trade_time <![CDATA[ <= ]]> #{query.endTime}
         </if>
-        group by DATE_FORMAT(trade_time, '%Y-%m')
-        order by DATE_FORMAT(trade_time, '%Y-%m') asc
+        group by
+        <choose>
+            <when test="query.groupBy == 'day'">
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+            </when>
+            <otherwise>
+                DATE_FORMAT(trade_time, '%Y-%m')
+            </otherwise>
+        </choose>
+        order by label asc
     </select>
 
     <select id="sumIncomeAndExpense" resultType="com.idea.vo.StatisticsPointVO">
@@ -186,6 +202,23 @@
         </if>
         group by counterparty_account_no
         order by value desc
+    </select>
+
+    <select id="listExpenseAmounts" resultType="java.math.BigDecimal">
+        select ABS(amount)
+        from transaction_record
+        where 1 = 1
+        <if test="query.accountId != null">
+            and account_id = #{query.accountId}
+        </if>
+        and type = '支出'
+        <if test="query.startTime != null and query.startTime != ''">
+            and trade_time <![CDATA[ >= ]]> #{query.startTime}
+        </if>
+        <if test="query.endTime != null and query.endTime != ''">
+            and trade_time <![CDATA[ <= ]]> #{query.endTime}
+        </if>
+        order by ABS(amount) asc
     </select>
 
 </mapper>
