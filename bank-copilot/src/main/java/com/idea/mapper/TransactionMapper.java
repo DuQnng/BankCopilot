@@ -58,4 +58,7 @@ public interface TransactionMapper {
     // === 按对方账号分组统计 (饼图)
     List<StatisticsPointVO> statisticsByCounterparty(@Param("query") StatisticsQueryDTO query);
 
+    // === 近一段时间支出金额列表（用于P90异常检测）
+    List<BigDecimal> listExpenseAmounts(@Param("query") StatisticsQueryDTO query);
+
 }

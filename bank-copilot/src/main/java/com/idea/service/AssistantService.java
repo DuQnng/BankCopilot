@@ -9,6 +9,7 @@ import com.idea.entity.Account;
 import com.idea.entity.Result;
 import com.idea.exception.BusinessException;
 import com.idea.llm.QwenClient;
+import com.idea.mapper.TransactionMapper;
 import com.idea.service.impl.AccountServiceImpl;
 import com.idea.service.impl.TransactionServiceImpl;
 import com.idea.vo.AssistantChatResponse;
@@ -23,14 +24,12 @@ import com.idea.utils.Time;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,6 +43,7 @@ public class AssistantService {
     private final AccountServiceImpl accountService;
     private final TransactionServiceImpl transactionService;
     private final StatisticsService statisticsService;
+    private final TransactionMapper transactionMapper;
 
 
     private final Map<Long, PendingTransfer> pendingMap = new ConcurrentHashMap<>();
@@ -149,7 +149,10 @@ public class AssistantService {
         highlights.add(periodLabel + "总支出：¥" + expense.toPlainString());
         highlights.add(periodLabel + "净流入：¥" + net.toPlainString());
 
-        String anomaly = detectExpenseAnomaly(account.getId(), expense, normalizedPeriod);
+        Map<String, Object> comparison = buildBriefComparison(account.getId(), normalizedPeriod, income, expense);
+        List<String> suggestions = generateBriefSuggestions(normalizedPeriod, income, expense, net, trendVo.getTrendList());
+        List<Map<String, String>> anomalies = detectExpenseAnomaly(account.getId(), expense, normalizedPeriod);
+        String anomaly = anomalies.isEmpty() ? "" : anomalies.get(0).get("message");
         List<String> quickActions = List.of(
                 "看" + periodLabel + "支出明细",
                 "统计" + periodLabel + "总支出",
@@ -161,6 +164,9 @@ public class AssistantService {
         brief.put("headline", "AI简报：" + periodLabel + "净流入 ¥" + net.toPlainString());
         brief.put("highlights", highlights);
         brief.put("anomaly", anomaly);
+        brief.put("anomalies", anomalies);
+        brief.put("suggestions", suggestions);
+        brief.put("comparison", comparison);
         brief.put("quickActions", quickActions);
         brief.put("chartType", "bar");
         brief.put("chartData", trendVo.getTrendList() == null ? List.of() : trendVo.getTrendList());
@@ -281,6 +287,8 @@ public class AssistantService {
 5. 如果是趋势数据，可以简单指出“整体变化情况”，但不能编造未提供的涨跌幅。
 6. 仅进行总结分析即可，不要提示用户进一步分析！
 7. 不要输出 JSON，不要解释过程，直接输出给用户的话。
+8. 当前系统不支持支出品类、消费场景、商户类型分类分析，禁止输出此类结论。
+9. 饼图仅表示按对方账号聚合，不得称为“消费分类”。
 """
                     ),
                     Map.of(
@@ -293,7 +301,7 @@ public class AssistantService {
             if (content == null || content.isBlank()) {
                 return vo.getSummary();
             }
-            return content;
+            return sanitizeModelReply(content, vo.getSummary());
         } catch (Exception e) {
             log.warn("assistant summarize statistics fallback, metric={}, accountId={}", q.getMetric(), q.getAccountId(), e);
             return vo.getSummary();
@@ -657,6 +665,7 @@ public class AssistantService {
 1. 用户表达“查余额”“查一下我的余额”“我的账户信息”“查询账户信息”等，intent 一律输出 balance。
 2. 用户表达查交易记录、查流水、查收入记录、查支出记录等，intent 输出 transactions。
 3. 用户表达“统计、汇总、分析、总共、多少笔、最大一笔、趋势、对比”等账单分析需求时，intent 输出 statistics。
+3.1 若用户要求“按消费类别/支出种类/商户类型/场景标签”统计，当前系统不支持，请 intent 输出 other。
 
 4. 当 intent=transfer 时必须给：
    toAccountNo（字符串），amount（数字字符串），description（可空字符串）
@@ -736,7 +745,11 @@ public class AssistantService {
         content = sanitizeJsonContent(content);
 
         try {
-            return objectMapper.readTree(content);
+            JsonNode node = objectMapper.readTree(content);
+            if (containsUnsupportedScope(userMsg)) {
+                return objectMapper.createObjectNode().put("intent", "other");
+            }
+            return node;
         } catch (Exception e) {
             log.warn("assistant parse intent failed, content={}", content, e);
             return objectMapper.createObjectNode().put("intent", "other");
@@ -746,10 +759,16 @@ public class AssistantService {
 
     private String fallbackChat(String userMsg) {
         JsonNode raw = qwenClient.chat(List.of(
-                Map.of("role", "system", "content", "你是银行智能客服，回答要简短、清晰、偏业务。"),
+                Map.of("role", "system", "content", """
+你是银行智能客服，回答要简短、清晰、偏业务。
+仅可回答当前已支持能力：查余额、查流水、转账确认、收支统计、趋势和对比。
+禁止声称支持“支出分类/品类/商户类型/消费场景标签分析”等未实现能力。
+若用户问到未实现能力，请直接说明当前不支持，并建议改问已支持能力。
+"""),
                 Map.of("role", "user", "content", userMsg)
         ));
-        return raw.path("choices").get(0).path("message").path("content").asText("我明白啦，你可以再说具体一点~");
+        String content = raw.path("choices").get(0).path("message").path("content").asText("我明白啦，你可以再说具体一点~");
+        return sanitizeModelReply(content, "当前可支持：查余额、查流水、转账确认、收支统计与趋势分析。");
     }
 
     private boolean isConfirm(String msg) {
@@ -830,10 +849,8 @@ public class AssistantService {
         return q;
     }
 
-    private String detectExpenseAnomaly(Long accountId, BigDecimal currentExpense, String period) {
-        if (!"week".equals(period)) {
-            return "";
-        }
+    private List<Map<String, String>> detectExpenseAnomaly(Long accountId, BigDecimal currentExpense, String period) {
+        List<Map<String, String>> anomalies = new ArrayList<>();
         StatisticsQueryDTO baseline = new StatisticsQueryDTO();
         baseline.setAccountId(accountId);
         baseline.setTxnType("支出");
@@ -842,13 +859,179 @@ public class AssistantService {
         Time.fillTimeRange(baseline, "recent_days", "", "", "", "28");
         StatisticsResultVO baselineVo = statisticsService.statistics(baseline);
         BigDecimal baselineExpense = baselineVo.getValue() == null ? BigDecimal.ZERO : baselineVo.getValue();
-        BigDecimal avgPerWeek = baselineExpense.divide(BigDecimal.valueOf(4), 2, java.math.RoundingMode.HALF_UP);
-        if (avgPerWeek.compareTo(BigDecimal.ZERO) <= 0) {
-            return "";
+        BigDecimal avgPerWeek = baselineExpense.divide(BigDecimal.valueOf(4), 2, RoundingMode.HALF_UP);
+        if (avgPerWeek.compareTo(BigDecimal.ZERO) > 0
+                && currentExpense.compareTo(avgPerWeek.multiply(BigDecimal.valueOf(1.5))) > 0) {
+            anomalies.add(Map.of("level", "warning", "message", "异常提醒：当前周期总支出显著高于近4周周均值。"));
         }
-        if (currentExpense.compareTo(avgPerWeek.multiply(BigDecimal.valueOf(1.5))) > 0) {
-            return "异常提醒：本周支出显著高于近4周周均值，请关注大额消费。";
+
+        StatisticsQueryDTO baselineP90Query = new StatisticsQueryDTO();
+        baselineP90Query.setAccountId(accountId);
+        Time.fillTimeRange(baselineP90Query, "recent_days", "", "", "", "30");
+        List<BigDecimal> expenseAmountList = transactionMapper.listExpenseAmounts(baselineP90Query);
+        BigDecimal p90 = calculatePercentile(expenseAmountList, 0.9);
+        if (p90.compareTo(BigDecimal.ZERO) > 0) {
+            StatisticsQueryDTO currentMaxQuery = new StatisticsQueryDTO();
+            currentMaxQuery.setAccountId(accountId);
+            currentMaxQuery.setTxnType("支出");
+            currentMaxQuery.setMetric("max");
+            currentMaxQuery.setGroupBy("none");
+            if ("month".equals(period)) {
+                Time.fillTimeRange(currentMaxQuery, "month", "", "", "", "");
+            } else {
+                Time.fillTimeRange(currentMaxQuery, "week", "", "", "", "");
+            }
+            StatisticsResultVO maxVo = statisticsService.statistics(currentMaxQuery);
+            BigDecimal currentMax = maxVo.getValue() == null ? BigDecimal.ZERO : maxVo.getValue();
+            if (currentMax.compareTo(p90) > 0) {
+                anomalies.add(Map.of(
+                        "level", "warning",
+                        "message", "异常提醒：当前周期出现超大单笔支出，已超过近30天P90阈值。"
+                ));
+            }
         }
-        return "";
+        return anomalies;
+    }
+
+    private BigDecimal calculatePercentile(List<BigDecimal> list, double percentile) {
+        if (list == null || list.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        int n = list.size();
+        int index = (int) Math.ceil(percentile * n) - 1;
+        index = Math.max(0, Math.min(index, n - 1));
+        return list.get(index) == null ? BigDecimal.ZERO : list.get(index);
+    }
+
+    private Map<String, Object> buildBriefComparison(Long accountId, String period, BigDecimal currentIncome, BigDecimal currentExpense) {
+        StatisticsQueryDTO prevIncomeQuery = new StatisticsQueryDTO();
+        StatisticsQueryDTO prevExpenseQuery = new StatisticsQueryDTO();
+        prevIncomeQuery.setAccountId(accountId);
+        prevIncomeQuery.setTxnType("收入");
+        prevIncomeQuery.setMetric("sum");
+        prevIncomeQuery.setGroupBy("none");
+        prevExpenseQuery.setAccountId(accountId);
+        prevExpenseQuery.setTxnType("支出");
+        prevExpenseQuery.setMetric("sum");
+        prevExpenseQuery.setGroupBy("none");
+
+        if ("month".equals(period)) {
+            Time.fillTimeRange(prevIncomeQuery, "month", "", "", "", "");
+            Time.fillTimeRange(prevExpenseQuery, "month", "", "", "", "");
+            shiftQueryToPreviousMonth(prevIncomeQuery);
+            shiftQueryToPreviousMonth(prevExpenseQuery);
+        } else {
+            Time.fillTimeRange(prevIncomeQuery, "last_week", "", "", "", "");
+            Time.fillTimeRange(prevExpenseQuery, "last_week", "", "", "", "");
+        }
+
+        BigDecimal previousIncome = safeAmount(statisticsService.statistics(prevIncomeQuery).getValue());
+        BigDecimal previousExpense = safeAmount(statisticsService.statistics(prevExpenseQuery).getValue());
+        BigDecimal currentNet = currentIncome.subtract(currentExpense);
+        BigDecimal previousNet = previousIncome.subtract(previousExpense);
+        Map<String, Object> deltaPct = new HashMap<>();
+        deltaPct.put("income", calculateDeltaPercent(currentIncome, previousIncome));
+        deltaPct.put("expense", calculateDeltaPercent(currentExpense, previousExpense));
+        deltaPct.put("net", calculateDeltaPercent(currentNet, previousNet));
+        return Map.of(
+                "currentPeriodLabel", "month".equals(period) ? "本月" : "本周",
+                "previousPeriodLabel", "month".equals(period) ? "上月" : "上周",
+                "current", Map.of(
+                        "income", currentIncome.toPlainString(),
+                        "expense", currentExpense.toPlainString(),
+                        "net", currentNet.toPlainString()
+                ),
+                "previous", Map.of(
+                        "income", previousIncome.toPlainString(),
+                        "expense", previousExpense.toPlainString(),
+                        "net", previousNet.toPlainString()
+                ),
+                "deltaPct", deltaPct
+        );
+    }
+
+    private BigDecimal safeAmount(BigDecimal value) {
+        return value == null ? BigDecimal.ZERO : value;
+    }
+
+    private Double calculateDeltaPercent(BigDecimal current, BigDecimal previous) {
+        if (previous == null || previous.compareTo(BigDecimal.ZERO) == 0) {
+            return null;
+        }
+        BigDecimal delta = current.subtract(previous)
+                .divide(previous.abs(), 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+        return delta.setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    private void shiftQueryToPreviousMonth(StatisticsQueryDTO query) {
+        if (query.getStartTime() == null || query.getEndTime() == null) {
+            return;
+        }
+        LocalDateTime start = LocalDateTime.parse(query.getStartTime().replace(" ", "T"));
+        LocalDateTime end = LocalDateTime.parse(query.getEndTime().replace(" ", "T"));
+        query.setStartTime(start.minusMonths(1).toString());
+        query.setEndTime(end.minusMonths(1).toString());
+    }
+
+    private List<String> generateBriefSuggestions(String period, BigDecimal income, BigDecimal expense, BigDecimal net,
+                                                  List<StatisticsPointVO> trendList) {
+        if (!"month".equals(period)) {
+            return List.of();
+        }
+        String facts = "周期=月报\n收入=" + income.toPlainString() + "\n支出=" + expense.toPlainString()
+                + "\n净流入=" + net.toPlainString() + "\n趋势点数=" + (trendList == null ? 0 : trendList.size());
+        try {
+            JsonNode raw = qwenClient.chat(List.of(
+                    Map.of("role", "system", "content", """
+你是银行助手。只基于给定事实输出1-2条建议，简短可执行。
+禁止输出未实现能力（消费分类、品类、商户类型、标签）。
+禁止让用户“进一步提供分类信息”。
+每条建议不超过18字。
+"""),
+                    Map.of("role", "user", "content", facts)
+            ));
+            String text = raw.path("choices").get(0).path("message").path("content").asText("").trim();
+            text = sanitizeModelReply(text, "");
+            if (text.isBlank()) {
+                return List.of("建议控制非必要消费", "建议保持稳定结余");
+            }
+            String[] lines = text.split("\\n");
+            List<String> result = new ArrayList<>();
+            for (String line : lines) {
+                String cleaned = line.replaceFirst("^[-*\\d.\\s]+", "").trim();
+                if (!cleaned.isBlank()) {
+                    result.add(cleaned);
+                }
+                if (result.size() >= 2) {
+                    break;
+                }
+            }
+            return result.isEmpty() ? List.of("建议控制非必要消费", "建议保持稳定结余") : result;
+        } catch (Exception e) {
+            log.warn("assistant generate brief suggestions fallback", e);
+            return List.of("建议控制非必要消费", "建议保持稳定结余");
+        }
+    }
+
+    private String sanitizeModelReply(String content, String fallback) {
+        if (content == null || content.isBlank()) {
+            return fallback;
+        }
+        String lowered = content.toLowerCase();
+        String[] banned = new String[]{"支出种类", "消费类别", "商户类型", "场景标签", "分类统计"};
+        for (String keyword : banned) {
+            if (lowered.contains(keyword.toLowerCase())) {
+                return fallback.isBlank() ? "当前仅支持收入/支出、时间范围、总额、笔数、最大值和趋势分析。" : fallback;
+            }
+        }
+        return content;
+    }
+
+    private boolean containsUnsupportedScope(String msg) {
+        if (msg == null) {
+            return false;
+        }
+        return msg.contains("分类") || msg.contains("品类") || msg.contains("商户类型") || msg.contains("场景标签");
     }
 }
