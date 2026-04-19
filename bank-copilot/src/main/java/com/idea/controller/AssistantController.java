@@ -7,7 +7,9 @@ import com.idea.exception.BusinessException;
 import com.idea.service.AssistantService;
 import com.idea.utils.CurrentHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/assistant")
@@ -23,5 +25,23 @@ public class AssistantController {
             throw BusinessException.of(ErrorCode.UNAUTHORIZED, "用户未登录");
         }
         return assistantService.chat(userId.longValue(), req);
+    }
+
+    @PostMapping(value = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter chatStream(@RequestBody AssistantChatRequest req) {
+        Integer userId = CurrentHolder.getCurrentId();
+        if (userId == null) {
+            throw BusinessException.of(ErrorCode.UNAUTHORIZED, "用户未登录");
+        }
+        return assistantService.chatStream(userId.longValue(), req);
+    }
+
+    @GetMapping("/brief")
+    public Result brief(@RequestParam(defaultValue = "week") String period) {
+        Integer userId = CurrentHolder.getCurrentId();
+        if (userId == null) {
+            throw BusinessException.of(ErrorCode.UNAUTHORIZED, "用户未登录");
+        }
+        return assistantService.getBrief(userId.longValue(), period);
     }
 }

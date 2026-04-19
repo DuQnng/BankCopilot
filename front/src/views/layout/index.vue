@@ -1,8 +1,7 @@
 <script setup>
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, nextTick, watch} from 'vue';
 import {ElMessageBox, ElMessage} from 'element-plus';
 import { useRouter } from 'vue-router';
-import axios from 'axios'  
 import { changePasswordApi } from '@/api/user' 
 
 //当前登录员工
@@ -76,8 +75,7 @@ const submitPwd = async () => {
 }
 
 //以下为聊天机器人部分逻辑
-import { nextTick } from 'vue'
-import { chatAssistantApi } from '@/api/assistant'
+import { chatAssistantApi, streamAssistantApi, fetchAssistantBriefApi } from '@/api/assistant'
 import * as echarts from 'echarts'
 import request from '@/utils/request'
 
@@ -85,6 +83,8 @@ import request from '@/utils/request'
 const assistantVisible = ref(false)
 const chatInput = ref('')
 const chatLoading = ref(false)
+const briefLoading = ref(false)
+const briefData = ref(null)
 
 // 聊天消息列表：role = 'user' | 'assistant'
 const chatList = ref([
@@ -104,6 +104,62 @@ const chatList = ref([
 
 const chatBodyRef = ref(null)
 
+const briefPeriodText = (period) => (period === 'month' ? '本月' : '本周')
+
+const getDefaultBriefPeriod = () => {
+  const day = new Date().getDay()
+  return day === 1 ? 'week' : 'month'
+}
+
+const loadAssistantBrief = async () => {
+  if (briefLoading.value) return
+  try {
+    briefLoading.value = true
+    const period = getDefaultBriefPeriod()
+    const res = await fetchAssistantBriefApi(period)
+    if (res.code && res.data) {
+      briefData.value = res.data
+      await renderBriefChart()
+    } else {
+      briefData.value = null
+    }
+  } catch (error) {
+    briefData.value = null
+  } finally {
+    briefLoading.value = false
+  }
+}
+
+const openAssistantDrawer = async () => {
+  assistantVisible.value = true
+}
+
+watch(assistantVisible, async (visible) => {
+  if (visible) {
+    await loadAssistantBrief()
+  }
+})
+
+const buildExplainSummary = (explain) => {
+  if (!explain) return ''
+  const metricMap = { sum: '总额', count: '笔数', max: '最大值', trend: '趋势' }
+  const txnType = explain.txnType || '全部'
+  const metric = metricMap[explain.metric] || explain.metric || '统计'
+  const start = explain.startTime ? explain.startTime.substring(0, 10) : '未指定'
+  const end = explain.endTime ? explain.endTime.substring(0, 10) : '未指定'
+  return `统计口径：${txnType} / ${metric}，时间范围 ${start} 至 ${end}`
+}
+
+const normalizeTraceSteps = (trace, streamSteps = []) => {
+  const merged = [...streamSteps]
+  if (trace?.steps?.length) {
+    trace.steps.forEach((step) => {
+      if (!merged.includes(step)) merged.push(step)
+    })
+  }
+  return merged
+}
+
 const scrollToBottom = async () => {
   await nextTick()
   const el = chatBodyRef.value
@@ -116,6 +172,8 @@ const initChart = async (idx, type, data) => {
   if (!dom) return
   
   // 确保图表容器有实际宽高后再初始化
+  const current = echarts.getInstanceByDom(dom)
+  if (current) current.dispose()
   const myChart = echarts.init(dom)
   const xAxisData = data.map(item => item.label)
   const seriesData = data.map(item => item.value)
@@ -141,6 +199,8 @@ const initOverviewCharts = async (idx, data) => {
   // 初始化柱状图 (收入/支出)
   const barDom = document.getElementById(`chart-bar-${idx}`)
   if (barDom) {
+    const current = echarts.getInstanceByDom(barDom)
+    if (current) current.dispose()
     const myChart = echarts.init(barDom)
     myChart.setOption({
       title: { text: '收支对比', left: 'center', textStyle: { fontSize: 13, fontWeight: 'normal' } },
@@ -163,6 +223,8 @@ const initOverviewCharts = async (idx, data) => {
   if (data.expensePie && data.expensePie.length > 0) {
     const expDom = document.getElementById(`chart-pie-exp-${idx}`)
     if (expDom) {
+      const current = echarts.getInstanceByDom(expDom)
+      if (current) current.dispose()
       const myChart = echarts.init(expDom)
       myChart.setOption({
         title: { text: '支出占比(按对方)', left: 'center', textStyle: { fontSize: 13, fontWeight: 'normal' } },
@@ -181,6 +243,8 @@ const initOverviewCharts = async (idx, data) => {
   if (data.incomePie && data.incomePie.length > 0) {
     const incDom = document.getElementById(`chart-pie-inc-${idx}`)
     if (incDom) {
+      const current = echarts.getInstanceByDom(incDom)
+      if (current) current.dispose()
       const myChart = echarts.init(incDom)
       myChart.setOption({
         title: { text: '收入占比(按对方)', left: 'center', textStyle: { fontSize: 13, fontWeight: 'normal' } },
@@ -194,6 +258,46 @@ const initOverviewCharts = async (idx, data) => {
       })
     }
   }
+}
+
+const renderAssistantCharts = async (idx) => {
+  const msg = chatList.value[idx]
+  if (!msg) return
+  if (msg.chartType === 'bar' || msg.chartType === 'line') {
+    await initChart(idx, msg.renderChartType || msg.chartType, msg.chartData || [])
+  } else if (msg.chartType === 'overview') {
+    await initOverviewCharts(idx, msg.chartData || {})
+  }
+}
+
+const switchTrendType = async (idx, type) => {
+  const msg = chatList.value[idx]
+  if (!msg || !(msg.chartType === 'bar' || msg.chartType === 'line')) return
+  msg.renderChartType = type
+  await initChart(idx, type, msg.chartData || [])
+}
+
+const renderBriefChart = async () => {
+  await nextTick()
+  if (!briefData.value || briefData.value.chartType !== 'bar') return
+  const dom = document.getElementById('brief-chart')
+  if (!dom) return
+  const current = echarts.getInstanceByDom(dom)
+  if (current) current.dispose()
+  const chart = echarts.init(dom)
+  const list = briefData.value.chartData || []
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: '15%', right: '5%', bottom: '15%', top: '15%' },
+    xAxis: { type: 'category', data: list.map(item => item.label) },
+    yAxis: { type: 'value' },
+    series: [{
+      type: 'bar',
+      data: list.map(item => item.value),
+      barWidth: '40%',
+      itemStyle: { color: '#909399' }
+    }]
+  })
 }
 
 const handleDownload = async (url) => {
@@ -227,32 +331,75 @@ const sendChat = async (text) => {
   chatInput.value = ''
   await scrollToBottom()
 
+  const assistantMsg = {
+    role: 'assistant',
+    content: '正在分析你的请求...',
+    chartType: null,
+    renderChartType: null,
+    chartData: null,
+    exportUrl: null,
+    trace: null,
+    explain: null,
+    streamSteps: ['已接收请求，准备解析意图'],
+    isStreaming: true
+  }
+  chatList.value.push(assistantMsg)
+  const assistantIndex = chatList.value.length - 1
+
   try {
     chatLoading.value = true
-    const res = await chatAssistantApi(msg)
-
-    if (res.code) {
-      chatList.value.push({ 
-        role: 'assistant', 
-        content: res.data?.reply || '（机器人没有返回内容）',
-        chartType: res.data?.chartType,
-        chartData: res.data?.chartData,
-        exportUrl: res.data?.exportUrl
-      })
-      
-      // 如果返回了图表数据，渲染图表
-      if (res.data?.chartType === 'bar' || res.data?.chartType === 'line') {
-        const newIdx = chatList.value.length - 1
-        initChart(newIdx, res.data.chartType, res.data.chartData)
-      } else if (res.data?.chartType === 'overview') {
-        const newIdx = chatList.value.length - 1
-        initOverviewCharts(newIdx, res.data.chartData)
+    await streamAssistantApi(msg, {
+      onEvent: async (event, data) => {
+        const current = chatList.value[assistantIndex]
+        if (!current) return
+        if (event === 'trace') {
+          if (data?.message && !current.streamSteps.includes(data.message)) {
+            current.streamSteps.push(data.message)
+          }
+        } else if (event === 'message') {
+          current.content = data?.reply || '（机器人没有返回内容）'
+          current.chartType = data?.chartType || null
+          current.renderChartType = data?.chartType || null
+          current.chartData = data?.chartData || null
+          current.exportUrl = data?.exportUrl || null
+          current.trace = data?.trace || null
+          current.explain = data?.explain || null
+          current.streamSteps = normalizeTraceSteps(current.trace, current.streamSteps)
+          await renderAssistantCharts(assistantIndex)
+        } else if (event === 'error') {
+          current.content = data?.message || '流式请求失败，请稍后再试'
+        } else if (event === 'done') {
+          current.isStreaming = false
+        }
+        await scrollToBottom()
       }
-    } else {
-      chatList.value.push({ role: 'assistant', content: res.msg || '请求失败' })
+    })
+  } catch (streamError) {
+    try {
+      const res = await chatAssistantApi(msg)
+      const current = chatList.value[assistantIndex]
+      if (!current) return
+      if (res.code) {
+        current.content = res.data?.reply || '（机器人没有返回内容）'
+        current.chartType = res.data?.chartType || null
+        current.renderChartType = res.data?.chartType || null
+        current.chartData = res.data?.chartData || null
+        current.exportUrl = res.data?.exportUrl || null
+        current.trace = res.data?.trace || null
+        current.explain = res.data?.explain || null
+        current.streamSteps = normalizeTraceSteps(current.trace, current.streamSteps)
+        await renderAssistantCharts(assistantIndex)
+      } else {
+        current.content = res.msg || '请求失败'
+      }
+      current.isStreaming = false
+    } catch (e) {
+      const current = chatList.value[assistantIndex]
+      if (current) {
+        current.content = '网络/接口异常，请稍后再试'
+        current.isStreaming = false
+      }
     }
-  } catch (e) {
-    chatList.value.push({ role: 'assistant', content: '网络/接口异常，请稍后再试' })
   } finally {
     chatLoading.value = false
     await scrollToBottom()
@@ -278,7 +425,7 @@ const needConfirm = () => {
       <el-header class="header">
         <span class="title">银行智能机器人</span>
         <span class="right_tool">
-            <a href="javascript:;" @click="assistantVisible = true">
+            <a href="javascript:;" @click="openAssistantDrawer">
               <el-icon><ChatLineRound /></el-icon> 智能客服 &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
             </a>
 
@@ -343,6 +490,33 @@ const needConfirm = () => {
       >
         <!-- 消息区 -->
         <div ref="chatBodyRef" class="chat-body">
+          <div v-if="briefLoading" class="brief-card brief-loading">正在生成 AI 简报...</div>
+
+          <div v-if="briefData" class="brief-card">
+            <div class="brief-title">{{ briefData.headline }}</div>
+            <div class="brief-subtitle">统计周期：{{ briefPeriodText(briefData.period) }}</div>
+            <ul class="brief-list">
+              <li v-for="(item, bIdx) in (briefData.highlights || [])" :key="`brief-${bIdx}`">{{ item }}</li>
+            </ul>
+            <div v-if="briefData.anomaly" class="brief-anomaly">{{ briefData.anomaly }}</div>
+            <div class="brief-actions">
+              <el-button
+                v-for="(action, aIdx) in (briefData.quickActions || [])"
+                :key="`action-${aIdx}`"
+                size="small"
+                plain
+                @click="sendChat(action)"
+              >
+                {{ action }}
+              </el-button>
+            </div>
+            <div
+              v-if="briefData.chartType === 'bar' && briefData.chartData && briefData.chartData.length"
+              id="brief-chart"
+              class="brief-chart"
+            ></div>
+          </div>
+
           <div
             v-for="(m, idx) in chatList"
             :key="idx"
@@ -351,11 +525,37 @@ const needConfirm = () => {
           >
             <div class="bubble">
               <div style="white-space: pre-line;">{{ m.content }}</div>
+
+              <div v-if="m.isStreaming" class="streaming-flag">AI 正在处理中...</div>
+
+              <div v-if="m.trace || (m.streamSteps && m.streamSteps.length)" class="trace-card">
+                <div class="trace-title">AI处理过程</div>
+                <div class="trace-steps">
+                  <span v-for="(step, sIdx) in m.streamSteps" :key="`${idx}-${sIdx}`" class="trace-step">
+                    {{ sIdx + 1 }}. {{ step }}
+                  </span>
+                </div>
+                <div v-if="m.trace" class="trace-meta">
+                  <el-tag size="small" type="info">意图：{{ m.trace.intent || 'unknown' }}</el-tag>
+                  <el-tag size="small" type="success">能力：{{ m.trace.tool || 'assistant' }}</el-tag>
+                  <el-tag size="small" type="warning">状态：{{ m.trace.status || 'completed' }}</el-tag>
+                  <el-tag size="small">置信度：{{ m.trace.confidence || 'medium' }}</el-tag>
+                </div>
+              </div>
+
+              <div v-if="m.explain" class="explain-line">
+                {{ buildExplainSummary(m.explain) }}
+              </div>
               
               <!-- 数字指标 (如求和、计数) -->
               <div v-if="m.chartType === 'number'" class="chart-number">
                 <span>统计结果：</span>
                 <span class="highlight">{{ m.chartData }}</span>
+              </div>
+
+              <div v-if="m.chartType === 'bar' || m.chartType === 'line'" class="trend-switch">
+                <el-button size="small" :type="m.renderChartType === 'bar' ? 'primary' : 'default'" @click="switchTrendType(idx, 'bar')">柱状图</el-button>
+                <el-button size="small" :type="m.renderChartType === 'line' ? 'primary' : 'default'" @click="switchTrendType(idx, 'line')">折线图</el-button>
               </div>
 
               <!-- ECharts 图表容器 -->
@@ -506,6 +706,62 @@ a {
   margin: 8px 0;
 }
 
+.brief-card {
+  margin: 4px 4px 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f0f9ff;
+  border: 1px solid #d9ecff;
+}
+
+.brief-loading {
+  color: #409eff;
+  font-size: 13px;
+}
+
+.brief-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.brief-subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #606266;
+}
+
+.brief-list {
+  margin: 8px 0;
+  padding-left: 18px;
+  color: #303133;
+  font-size: 12px;
+}
+
+.brief-anomaly {
+  margin: 8px 0;
+  padding: 8px;
+  border-left: 3px solid #e6a23c;
+  background: #fdf6ec;
+  font-size: 12px;
+  color: #606266;
+}
+
+.brief-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.brief-chart {
+  width: 100%;
+  height: 180px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 8px;
+}
+
 .chat-item.user {
   justify-content: flex-end;
 }
@@ -521,6 +777,54 @@ a {
   line-height: 1.5;
   background: white;
   box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.streaming-flag {
+  margin-top: 8px;
+  color: #409eff;
+  font-size: 12px;
+}
+
+.trace-card {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f5f7fa;
+  border: 1px solid #e4e7ed;
+}
+
+.trace-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #303133;
+}
+
+.trace-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.trace-step {
+  font-size: 12px;
+  color: #606266;
+}
+
+.trace-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.explain-line {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-left: 3px solid #409eff;
+  background: #ecf5ff;
+  font-size: 12px;
+  color: #303133;
 }
 
 .chart-number {
@@ -545,6 +849,12 @@ a {
   background: white;
   border-radius: 8px;
   border: 1px solid #ebeef5;
+}
+
+.trend-switch {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
 }
 
 .overview-charts {

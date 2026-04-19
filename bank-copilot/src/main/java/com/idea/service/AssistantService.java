@@ -16,17 +16,28 @@ import com.idea.vo.StatisticsPointVO;
 import com.idea.vo.StatisticsResultVO;
 import com.idea.vo.TransferValidateVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.idea.utils.Time;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AssistantService {
 
     private final QwenClient qwenClient;
@@ -38,12 +49,14 @@ public class AssistantService {
     private final Map<Long, PendingTransfer> pendingMap = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Map<Long, PendingTransactionQuery> pendingTxnQueryMap = new ConcurrentHashMap<>();
+    private static final Duration PENDING_TTL = Duration.ofMinutes(10);
 
     public Result chat(Long userId, AssistantChatRequest req) {
         String msg = req.getMessage() == null ? "" : req.getMessage().trim();
         if (msg.isEmpty()) {
             throw BusinessException.of(ErrorCode.PARAM_INVALID, "message 不能为空");
         }
+        log.info("assistant chat start, userId={}, message={}", userId, msg);
 
         // 1. 优先处理转账确认/取消
         Result pendingResult = handlePendingTransfer(userId, msg);
@@ -61,6 +74,7 @@ public class AssistantService {
         JsonNode parsed = parseIntentByQwen(msg);
         parsed = Time.normalizeTimeByText(msg, parsed);
         String intent = parsed.path("intent").asText("");
+        log.info("assistant intent parsed, userId={}, intent={}", userId, intent);
 
         // 4. 分发处理
         switch (intent) {
@@ -73,9 +87,84 @@ public class AssistantService {
             case "statistics":
                 return handleStatistics(userId, parsed);
             default:
-                return Result.success(new AssistantChatResponse(fallbackChat(msg)));
+                AssistantChatResponse fallback = new AssistantChatResponse(fallbackChat(msg));
+                attachTrace(fallback, "other", "qwen_fallback", "completed", "medium", "", List.of("进入闲聊兜底"));
+                return Result.success(fallback);
         }
 
+    }
+
+    public SseEmitter chatStream(Long userId, AssistantChatRequest req) {
+        SseEmitter emitter = new SseEmitter(120000L);
+        CompletableFuture.runAsync(() -> {
+            try {
+                sendEvent(emitter, "trace", Map.of("phase", "received", "message", "请求已接收，正在准备解析意图"));
+                sendEvent(emitter, "trace", Map.of("phase", "intent", "message", "正在识别你的业务意图"));
+                Result result = chat(userId, req);
+                if (result.getCode() != null && result.getCode() == 1) {
+                    sendEvent(emitter, "message", result.getData());
+                } else {
+                    sendEvent(emitter, "error", Map.of("message", safe(result.getMsg())));
+                }
+                sendEvent(emitter, "done", Map.of("ok", true));
+                emitter.complete();
+            } catch (Exception ex) {
+                log.error("assistant chat stream failed, userId={}", userId, ex);
+                try {
+                    sendEvent(emitter, "error", Map.of("message", "流式请求失败，请稍后重试"));
+                    sendEvent(emitter, "done", Map.of("ok", false));
+                } catch (IOException ioException) {
+                    log.warn("assistant stream send error event failed, userId={}", userId, ioException);
+                }
+                emitter.complete();
+            }
+        });
+        return emitter;
+    }
+
+    public Result getBrief(Long userId, String period) {
+        Account account = accountService.getAccountInfo(userId);
+        if (account == null) {
+            throw BusinessException.of(ErrorCode.ACCOUNT_NOT_FOUND, "账户不存在");
+        }
+        String normalizedPeriod = ("month".equalsIgnoreCase(period) || "week".equalsIgnoreCase(period))
+                ? period.toLowerCase()
+                : "week";
+
+        StatisticsQueryDTO incomeQuery = buildBriefQuery(account.getId(), "收入", "sum", normalizedPeriod);
+        StatisticsQueryDTO expenseQuery = buildBriefQuery(account.getId(), "支出", "sum", normalizedPeriod);
+        StatisticsQueryDTO trendQuery = buildBriefQuery(account.getId(), "支出", "trend", normalizedPeriod);
+
+        StatisticsResultVO incomeVo = statisticsService.statistics(incomeQuery);
+        StatisticsResultVO expenseVo = statisticsService.statistics(expenseQuery);
+        StatisticsResultVO trendVo = statisticsService.statistics(trendQuery);
+
+        BigDecimal income = incomeVo.getValue() == null ? BigDecimal.ZERO : incomeVo.getValue();
+        BigDecimal expense = expenseVo.getValue() == null ? BigDecimal.ZERO : expenseVo.getValue();
+        BigDecimal net = income.subtract(expense);
+        String periodLabel = "month".equals(normalizedPeriod) ? "本月" : "本周";
+
+        List<String> highlights = new ArrayList<>();
+        highlights.add(periodLabel + "总收入：¥" + income.toPlainString());
+        highlights.add(periodLabel + "总支出：¥" + expense.toPlainString());
+        highlights.add(periodLabel + "净流入：¥" + net.toPlainString());
+
+        String anomaly = detectExpenseAnomaly(account.getId(), expense, normalizedPeriod);
+        List<String> quickActions = List.of(
+                "看" + periodLabel + "支出明细",
+                "统计" + periodLabel + "总支出",
+                "看" + periodLabel + "收入趋势"
+        );
+
+        Map<String, Object> brief = new HashMap<>();
+        brief.put("period", normalizedPeriod);
+        brief.put("headline", "AI简报：" + periodLabel + "净流入 ¥" + net.toPlainString());
+        brief.put("highlights", highlights);
+        brief.put("anomaly", anomaly);
+        brief.put("quickActions", quickActions);
+        brief.put("chartType", "bar");
+        brief.put("chartData", trendVo.getTrendList() == null ? List.of() : trendVo.getTrendList());
+        return Result.success(brief);
     }
 
     //AI数据报表统计
@@ -91,9 +180,12 @@ public class AssistantService {
         boolean comparePrevious = parsed.path("comparePrevious").asBoolean(false);
 
         if (metric.isBlank()) {
-            return Result.success(new AssistantChatResponse(
+            AssistantChatResponse response = new AssistantChatResponse(
                     "你可以这样说：统计这个月总支出、最近7天我花了多少钱、本月有多少笔收入、统计今年每个月的支出。"
-            ));
+            );
+            attachTrace(response, "statistics", "statistics_service", "need_more_info", "high", timeRange,
+                    List.of("识别为统计意图", "缺少统计指标 metric"));
+            return Result.success(response);
         }
 
         Account account = accountService.getAccountInfo(userId);
@@ -149,7 +241,21 @@ public class AssistantService {
         } else if ("count".equals(metric)) {
             response.setChartType("number");
             response.setChartData(vo.getCount());
+        } else if ("max".equals(metric)) {
+            response.setChartType("number");
+            response.setChartData(vo.getValue());
         }
+
+        response.setExplain(Map.of(
+                "metric", safe(q.getMetric()),
+                "txnType", safe(q.getTxnType()),
+                "groupBy", safe(q.getGroupBy()),
+                "startTime", safe(q.getStartTime()),
+                "endTime", safe(q.getEndTime()),
+                "comparePrevious", q.getComparePrevious() != null && q.getComparePrevious()
+        ));
+        attachTrace(response, "statistics", "statistics_service", "completed", "high", timeRange,
+                List.of("识别为统计意图", "查询统计服务", "生成分析总结"));
 
         return Result.success(response);
     }
@@ -189,6 +295,7 @@ public class AssistantService {
             }
             return content;
         } catch (Exception e) {
+            log.warn("assistant summarize statistics fallback, metric={}, accountId={}", q.getMetric(), q.getAccountId(), e);
             return vo.getSummary();
         }
     }
@@ -238,6 +345,13 @@ public class AssistantService {
         if (pending == null) {
             return null;
         }
+        if (isPendingExpired(pending.getCreatedAt())) {
+            pendingMap.remove(userId);
+            AssistantChatResponse response = new AssistantChatResponse("上一次转账确认已超时，请重新发起转账请求。");
+            attachTrace(response, "transfer", "transfer_validation", "expired", "high", "",
+                    List.of("检测到待确认转账", "会话超时自动失效"));
+            return Result.success(response);
+        }
 
         if (isConfirm(msg)) {
             TransferRequestDTO dto = new TransferRequestDTO();
@@ -247,12 +361,18 @@ public class AssistantService {
 
             accountService.transfer(userId, dto);
             pendingMap.remove(userId);
-            return Result.success(new AssistantChatResponse("已确认✅ 转账成功。"));
+            AssistantChatResponse response = new AssistantChatResponse("已确认✅ 转账成功。");
+            attachTrace(response, "transfer", "account_transfer", "completed", "high", "",
+                    List.of("检测到待确认转账", "用户确认", "执行转账"));
+            return Result.success(response);
         }
 
         if (isCancel(msg)) {
             pendingMap.remove(userId);
-            return Result.success(new AssistantChatResponse("好的，已取消这笔转账。"));
+            AssistantChatResponse response = new AssistantChatResponse("好的，已取消这笔转账。");
+            attachTrace(response, "transfer", "transfer_validation", "cancelled", "high", "",
+                    List.of("检测到待确认转账", "用户取消转账"));
+            return Result.success(response);
         }
 
         return null;
@@ -267,7 +387,10 @@ public class AssistantService {
         String desc = parsed.path("description").asText("");
 
         if (to.isBlank() || amountStr.isBlank()) {
-            return Result.success(new AssistantChatResponse("请提供完整的转账信息，例如：向6222000012345678转100元，备注午餐费。"));
+            AssistantChatResponse response = new AssistantChatResponse("请提供完整的转账信息，例如：向6222000012345678转100元，备注午餐费。");
+            attachTrace(response, "transfer", "transfer_validation", "need_more_info", "high", "",
+                    List.of("识别为转账意图", "缺少收款账号或金额"));
+            return Result.success(response);
         }
 
         TransferRequestDTO dto = new TransferRequestDTO();
@@ -293,7 +416,10 @@ public class AssistantService {
                         ((vo.getDescription() != null && !vo.getDescription().isBlank()) ? "备注：" + vo.getDescription() + "\n" : "") +
                         "回复【确认】执行，回复【取消】放弃。";
 
-        return Result.success(new AssistantChatResponse(reply));
+        AssistantChatResponse response = new AssistantChatResponse(reply);
+        attachTrace(response, "transfer", "transfer_validation", "awaiting_confirmation", "high", "",
+                List.of("识别为转账意图", "完成转账前校验", "等待用户确认"));
+        return Result.success(response);
     }
 
     /**
@@ -322,9 +448,12 @@ public class AssistantService {
 
             pendingTxnQueryMap.put(userId, pending);
 
-            return Result.success(new AssistantChatResponse(
+            AssistantChatResponse response = new AssistantChatResponse(
                     "请问你要查询几月" + dayStr + "号的" + (txnType.isBlank() ? "" : txnType) + "记录？例如回复“1月”或“今年1月”。"
-            ));
+            );
+            attachTrace(response, "transactions", "transaction_query", "awaiting_more_context", "high", timeRange,
+                    List.of("识别为流水查询意图", "检测到日期缺月份", "等待用户补充月份"));
+            return Result.success(response);
         }
 
         TransactionQueryDTO q = new TransactionQueryDTO();
@@ -354,17 +483,30 @@ public class AssistantService {
         if (pending == null) {
             return null;
         }
+        if (isPendingExpired(pending.getCreatedAt())) {
+            pendingTxnQueryMap.remove(userId);
+            AssistantChatResponse response = new AssistantChatResponse("上一次补全月份的查询已超时，请重新描述你的查询需求。");
+            attachTrace(response, "transactions", "transaction_query", "expired", "high", "",
+                    List.of("检测到待补全流水查询", "会话超时自动失效"));
+            return Result.success(response);
+        }
 
         if (isCancel(msg)) {
             pendingTxnQueryMap.remove(userId);
-            return Result.success(new AssistantChatResponse("好的，已取消这次流水查询。"));
+            AssistantChatResponse response = new AssistantChatResponse("好的，已取消这次流水查询。");
+            attachTrace(response, "transactions", "transaction_query", "cancelled", "high", "",
+                    List.of("检测到待补全流水查询", "用户取消查询"));
+            return Result.success(response);
         }
 
         JsonNode parsed = parseIntentByQwen(msg);
 
         int month = Time.extractMonth(parsed, msg);
         if (month <= 0 || month > 12) {
-            return Result.success(new AssistantChatResponse("请直接告诉我月份，例如“1月”或“今年1月”。"));
+            AssistantChatResponse response = new AssistantChatResponse("请直接告诉我月份，例如“1月”或“今年1月”。");
+            attachTrace(response, "transactions", "transaction_query", "need_more_info", "medium", "",
+                    List.of("检测到待补全流水查询", "未识别出合法月份"));
+            return Result.success(response);
         }
 
         pending.setMonth(month);
@@ -383,19 +525,31 @@ public class AssistantService {
     @SuppressWarnings("unchecked")
     private Result convertTransactionResultToChat(Result result, String txnType, TransactionQueryDTO q) {
         if (result == null || result.getData() == null) {
-            return Result.success(new AssistantChatResponse("未查询到相关交易记录。"));
+            AssistantChatResponse response = new AssistantChatResponse("未查询到相关交易记录。");
+            attachTrace(response, "transactions", "transaction_query", "completed", "high", buildTimeRangeText(q),
+                    List.of("识别为流水查询意图", "调用流水查询服务", "结果为空"));
+            response.setExplain(buildTransactionExplain(q, txnType));
+            return Result.success(response);
         }
 
         Object data = result.getData();
         if (!(data instanceof com.idea.entity.PageResult<?> pageResultRaw)) {
-            return Result.success(new AssistantChatResponse("未查询到相关交易记录。"));
+            AssistantChatResponse response = new AssistantChatResponse("未查询到相关交易记录。");
+            attachTrace(response, "transactions", "transaction_query", "completed", "medium", buildTimeRangeText(q),
+                    List.of("识别为流水查询意图", "流水结果格式异常"));
+            response.setExplain(buildTransactionExplain(q, txnType));
+            return Result.success(response);
         }
 
         com.idea.entity.PageResult<?> pageResult = (com.idea.entity.PageResult<?>) data;
         List<?> rows = pageResult.getList();
 
         if (rows == null || rows.isEmpty()) {
-            return Result.success(new AssistantChatResponse("未查询到相关交易记录。"));
+            AssistantChatResponse response = new AssistantChatResponse("未查询到相关交易记录。");
+            attachTrace(response, "transactions", "transaction_query", "completed", "high", buildTimeRangeText(q),
+                    List.of("识别为流水查询意图", "调用流水查询服务", "结果为空"));
+            response.setExplain(buildTransactionExplain(q, txnType));
+            return Result.success(response);
         }
 
         StringBuilder sb = new StringBuilder();
@@ -418,7 +572,11 @@ public class AssistantService {
             }
         }
 
-        return Result.success(new AssistantChatResponse(sb.toString()));
+        AssistantChatResponse response = new AssistantChatResponse(sb.toString());
+        response.setExplain(buildTransactionExplain(q, txnType));
+        attachTrace(response, "transactions", "transaction_query", "completed", "high", buildTimeRangeText(q),
+                List.of("识别为流水查询意图", "调用流水查询服务", "格式化返回结果"));
+        return Result.success(response);
     }
 
 
@@ -479,7 +637,10 @@ public class AssistantService {
                         "状态：" + safe(account.getStatus()) + "\n" +
                         "余额：¥ " + (account.getBalance() == null ? "0.00" : account.getBalance().toPlainString());
 
-        return Result.success(new AssistantChatResponse(reply));
+        AssistantChatResponse response = new AssistantChatResponse(reply);
+        attachTrace(response, "balance", "account_info", "completed", "high", "",
+                List.of("识别为余额/账户查询意图", "查询账户信息"));
+        return Result.success(response);
     }
 
     private JsonNode parseIntentByQwen(String userMsg) {
@@ -572,10 +733,12 @@ public class AssistantService {
         ));
 
         String content = raw.path("choices").get(0).path("message").path("content").asText("{}");
+        content = sanitizeJsonContent(content);
 
         try {
             return objectMapper.readTree(content);
         } catch (Exception e) {
+            log.warn("assistant parse intent failed, content={}", content, e);
             return objectMapper.createObjectNode().put("intent", "other");
         }
     }
@@ -599,5 +762,93 @@ public class AssistantService {
 
     private String safe(String s) {
         return s == null ? "" : s;
+    }
+
+    private void sendEvent(SseEmitter emitter, String event, Object data) throws IOException {
+        emitter.send(SseEmitter.event().name(event).data(data));
+    }
+
+    private void attachTrace(AssistantChatResponse response, String intent, String tool, String status,
+                             String confidence, String timeRange, List<String> steps) {
+        response.setTrace(new AssistantChatResponse.TraceInfo(
+                intent,
+                tool,
+                status,
+                confidence,
+                safe(timeRange),
+                steps
+        ));
+    }
+
+    private boolean isPendingExpired(LocalDateTime createdAt) {
+        if (createdAt == null) {
+            return false;
+        }
+        return createdAt.plus(PENDING_TTL).isBefore(LocalDateTime.now());
+    }
+
+    private String sanitizeJsonContent(String rawContent) {
+        if (rawContent == null) {
+            return "{}";
+        }
+        String content = rawContent.trim();
+        if (content.startsWith("```")) {
+            content = content.replaceFirst("^```(?:json)?", "").replaceFirst("```$", "").trim();
+        }
+        int start = content.indexOf('{');
+        int end = content.lastIndexOf('}');
+        if (start >= 0 && end > start) {
+            content = content.substring(start, end + 1);
+        }
+        return content;
+    }
+
+    private Map<String, Object> buildTransactionExplain(TransactionQueryDTO q, String txnType) {
+        return Map.of(
+                "txnType", safe(txnType),
+                "startTime", safe(q.getStartTime()),
+                "endTime", safe(q.getEndTime()),
+                "limit", q.getSize() == null ? 0 : q.getSize()
+        );
+    }
+
+    private String buildTimeRangeText(TransactionQueryDTO q) {
+        return safe(q.getStartTime()) + " ~ " + safe(q.getEndTime());
+    }
+
+    private StatisticsQueryDTO buildBriefQuery(Long accountId, String txnType, String metric, String period) {
+        StatisticsQueryDTO q = new StatisticsQueryDTO();
+        q.setAccountId(accountId);
+        q.setTxnType(txnType);
+        q.setMetric(metric);
+        q.setGroupBy("trend".equals(metric) ? "day" : "none");
+        if ("month".equals(period)) {
+            Time.fillTimeRange(q, "month", "", "", "", "");
+        } else {
+            Time.fillTimeRange(q, "week", "", "", "", "");
+        }
+        return q;
+    }
+
+    private String detectExpenseAnomaly(Long accountId, BigDecimal currentExpense, String period) {
+        if (!"week".equals(period)) {
+            return "";
+        }
+        StatisticsQueryDTO baseline = new StatisticsQueryDTO();
+        baseline.setAccountId(accountId);
+        baseline.setTxnType("支出");
+        baseline.setMetric("sum");
+        baseline.setGroupBy("none");
+        Time.fillTimeRange(baseline, "recent_days", "", "", "", "28");
+        StatisticsResultVO baselineVo = statisticsService.statistics(baseline);
+        BigDecimal baselineExpense = baselineVo.getValue() == null ? BigDecimal.ZERO : baselineVo.getValue();
+        BigDecimal avgPerWeek = baselineExpense.divide(BigDecimal.valueOf(4), 2, java.math.RoundingMode.HALF_UP);
+        if (avgPerWeek.compareTo(BigDecimal.ZERO) <= 0) {
+            return "";
+        }
+        if (currentExpense.compareTo(avgPerWeek.multiply(BigDecimal.valueOf(1.5))) > 0) {
+            return "异常提醒：本周支出显著高于近4周周均值，请关注大额消费。";
+        }
+        return "";
     }
 }
