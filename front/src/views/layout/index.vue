@@ -132,6 +132,9 @@ const submitPwd = async () => {
             <el-menu-item index="/transactions">
               <el-icon><Document /></el-icon> 交易流水
             </el-menu-item>
+            <el-menu-item index="/payees">
+              <el-icon><User /></el-icon> 收款人管理
+            </el-menu-item>
           </el-menu>
         </el-aside>
 

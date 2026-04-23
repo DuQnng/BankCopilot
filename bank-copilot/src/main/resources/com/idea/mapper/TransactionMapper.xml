@@ -221,4 +221,43 @@
         order by ABS(amount) asc
     </select>
 
+    <select id="selectLatestExpenseByCounterpartyAndDescription" resultType="com.idea.entity.TransactionRecord">
+        select
+        id,
+        account_id,
+        counterparty_account_no,
+        type,
+        amount,
+        description,
+        trade_time
+        from transaction_record
+        where account_id = #{accountId}
+        and type = '支出'
+        and counterparty_account_no = #{counterpartyAccountNo}
+        and trade_time <![CDATA[ >= ]]> #{startTime}
+        and trade_time <![CDATA[ <= ]]> #{endTime}
+        and description like concat('%', #{keyword}, '%')
+        order by trade_time desc, id desc
+        limit 1
+    </select>
+
+    <select id="selectLatestExpenseByCounterparty" resultType="com.idea.entity.TransactionRecord">
+        select
+        id,
+        account_id,
+        counterparty_account_no,
+        type,
+        amount,
+        description,
+        trade_time
+        from transaction_record
+        where account_id = #{accountId}
+        and type = '支出'
+        and counterparty_account_no = #{counterpartyAccountNo}
+        and trade_time <![CDATA[ >= ]]> #{startTime}
+        and trade_time <![CDATA[ <= ]]> #{endTime}
+        order by trade_time desc, id desc
+        limit 1
+    </select>
+
 </mapper>

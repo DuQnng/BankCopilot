@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class PendingTransfer {
+    private Long payeeId;
+    private String payeeAlias;
     private String toAccountNo;
     private BigDecimal amount;
     private String description;

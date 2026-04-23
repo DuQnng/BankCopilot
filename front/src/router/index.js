@@ -8,6 +8,7 @@ import RegisterView from '@/views/register/index.vue'
 import AccountView from '@/views/account/AccountOverview.vue'
 import TransferView from '@/views/account/Transfer.vue'
 import TransactionsView from '@/views/transaction/Transactions.vue'
+import PayeeView from '@/views/payee/index.vue'
 
 
 
@@ -40,6 +41,11 @@ const router = createRouter({
         path: '/transactions',
         name: 'transactions',
         component: TransactionsView
+      },
+      {
+        path: '/payees',
+        name: 'payees',
+        component: PayeeView
       }
 
 

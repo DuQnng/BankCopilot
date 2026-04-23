@@ -18,7 +18,11 @@ public enum ErrorCode {
     ACCOUNT_NOT_FOUND(2001, "账户不存在"),
     ACCOUNT_FROZEN(2002, "账户状态异常"),
     INSUFFICIENT_BALANCE(2003, "余额不足"),
-    TRANSFER_TO_SELF(2004, "不能给自己转账");
+    TRANSFER_TO_SELF(2004, "不能给自己转账"),
+
+    // 收款人管理
+    PAYEE_NOT_FOUND(2101, "收款人不存在"),
+    PAYEE_ALREADY_EXISTS(2102, "该银行卡已在收款人列表中");
 
     private final int code;
     private final String msg;

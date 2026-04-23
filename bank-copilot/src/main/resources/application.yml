@@ -5,7 +5,7 @@ spring:
     url: jdbc:mysql://localhost:3306/tlias
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: '000150'
+    password: 123456
   servlet:
     multipart:
       max-file-size: 10MB
@@ -27,3 +27,6 @@ dashscope:
   api-key: sk-f4db414853394f598c764fc49a295fda
   base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
   model: qwen-plus
+
+server:
+  port: 8081

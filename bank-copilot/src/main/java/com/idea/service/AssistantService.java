@@ -6,9 +6,12 @@ import com.idea.assistant.PendingTransfer;
 import com.idea.common.ErrorCode;
 import com.idea.dto.*;
 import com.idea.entity.Account;
+import com.idea.entity.PayeeContact;
 import com.idea.entity.Result;
+import com.idea.entity.TransactionRecord;
 import com.idea.exception.BusinessException;
 import com.idea.llm.QwenClient;
+import com.idea.mapper.PayeeContactMapper;
 import com.idea.mapper.TransactionMapper;
 import com.idea.service.impl.AccountServiceImpl;
 import com.idea.service.impl.TransactionServiceImpl;
@@ -29,10 +32,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +49,8 @@ public class AssistantService {
     private final AccountServiceImpl accountService;
     private final TransactionServiceImpl transactionService;
     private final StatisticsService statisticsService;
+    private final PayeeService payeeService;
+    private final PayeeContactMapper payeeContactMapper;
     private final TransactionMapper transactionMapper;
 
 
@@ -79,7 +87,7 @@ public class AssistantService {
         // 4. 分发处理
         switch (intent) {
             case "transfer":
-                return handleTransfer(userId, parsed);
+                return handleTransfer(userId, parsed, msg);
             case "transactions":
                 return handleTransactions(userId, parsed);
             case "balance":
@@ -270,23 +278,25 @@ public class AssistantService {
     //分析型总结功能
     private String summarizeStatisticsByQwen(StatisticsQueryDTO q, StatisticsResultVO vo) {
         try {
-            String facts = buildStatisticsFacts(q, vo);
+            StatisticsInsight insight = buildStatisticsInsight(q, vo);
+            String facts = buildStatisticsFacts(q, vo, insight);
+            String ruleBasedFallback = buildRuleBasedStatisticsSummary(q, vo, insight);
 
             JsonNode raw = qwenClient.chat(List.of(
                     Map.of(
                             "role", "system",
                             "content", """
 你是银行智能分析助手。
-你的任务是：基于系统已经计算好的真实统计结果，生成简短、清晰、有业务感的分析型总结。
+你的任务是：基于系统已给出的真实统计与流水分析结果，输出详细、可落地的账单分析。
 
 要求：
 1. 只能基于给定事实总结，禁止编造数据。
-2. 语气自然、专业、简洁，像银行智能助理。
-3. 控制在 2~4 句。
-4. 若数据为空或为 0，要明确说明未查询到明显记录或金额很少。
-5. 如果是趋势数据，可以简单指出“整体变化情况”，但不能编造未提供的涨跌幅。
-6. 仅进行总结分析即可，不要提示用户进一步分析！
-7. 不要输出 JSON，不要解释过程，直接输出给用户的话。
+2. 语气自然、专业，像银行客户经理做月度复盘。
+3. 控制在 4~8 句，优先覆盖：总体收支、主要收入日、主要支出日、主要对方账号、异常信号。
+4. 至少引用 2 处具体数字（金额/日期/占比均可）。
+5. 若数据为空或为 0，要明确说明未查询到明显记录或金额很少。
+6. 禁止输出空话模板，例如“未区分收入与支出”“暂无进一步分项或趋势对比数据”。
+7. 仅进行总结分析，不要要求用户继续补数据，不要输出 JSON。
 8. 当前系统不支持支出品类、消费场景、商户类型分类分析，禁止输出此类结论。
 9. 饼图仅表示按对方账号聚合，不得称为“消费分类”。
 """
@@ -299,17 +309,21 @@ public class AssistantService {
 
             String content = raw.path("choices").get(0).path("message").path("content").asText("").trim();
             if (content == null || content.isBlank()) {
-                return vo.getSummary();
+                return ruleBasedFallback;
             }
-            return sanitizeModelReply(content, vo.getSummary());
+            content = sanitizeModelReply(content, ruleBasedFallback);
+            if (isGenericStatisticsReply(content)) {
+                return ruleBasedFallback;
+            }
+            return content;
         } catch (Exception e) {
             log.warn("assistant summarize statistics fallback, metric={}, accountId={}", q.getMetric(), q.getAccountId(), e);
-            return vo.getSummary();
+            return buildRuleBasedStatisticsSummary(q, vo, buildStatisticsInsight(q, vo));
         }
     }
 
     //数据整理
-    private String buildStatisticsFacts(StatisticsQueryDTO q, StatisticsResultVO vo) {
+    private String buildStatisticsFacts(StatisticsQueryDTO q, StatisticsResultVO vo, StatisticsInsight insight) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("下面是系统已计算出的真实统计结果，请据此生成用户可直接阅读的分析总结：\n");
@@ -339,8 +353,360 @@ public class AssistantService {
             }
         }
 
+        appendInsightFacts(sb, insight);
         sb.append("系统规则总结：").append(safe(vo.getSummary())).append("\n");
         return sb.toString();
+    }
+
+    private StatisticsInsight buildStatisticsInsight(StatisticsQueryDTO q, StatisticsResultVO vo) {
+        BigDecimal incomeTotal = extractBarAmount(vo.getIncomeExpenseBar(), "收入");
+        BigDecimal expenseTotal = extractBarAmount(vo.getIncomeExpenseBar(), "支出");
+
+        if ("收入".equals(q.getTxnType())) {
+            incomeTotal = safeAmount(vo.getValue());
+        } else if ("支出".equals(q.getTxnType())) {
+            expenseTotal = safeAmount(vo.getValue());
+        }
+
+        StatisticsQueryDTO incomeSumQuery = buildStatisticsSubQuery(q, "收入", "sum", "none");
+        StatisticsQueryDTO expenseSumQuery = buildStatisticsSubQuery(q, "支出", "sum", "none");
+        if (incomeTotal == null) {
+            incomeTotal = safeAmount(transactionMapper.sumAmount(incomeSumQuery));
+        }
+        if (expenseTotal == null) {
+            expenseTotal = safeAmount(transactionMapper.sumAmount(expenseSumQuery));
+        }
+
+        List<StatisticsPointVO> incomeDayTrend = transactionMapper.statisticsTrend(buildStatisticsSubQuery(q, "收入", "trend", "day"));
+        List<StatisticsPointVO> expenseDayTrend = transactionMapper.statisticsTrend(buildStatisticsSubQuery(q, "支出", "trend", "day"));
+        StatisticsPointVO peakIncomeDay = maxValuePoint(incomeDayTrend);
+        StatisticsPointVO peakExpenseDay = maxValuePoint(expenseDayTrend);
+
+        List<StatisticsPointVO> topIncomeCounterparty = topNPoints(
+                (vo.getIncomePie() != null && !vo.getIncomePie().isEmpty()) ? vo.getIncomePie() : transactionMapper.statisticsByCounterparty(incomeSumQuery),
+                3
+        );
+        List<StatisticsPointVO> topExpenseCounterparty = topNPoints(
+                (vo.getExpensePie() != null && !vo.getExpensePie().isEmpty()) ? vo.getExpensePie() : transactionMapper.statisticsByCounterparty(expenseSumQuery),
+                3
+        );
+
+        StatisticsPointVO maxIncomeTxn = transactionMapper.maxTransaction(buildStatisticsSubQuery(q, "收入", "max", "none"));
+        StatisticsPointVO maxExpenseTxn = transactionMapper.maxTransaction(buildStatisticsSubQuery(q, "支出", "max", "none"));
+
+        Long incomeCount = transactionMapper.countByStatistics(buildStatisticsSubQuery(q, "收入", "count", "none"));
+        Long expenseCount = transactionMapper.countByStatistics(buildStatisticsSubQuery(q, "支出", "count", "none"));
+
+        List<String> anomalySignals = buildAnomalySignals(
+                incomeTotal,
+                expenseTotal,
+                peakIncomeDay,
+                peakExpenseDay,
+                topIncomeCounterparty,
+                topExpenseCounterparty,
+                maxExpenseTxn,
+                incomeCount,
+                expenseCount
+        );
+
+        return new StatisticsInsight(
+                safeAmount(incomeTotal),
+                safeAmount(expenseTotal),
+                peakIncomeDay,
+                peakExpenseDay,
+                topIncomeCounterparty,
+                topExpenseCounterparty,
+                maxIncomeTxn,
+                maxExpenseTxn,
+                incomeCount == null ? 0L : incomeCount,
+                expenseCount == null ? 0L : expenseCount,
+                anomalySignals
+        );
+    }
+
+    private StatisticsQueryDTO buildStatisticsSubQuery(StatisticsQueryDTO source, String txnType, String metric, String groupBy) {
+        StatisticsQueryDTO dto = new StatisticsQueryDTO();
+        dto.setAccountId(source.getAccountId());
+        dto.setAccountNo(source.getAccountNo());
+        dto.setStartTime(source.getStartTime());
+        dto.setEndTime(source.getEndTime());
+        dto.setRangeValue(source.getRangeValue());
+        dto.setComparePrevious(source.getComparePrevious());
+        dto.setTxnType(txnType);
+        dto.setMetric(metric);
+        dto.setGroupBy(groupBy);
+        return dto;
+    }
+
+    private BigDecimal extractBarAmount(List<StatisticsPointVO> bars, String label) {
+        if (bars == null || bars.isEmpty()) {
+            return null;
+        }
+        for (StatisticsPointVO point : bars) {
+            if (point == null || point.getLabel() == null) {
+                continue;
+            }
+            if (label.equals(point.getLabel())) {
+                return point.getValue();
+            }
+        }
+        return null;
+    }
+
+    private StatisticsPointVO maxValuePoint(List<StatisticsPointVO> points) {
+        if (points == null || points.isEmpty()) {
+            return null;
+        }
+        StatisticsPointVO max = null;
+        for (StatisticsPointVO point : points) {
+            if (point == null || point.getValue() == null) {
+                continue;
+            }
+            if (max == null || point.getValue().compareTo(max.getValue()) > 0) {
+                max = point;
+            }
+        }
+        return max;
+    }
+
+    private List<StatisticsPointVO> topNPoints(List<StatisticsPointVO> points, int n) {
+        if (points == null || points.isEmpty()) {
+            return List.of();
+        }
+        int limit = Math.min(Math.max(n, 0), points.size());
+        List<StatisticsPointVO> result = new ArrayList<>();
+        for (int i = 0; i < limit; i++) {
+            StatisticsPointVO point = points.get(i);
+            if (point != null) {
+                result.add(point);
+            }
+        }
+        return result;
+    }
+
+    private void appendInsightFacts(StringBuilder sb, StatisticsInsight insight) {
+        sb.append("补充流水分析数据：\n");
+        sb.append("收入总额：").append(insight.totalIncome().toPlainString()).append("\n");
+        sb.append("支出总额：").append(insight.totalExpense().toPlainString()).append("\n");
+        sb.append("净流入：").append(insight.totalIncome().subtract(insight.totalExpense()).toPlainString()).append("\n");
+        sb.append("收入笔数：").append(insight.incomeCount()).append("\n");
+        sb.append("支出笔数：").append(insight.expenseCount()).append("\n");
+
+        if (insight.peakIncomeDay() != null && insight.peakIncomeDay().getValue() != null) {
+            sb.append("主要收入日：")
+                    .append(safe(insight.peakIncomeDay().getLabel()))
+                    .append("，金额 ")
+                    .append(insight.peakIncomeDay().getValue().toPlainString())
+                    .append("\n");
+        }
+        if (insight.peakExpenseDay() != null && insight.peakExpenseDay().getValue() != null) {
+            sb.append("主要支出日：")
+                    .append(safe(insight.peakExpenseDay().getLabel()))
+                    .append("，金额 ")
+                    .append(insight.peakExpenseDay().getValue().toPlainString())
+                    .append("\n");
+        }
+        if (insight.maxIncomeTxn() != null && insight.maxIncomeTxn().getValue() != null) {
+            sb.append("最大单笔收入：")
+                    .append(insight.maxIncomeTxn().getValue().toPlainString())
+                    .append("（")
+                    .append(safe(insight.maxIncomeTxn().getLabel()))
+                    .append("）\n");
+        }
+        if (insight.maxExpenseTxn() != null && insight.maxExpenseTxn().getValue() != null) {
+            sb.append("最大单笔支出：")
+                    .append(insight.maxExpenseTxn().getValue().toPlainString())
+                    .append("（")
+                    .append(safe(insight.maxExpenseTxn().getLabel()))
+                    .append("）\n");
+        }
+        if (!insight.topIncomeCounterparty().isEmpty()) {
+            sb.append("收入对方账号Top3：").append(formatCounterpartyTop(insight.topIncomeCounterparty())).append("\n");
+        }
+        if (!insight.topExpenseCounterparty().isEmpty()) {
+            sb.append("支出对方账号Top3：").append(formatCounterpartyTop(insight.topExpenseCounterparty())).append("\n");
+        }
+        if (!insight.anomalySignals().isEmpty()) {
+            sb.append("异常信号：\n");
+            for (String signal : insight.anomalySignals()) {
+                sb.append("- ").append(signal).append("\n");
+            }
+        }
+    }
+
+    private String formatCounterpartyTop(List<StatisticsPointVO> points) {
+        List<String> parts = new ArrayList<>();
+        for (StatisticsPointVO point : points) {
+            if (point == null || point.getValue() == null) {
+                continue;
+            }
+            parts.add(maskCounterparty(point.getLabel()) + "：" + point.getValue().toPlainString());
+        }
+        return parts.isEmpty() ? "无" : String.join("；", parts);
+    }
+
+    private String maskCounterparty(String accountNo) {
+        String no = safe(accountNo);
+        if (no.isBlank() || "未知".equals(no)) {
+            return "未知";
+        }
+        if (no.length() < 8) {
+            return no;
+        }
+        return no.substring(0, 4) + "****" + no.substring(no.length() - 4);
+    }
+
+    private List<String> buildAnomalySignals(BigDecimal incomeTotal,
+                                             BigDecimal expenseTotal,
+                                             StatisticsPointVO peakIncomeDay,
+                                             StatisticsPointVO peakExpenseDay,
+                                             List<StatisticsPointVO> topIncomeCounterparty,
+                                             List<StatisticsPointVO> topExpenseCounterparty,
+                                             StatisticsPointVO maxExpenseTxn,
+                                             Long incomeCount,
+                                             Long expenseCount) {
+        List<String> signals = new ArrayList<>();
+
+        BigDecimal safeExpenseTotal = safeAmount(expenseTotal);
+        if (safeExpenseTotal.compareTo(BigDecimal.ZERO) > 0 && peakExpenseDay != null && peakExpenseDay.getValue() != null) {
+            BigDecimal ratio = peakExpenseDay.getValue()
+                    .divide(safeExpenseTotal, 4, RoundingMode.HALF_UP);
+            if (ratio.compareTo(new BigDecimal("0.35")) >= 0) {
+                signals.add("支出在 " + safe(peakExpenseDay.getLabel()) + " 明显集中，占总支出约 " + formatPercent(ratio) + "。");
+            }
+        }
+
+        if (safeExpenseTotal.compareTo(BigDecimal.ZERO) > 0 && topExpenseCounterparty != null && !topExpenseCounterparty.isEmpty()) {
+            StatisticsPointVO top1 = topExpenseCounterparty.get(0);
+            if (top1 != null && top1.getValue() != null) {
+                BigDecimal ratio = top1.getValue().divide(safeExpenseTotal, 4, RoundingMode.HALF_UP);
+                if (ratio.compareTo(new BigDecimal("0.40")) >= 0) {
+                    signals.add("对账号 " + maskCounterparty(top1.getLabel()) + " 的支出占比较高，约 " + formatPercent(ratio) + "。");
+                }
+            }
+        }
+
+        if (safeExpenseTotal.compareTo(BigDecimal.ZERO) > 0
+                && maxExpenseTxn != null
+                && maxExpenseTxn.getValue() != null
+                && expenseCount != null
+                && expenseCount > 0) {
+            BigDecimal avgExpense = safeExpenseTotal.divide(BigDecimal.valueOf(expenseCount), 2, RoundingMode.HALF_UP);
+            if (avgExpense.compareTo(BigDecimal.ZERO) > 0
+                    && maxExpenseTxn.getValue().compareTo(avgExpense.multiply(BigDecimal.valueOf(3))) >= 0) {
+                signals.add("存在明显大额单笔支出，单笔 " + maxExpenseTxn.getValue().toPlainString()
+                        + "，约为平均单笔支出的 " + formatMultiple(maxExpenseTxn.getValue(), avgExpense) + " 倍。");
+            }
+        }
+
+        BigDecimal safeIncomeTotal = safeAmount(incomeTotal);
+        if (safeIncomeTotal.compareTo(BigDecimal.ZERO) > 0 && peakIncomeDay != null && peakIncomeDay.getValue() != null) {
+            BigDecimal ratio = peakIncomeDay.getValue()
+                    .divide(safeIncomeTotal, 4, RoundingMode.HALF_UP);
+            if (ratio.compareTo(new BigDecimal("0.50")) >= 0) {
+                signals.add("收入在 " + safe(peakIncomeDay.getLabel()) + " 较为集中，占总收入约 " + formatPercent(ratio) + "。");
+            }
+        }
+
+        if (safeIncomeTotal.compareTo(BigDecimal.ZERO) > 0 && topIncomeCounterparty != null && !topIncomeCounterparty.isEmpty()) {
+            StatisticsPointVO top1 = topIncomeCounterparty.get(0);
+            if (top1 != null && top1.getValue() != null) {
+                BigDecimal ratio = top1.getValue().divide(safeIncomeTotal, 4, RoundingMode.HALF_UP);
+                if (ratio.compareTo(new BigDecimal("0.60")) >= 0) {
+                    signals.add("收入来源对账号 " + maskCounterparty(top1.getLabel()) + " 依赖度较高，约 " + formatPercent(ratio) + "。");
+                }
+            }
+        }
+
+        if (incomeCount != null && incomeCount == 0 && expenseCount != null && expenseCount == 0) {
+            signals.add("当前周期内没有有效流水。");
+        }
+
+        return signals;
+    }
+
+    private String formatPercent(BigDecimal ratio) {
+        return ratio.multiply(BigDecimal.valueOf(100)).setScale(1, RoundingMode.HALF_UP).toPlainString() + "%";
+    }
+
+    private String formatMultiple(BigDecimal numerator, BigDecimal denominator) {
+        if (denominator == null || denominator.compareTo(BigDecimal.ZERO) == 0) {
+            return "0.0";
+        }
+        return numerator.divide(denominator, 1, RoundingMode.HALF_UP).toPlainString();
+    }
+
+    private String buildRuleBasedStatisticsSummary(StatisticsQueryDTO q, StatisticsResultVO vo, StatisticsInsight insight) {
+        StringBuilder sb = new StringBuilder();
+        String periodLabel = buildStatisticsPeriodLabel(q);
+        BigDecimal net = insight.totalIncome().subtract(insight.totalExpense());
+
+        sb.append(periodLabel)
+                .append("流水总览：收入 ")
+                .append(insight.totalIncome().toPlainString())
+                .append(" 元，支出 ")
+                .append(insight.totalExpense().toPlainString())
+                .append(" 元，净流入 ")
+                .append(net.toPlainString())
+                .append(" 元。");
+
+        if (insight.peakIncomeDay() != null && insight.peakIncomeDay().getValue() != null) {
+            sb.append("主要收入日为 ")
+                    .append(safe(insight.peakIncomeDay().getLabel()))
+                    .append("，当日收入 ")
+                    .append(insight.peakIncomeDay().getValue().toPlainString())
+                    .append(" 元。");
+        }
+        if (insight.peakExpenseDay() != null && insight.peakExpenseDay().getValue() != null) {
+            sb.append("主要支出日为 ")
+                    .append(safe(insight.peakExpenseDay().getLabel()))
+                    .append("，当日支出 ")
+                    .append(insight.peakExpenseDay().getValue().toPlainString())
+                    .append(" 元。");
+        }
+
+        if (!insight.topIncomeCounterparty().isEmpty()) {
+            sb.append("主要收入对方账号包括 ")
+                    .append(formatCounterpartyTop(insight.topIncomeCounterparty()))
+                    .append("。");
+        }
+        if (!insight.topExpenseCounterparty().isEmpty()) {
+            sb.append("主要支出对方账号包括 ")
+                    .append(formatCounterpartyTop(insight.topExpenseCounterparty()))
+                    .append("。");
+        }
+
+        if (!insight.anomalySignals().isEmpty()) {
+            sb.append("异常提示：").append(String.join("；", insight.anomalySignals())).append("。");
+        }
+
+        if (insight.incomeCount() == 0 && insight.expenseCount() == 0 && vo.getValue() != null) {
+            sb.append("当前统计值为 ").append(vo.getValue().toPlainString()).append(" 元。");
+        }
+        return sb.toString();
+    }
+
+    private String buildStatisticsPeriodLabel(StatisticsQueryDTO q) {
+        String startDate = extractDate(q.getStartTime());
+        String endDate = extractDate(q.getEndTime());
+        if (startDate.isBlank() || endDate.isBlank()) {
+            return "当前周期";
+        }
+        if (startDate.length() >= 7
+                && endDate.length() >= 7
+                && startDate.substring(0, 7).equals(endDate.substring(0, 7))) {
+            return startDate.substring(0, 7);
+        }
+        return startDate + "至" + endDate;
+    }
+
+    private boolean isGenericStatisticsReply(String content) {
+        if (content == null || content.isBlank()) {
+            return true;
+        }
+        return content.contains("未区分收入与支出")
+                || content.contains("暂无进一步分项或趋势对比数据")
+                || content.length() < 20;
     }
 
 
@@ -362,12 +728,18 @@ public class AssistantService {
         }
 
         if (isConfirm(msg)) {
-            TransferRequestDTO dto = new TransferRequestDTO();
-            dto.setToAccountNo(pending.getToAccountNo());
-            dto.setAmount(pending.getAmount());
-            dto.setDescription(pending.getDescription());
-
-            accountService.transfer(userId, dto);
+            if (pending.getPayeeId() != null) {
+                PayeeTransferDTO dto = new PayeeTransferDTO();
+                dto.setAmount(pending.getAmount());
+                dto.setDescription(pending.getDescription());
+                payeeService.transfer(userId, pending.getPayeeId(), dto);
+            } else {
+                TransferRequestDTO dto = new TransferRequestDTO();
+                dto.setToAccountNo(pending.getToAccountNo());
+                dto.setAmount(pending.getAmount());
+                dto.setDescription(pending.getDescription());
+                accountService.transfer(userId, dto);
+            }
             pendingMap.remove(userId);
             AssistantChatResponse response = new AssistantChatResponse("已确认✅ 转账成功。");
             attachTrace(response, "transfer", "account_transfer", "completed", "high", "",
@@ -389,27 +761,135 @@ public class AssistantService {
     /**
      * 处理转账
      */
-    private Result handleTransfer(Long userId, JsonNode parsed) {
-        String to = parsed.path("toAccountNo").asText("");
+    private Result handleTransfer(Long userId, JsonNode parsed, String rawMsg) {
+        String to = parsed.path("toAccountNo").asText("").trim();
+        String payeeAlias = parsed.path("payeeAlias").asText("").trim();
         String amountStr = parsed.path("amount").asText("");
-        String desc = parsed.path("description").asText("");
+        String desc = parsed.path("description").asText("").trim();
+        String repeatMode = parsed.path("repeatMode").asText("").trim();
+        Long payeeId = null;
+        String resolvedAlias = "无";
+        String referenceSummary = "";
 
-        if (to.isBlank() || amountStr.isBlank()) {
-            AssistantChatResponse response = new AssistantChatResponse("请提供完整的转账信息，例如：向6222000012345678转100元，备注午餐费。");
+        if (to.isBlank() && payeeAlias.isBlank()) {
+            payeeAlias = extractPayeeAliasFromMessage(rawMsg);
+        }
+        if (desc.isBlank()) {
+            desc = extractDescriptionFromMessage(rawMsg);
+        }
+
+        if (to.isBlank() && !payeeAlias.isBlank()) {
+            List<PayeeContact> payees = payeeContactMapper.selectByUserIdAndAlias(userId, payeeAlias);
+            if (payees == null || payees.isEmpty()) {
+                AssistantChatResponse response = new AssistantChatResponse(
+                        "未找到昵称为【" + payeeAlias + "】的收款人，请先到收款人管理新增，或直接提供银行卡号。"
+                );
+                attachTrace(response, "transfer", "payee_lookup", "need_more_info", "high", "",
+                        List.of("识别为转账意图", "尝试按昵称匹配收款人", "未匹配到收款人"));
+                return Result.success(response);
+            }
+            if (payees.size() > 1) {
+                AssistantChatResponse response = new AssistantChatResponse(
+                        "检测到多个昵称为【" + payeeAlias + "】的收款人，请使用更具体昵称或直接提供银行卡号。"
+                );
+                attachTrace(response, "transfer", "payee_lookup", "need_more_info", "medium", "",
+                        List.of("识别为转账意图", "尝试按昵称匹配收款人", "匹配到多个收款人"));
+                return Result.success(response);
+            }
+            PayeeContact targetPayee = payees.get(0);
+            payeeId = targetPayee.getId();
+            to = safe(targetPayee.getAccountNo());
+            if (targetPayee.getAlias() != null && !targetPayee.getAlias().isBlank()) {
+                resolvedAlias = targetPayee.getAlias();
+            }
+        }
+
+        if (!to.isBlank()) {
+            PayeeContact byAccount = payeeContactMapper.selectByUserIdAndAccountNo(userId, to);
+            if (byAccount != null) {
+                payeeId = byAccount.getId();
+                if (byAccount.getAlias() != null && !byAccount.getAlias().isBlank()) {
+                    resolvedAlias = byAccount.getAlias();
+                } else {
+                    resolvedAlias = "无";
+                }
+            }
+        }
+
+        if (to.isBlank()) {
+            AssistantChatResponse response = new AssistantChatResponse(
+                    "请提供完整的转账信息，例如：向6222000012345678转100元，备注午餐费，或给弟弟转300元。"
+            );
             attachTrace(response, "transfer", "transfer_validation", "need_more_info", "high", "",
-                    List.of("识别为转账意图", "缺少收款账号或金额"));
+                    List.of("识别为转账意图", "缺少收款账号/昵称"));
+            return Result.success(response);
+        }
+
+        BigDecimal amount = null;
+        if (!amountStr.isBlank()) {
+            try {
+                amount = new BigDecimal(amountStr.trim());
+            } catch (Exception e) {
+                AssistantChatResponse response = new AssistantChatResponse("转账金额格式不正确，请输入数字金额，例如：300 或 300.00。");
+                attachTrace(response, "transfer", "transfer_validation", "need_more_info", "high", "",
+                        List.of("识别为转账意图", "金额格式解析失败"));
+                return Result.success(response);
+            }
+        } else if (isRepeatByTimeReference(parsed, rawMsg, repeatMode)) {
+            ReferenceRange referenceRange = resolveReferenceRange(parsed);
+            if (referenceRange == null) {
+                AssistantChatResponse response = new AssistantChatResponse("请补充参考时间，例如：和昨天一样、和前天一样、和上个月一样。");
+                attachTrace(response, "transfer", "time_reference", "need_more_info", "medium", "",
+                        List.of("识别为转账意图", "识别到按历史时间复用金额", "缺少可解析的参考时间范围"));
+                return Result.success(response);
+            }
+            ReferenceTransfer referenceTransfer = resolveReferenceTransfer(userId, to, desc, rawMsg, referenceRange);
+            if (referenceTransfer == null) {
+                String promptMsg = desc.isBlank()
+                        ? referenceRange.label() + "未找到该收款人的支出流水，无法自动确定金额，请补充转账金额。"
+                        : referenceRange.label() + "未找到与【" + desc + "】相关的该收款人支出流水，无法自动确定金额，请补充转账金额。";
+                AssistantChatResponse response = new AssistantChatResponse(promptMsg);
+                attachTrace(response, "transfer", "time_reference", "need_more_info", "medium", referenceRange.label(),
+                        List.of("识别为转账意图", "识别到“和时间参考一样”", "查询参考时间同收款人流水失败"));
+                return Result.success(response);
+            }
+            amount = referenceTransfer.amount();
+            if (desc.isBlank() && referenceTransfer.description() != null && !referenceTransfer.description().isBlank()) {
+                desc = referenceTransfer.description();
+            }
+            referenceSummary = referenceTransfer.summary();
+        } else {
+            AssistantChatResponse response = new AssistantChatResponse(
+                    "请提供转账金额，例如：给弟弟转300元，或说“给弟弟转午餐费，和前天一样”。"
+            );
+            attachTrace(response, "transfer", "transfer_validation", "need_more_info", "high", "",
+                    List.of("识别为转账意图", "缺少金额"));
             return Result.success(response);
         }
 
         TransferRequestDTO dto = new TransferRequestDTO();
         dto.setToAccountNo(to);
-        dto.setAmount(new BigDecimal(amountStr));
+        dto.setAmount(amount);
         dto.setDescription(desc);
 
-        // 校验但不执行
-        TransferValidateVO vo = accountService.validateTransfer(userId, dto);
+        TransferValidateVO vo;
+        if (payeeId != null) {
+            PayeeTransferDTO payeeTransferDTO = new PayeeTransferDTO();
+            payeeTransferDTO.setAmount(amount);
+            payeeTransferDTO.setDescription(desc);
+            Result validateResult = payeeService.validateTransfer(userId, payeeId, payeeTransferDTO);
+            if (validateResult.getData() instanceof TransferValidateVO transferValidateVO) {
+                vo = transferValidateVO;
+            } else {
+                vo = accountService.validateTransfer(userId, dto);
+            }
+        } else {
+            vo = accountService.validateTransfer(userId, dto);
+        }
 
         PendingTransfer p = new PendingTransfer();
+        p.setPayeeId(payeeId);
+        p.setPayeeAlias(resolvedAlias);
         p.setToAccountNo(to);
         p.setAmount(dto.getAmount());
         p.setDescription(desc);
@@ -420,13 +900,23 @@ public class AssistantService {
                 "我将为你发起转账，请确认：\n" +
                         "付款账号：" + vo.getFromAccountNoMasked() + "\n" +
                         "收款账号：" + vo.getToAccountNoMasked() + "\n" +
+                        "收款人昵称：" + resolvedAlias + "\n" +
+                        (!referenceSummary.isBlank() ? "参考依据：" + referenceSummary + "\n" : "") +
                         "金额：" + vo.getAmount() + "，余额：" + vo.getBalance() + "\n" +
                         ((vo.getDescription() != null && !vo.getDescription().isBlank()) ? "备注：" + vo.getDescription() + "\n" : "") +
                         "回复【确认】执行，回复【取消】放弃。";
 
         AssistantChatResponse response = new AssistantChatResponse(reply);
+        List<String> steps = new ArrayList<>();
+        steps.add("识别为转账意图");
+        steps.add("解析收款账号/昵称");
+        if (!referenceSummary.isBlank()) {
+            steps.add("识别到“和时间参考一样”并复用参考流水金额");
+        }
+        steps.add("完成转账前校验");
+        steps.add("等待用户确认");
         attachTrace(response, "transfer", "transfer_validation", "awaiting_confirmation", "high", "",
-                List.of("识别为转账意图", "完成转账前校验", "等待用户确认"));
+                steps);
         return Result.success(response);
     }
 
@@ -668,7 +1158,20 @@ public class AssistantService {
 3.1 若用户要求“按消费类别/支出种类/商户类型/场景标签”统计，当前系统不支持，请 intent 输出 other。
 
 4. 当 intent=transfer 时必须给：
-   toAccountNo（字符串），amount（数字字符串），description（可空字符串）
+   toAccountNo（明确说了银行卡号时填写，否则空字符串）
+   payeeAlias（明确说了收款人昵称/备注时填写，否则空字符串）
+   repeatMode（若表达“和昨天一样/和前天一样/和上个月一样/和那天一样/那笔一样”等按历史时间复用金额，输出 time_same，否则空字符串）
+   amount（数字字符串），description（可空字符串）
+4.1 用户说“给弟弟转300元，备注午餐费”，且未给银行卡号时：
+   toAccountNo="", payeeAlias="弟弟", amount="300", description="午餐费", intent=transfer
+4.2 用户说“给我弟弟转午餐费，和昨天一样”时：
+   toAccountNo="", payeeAlias="弟弟", amount="", description="午餐费", repeatMode="time_same", intent=transfer
+4.3 用户说“给我弟弟转晚餐费，和前天一样”时：
+   toAccountNo="", payeeAlias="弟弟", amount="", description="晚餐费", repeatMode="time_same", intent=transfer
+   并尽量提取 year/month/day/timeRange（用于后端按 Time 工具计算参考时间范围）
+4.4 用户说“给我弟弟转午餐费，和上个月一样”时：
+   toAccountNo="", payeeAlias="弟弟", amount="", description="午餐费", repeatMode="time_same", intent=transfer
+   并提取 timeRange=month，month=上个月对应月份，year=对应年份
 
 5. 当 intent=transactions 时尽量提取：
    txnType（收入/支出/空字符串）
@@ -706,7 +1209,7 @@ public class AssistantService {
 18. “统计今年每个月的支出” -> intent=statistics, txnType=支出, metric=trend, timeRange=recent_years, rangeValue=1, groupBy=month
 19. “看近三个月收入趋势” -> intent=statistics, txnType=收入, metric=trend, groupBy=month
 
-20. 当不是 transfer 时，toAccountNo、amount、description 返回空字符串。
+20. 当不是 transfer 时，toAccountNo、payeeAlias、repeatMode、amount、description 返回空字符串。
 21. 当不是 transactions 时，limit、needMonth 可默认空字符串/false。
 22. 当不是 statistics 时，metric、groupBy 返回空字符串，comparePrevious 返回 false。
 """;
@@ -719,6 +1222,8 @@ public class AssistantService {
 {
   "intent":"transfer|transactions|balance|statistics|other",
   "toAccountNo":"",
+  "payeeAlias":"",
+  "repeatMode":"",
   "amount":"",
   "description":"",
   "txnType":"",
@@ -769,6 +1274,216 @@ public class AssistantService {
         ));
         String content = raw.path("choices").get(0).path("message").path("content").asText("我明白啦，你可以再说具体一点~");
         return sanitizeModelReply(content, "当前可支持：查余额、查流水、转账确认、收支统计与趋势分析。");
+    }
+
+    private boolean isRepeatByTimeReference(JsonNode parsed, String rawMsg, String repeatMode) {
+        if ("time_same".equalsIgnoreCase(repeatMode) || "yesterday_same".equalsIgnoreCase(repeatMode)) {
+            return true;
+        }
+        if (!hasParsedReferenceTime(parsed)) {
+            return false;
+        }
+        if (rawMsg == null || rawMsg.isBlank()) {
+            return false;
+        }
+        return rawMsg.contains("一样")
+                || rawMsg.contains("那笔")
+                || rawMsg.contains("照旧")
+                || rawMsg.contains("同上");
+    }
+
+    private boolean hasParsedReferenceTime(JsonNode parsed) {
+        if (parsed == null) {
+            return false;
+        }
+        String yearStr = parsed.path("year").asText("").trim();
+        String monthStr = parsed.path("month").asText("").trim();
+        String dayStr = parsed.path("day").asText("").trim();
+        String timeRange = parsed.path("timeRange").asText("").trim();
+        String rangeValue = parsed.path("rangeValue").asText("").trim();
+        return !yearStr.isBlank()
+                || !monthStr.isBlank()
+                || !dayStr.isBlank()
+                || (!timeRange.isBlank() && !"latest".equalsIgnoreCase(timeRange))
+                || !rangeValue.isBlank();
+    }
+
+    private ReferenceRange resolveReferenceRange(JsonNode parsed) {
+        String timeRange = parsed.path("timeRange").asText("").trim();
+        String yearStr = parsed.path("year").asText("").trim();
+        String monthStr = parsed.path("month").asText("").trim();
+        String dayStr = parsed.path("day").asText("").trim();
+        String rangeValueStr = parsed.path("rangeValue").asText("").trim();
+
+        TransactionQueryDTO q = new TransactionQueryDTO();
+        Time.fillTimeRange(q, timeRange, yearStr, monthStr, dayStr, rangeValueStr);
+
+        String startTime = q.getStartTime();
+        String endTime = q.getEndTime();
+        if (startTime != null && !startTime.isBlank() && endTime != null && !endTime.isBlank()) {
+            return new ReferenceRange(startTime, endTime, buildReferenceLabel(startTime, endTime, timeRange, rangeValueStr));
+        }
+        return null;
+    }
+
+    private String buildReferenceLabel(String startTime, String endTime, String timeRange, String rangeValue) {
+        String startDate = extractDate(startTime);
+        String endDate = extractDate(endTime);
+
+        if (!startDate.isBlank() && startDate.equals(endDate)) {
+            return startDate;
+        }
+        if ("month".equals(timeRange) && startDate.length() >= 7) {
+            return startDate.substring(0, 7);
+        }
+        if ("recent_days".equals(timeRange) && rangeValue != null && !rangeValue.isBlank()) {
+            return "近" + rangeValue + "天";
+        }
+        if ("recent_years".equals(timeRange) && rangeValue != null && !rangeValue.isBlank()) {
+            return "近" + rangeValue + "年";
+        }
+        if (!startDate.isBlank() && !endDate.isBlank()) {
+            return startDate + " 至 " + endDate;
+        }
+        if (!startDate.isBlank()) {
+            return startDate;
+        }
+        return "参考时间";
+    }
+
+    private String extractDate(String dateTimeText) {
+        if (dateTimeText == null) {
+            return "";
+        }
+        String value = dateTimeText.trim();
+        if (value.length() >= 10) {
+            return value.substring(0, 10);
+        }
+        return "";
+    }
+
+    private ReferenceTransfer resolveReferenceTransfer(Long userId, String toAccountNo, String descriptionKeyword, String rawMsg, ReferenceRange range) {
+        Account account = accountService.getAccountInfo(userId);
+        if (account == null) {
+            throw BusinessException.of(ErrorCode.ACCOUNT_NOT_FOUND, "账户不存在");
+        }
+        if (toAccountNo == null || toAccountNo.isBlank() || range == null) {
+            return null;
+        }
+
+        TransactionRecord reference = null;
+        List<String> keywordCandidates = buildDescriptionKeywordCandidates(descriptionKeyword, rawMsg);
+        for (String keyword : keywordCandidates) {
+            reference = transactionMapper.selectLatestExpenseByCounterpartyAndDescription(
+                    account.getId(), toAccountNo, range.startTime(), range.endTime(), keyword
+            );
+            if (reference != null) {
+                break;
+            }
+        }
+        if (reference == null) {
+            reference = transactionMapper.selectLatestExpenseByCounterparty(
+                    account.getId(), toAccountNo, range.startTime(), range.endTime()
+            );
+        }
+        if (reference == null || reference.getAmount() == null) {
+            return null;
+        }
+
+        BigDecimal amount = reference.getAmount().abs();
+        String desc = safe(reference.getDescription());
+        String tradeTimeText = reference.getTradeTime() == null ? "" : reference.getTradeTime().toString();
+        String summary = range.label();
+        if (!tradeTimeText.isBlank()) {
+            summary += " " + tradeTimeText;
+        }
+        if (!desc.isBlank()) {
+            summary += " 备注“" + desc + "”";
+        }
+        summary += "，金额 " + amount.toPlainString();
+
+        return new ReferenceTransfer(amount, desc, summary);
+    }
+
+    private List<String> buildDescriptionKeywordCandidates(String descriptionKeyword, String rawMsg) {
+        LinkedHashSet<String> candidates = new LinkedHashSet<>();
+        String normalized = normalizeKeyword(descriptionKeyword);
+        if (!normalized.isBlank()) {
+            candidates.add(normalized);
+        }
+
+        if (candidates.isEmpty()) {
+            String inferred = normalizeKeyword(extractDescriptionFromMessage(rawMsg));
+            if (!inferred.isBlank()) {
+                candidates.add(inferred);
+            }
+        }
+
+        if (!candidates.isEmpty()) {
+            String first = candidates.iterator().next();
+            String compact = first.replace(" ", "");
+            if (!compact.isBlank()) {
+                candidates.add(compact);
+            }
+            String[] tokens = compact.split("[、/\\-\\s]+");
+            for (String token : tokens) {
+                String t = token.trim();
+                if (t.length() >= 2) {
+                    candidates.add(t);
+                }
+            }
+        }
+
+        return new ArrayList<>(candidates);
+    }
+
+    private String extractPayeeAliasFromMessage(String rawMsg) {
+        if (rawMsg == null || rawMsg.isBlank()) {
+            return "";
+        }
+        Matcher matcher = Pattern.compile("给(?:我)?([^\\d\\s，,。.!?；;：:]{1,12}?)(?:转账|转|打款|汇款)").matcher(rawMsg);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+        return "";
+    }
+
+    private String extractDescriptionFromMessage(String rawMsg) {
+        if (rawMsg == null || rawMsg.isBlank()) {
+            return "";
+        }
+
+        Matcher remarkMatcher = Pattern.compile("备注[:：]?\\s*([^，,。.!?；;]+)").matcher(rawMsg);
+        if (remarkMatcher.find()) {
+            return normalizeKeyword(remarkMatcher.group(1));
+        }
+
+        Matcher matcher = Pattern.compile("(?:转账|转|打款|汇款)\\s*([^，,。.!?；;]*)").matcher(rawMsg);
+        if (!matcher.find()) {
+            return "";
+        }
+
+        String candidate = matcher.group(1).trim();
+        candidate = candidate.replaceFirst("^\\d+(?:\\.\\d+)?(?:元|块)?", "").trim();
+        candidate = candidate.replaceFirst("\\d+(?:\\.\\d+)?(?:元|块)$", "").trim();
+        return normalizeKeyword(candidate);
+    }
+
+    private String normalizeKeyword(String text) {
+        String keyword = safe(text).trim();
+        if (keyword.isBlank()) {
+            return "";
+        }
+        keyword = keyword
+                .replace("备注", "")
+                .trim();
+        // 去掉尾部“和X一样/跟X一样/按X一样”等时间复用短语，避免影响备注关键词检索
+        keyword = keyword.replaceAll("(?:，|,)?\\s*(?:和|跟|按)[^，,。.!?；;]{0,20}一样\\s*$", "").trim();
+        keyword = keyword
+                .replaceAll("^[，,。.!?；;：:\\s]+", "")
+                .replaceAll("[，,。.!?；;：:\\s]+$", "")
+                .trim();
+        return keyword;
     }
 
     private boolean isConfirm(String msg) {
@@ -1033,5 +1748,26 @@ public class AssistantService {
             return false;
         }
         return msg.contains("分类") || msg.contains("品类") || msg.contains("商户类型") || msg.contains("场景标签");
+    }
+
+    private record StatisticsInsight(
+            BigDecimal totalIncome,
+            BigDecimal totalExpense,
+            StatisticsPointVO peakIncomeDay,
+            StatisticsPointVO peakExpenseDay,
+            List<StatisticsPointVO> topIncomeCounterparty,
+            List<StatisticsPointVO> topExpenseCounterparty,
+            StatisticsPointVO maxIncomeTxn,
+            StatisticsPointVO maxExpenseTxn,
+            Long incomeCount,
+            Long expenseCount,
+            List<String> anomalySignals
+    ) {
+    }
+
+    private record ReferenceRange(String startTime, String endTime, String label) {
+    }
+
+    private record ReferenceTransfer(BigDecimal amount, String description, String summary) {
     }
 }

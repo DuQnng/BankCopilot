@@ -61,4 +61,17 @@ public interface TransactionMapper {
     // === 近一段时间支出金额列表（用于P90异常检测）
     List<BigDecimal> listExpenseAmounts(@Param("query") StatisticsQueryDTO query);
 
+    // === AI转账：按昨日、对方卡号和备注关键词查询最近一笔支出
+    TransactionRecord selectLatestExpenseByCounterpartyAndDescription(@Param("accountId") Long accountId,
+                                                                      @Param("counterpartyAccountNo") String counterpartyAccountNo,
+                                                                      @Param("startTime") String startTime,
+                                                                      @Param("endTime") String endTime,
+                                                                      @Param("keyword") String keyword);
+
+    // === AI转账：按昨日、对方卡号查询最近一笔支出（无备注关键词时回退）
+    TransactionRecord selectLatestExpenseByCounterparty(@Param("accountId") Long accountId,
+                                                        @Param("counterpartyAccountNo") String counterpartyAccountNo,
+                                                        @Param("startTime") String startTime,
+                                                        @Param("endTime") String endTime);
+
 }
