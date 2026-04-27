@@ -1,0 +1,202 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram id="fig-statistics-ui" name="fig-statistics-ui">
+    <mxGraphModel dx="1097" dy="599" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="720" pageHeight="512" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="q9GJF27Fpf4JnHSrn3XC-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="476" width="670" x="30" y="14" as="geometry" />
+        </mxCell>
+        <mxCell id="s_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=16;fontColor=#000000;fontStyle=1;" value="AI 统计图表展示" vertex="1">
+          <mxGeometry height="24" width="160" x="46" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="s_q" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=12;fontColor=#000000;" value="用户问题：看一下今年每个月的支出趋势" vertex="1">
+          <mxGeometry height="18" width="300" x="46" y="74" as="geometry" />
+        </mxCell>
+        <mxCell id="s_a" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=12;fontColor=#000000;" value="AI 回复：已根据交易流水生成月度支出趋势，并支持图表切换与明细报表导出。" vertex="1">
+          <mxGeometry height="18" width="560" x="46" y="96" as="geometry" />
+        </mxCell>
+        <mxCell id="s_scope" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fafafa;strokeColor=#cfcfcf;strokeWidth=0.9;fontFamily=SimSun;fontSize=11;align=left;verticalAlign=middle;spacing=4;" value="统计口径：支出 / 趋势，时间范围 2025-04-27 至 2026-04-27" vertex="1">
+          <mxGeometry height="30" width="628" x="46" y="124" as="geometry" />
+        </mxCell>
+        <mxCell id="s_tab1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#000000;strokeWidth=0.9;fontFamily=SimSun;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="柱状图" vertex="1">
+          <mxGeometry height="22" width="60" x="46" y="166" as="geometry" />
+        </mxCell>
+        <mxCell id="s_tab2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.9;fontFamily=SimSun;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="折线图" vertex="1">
+          <mxGeometry height="22" width="60" x="114" y="166" as="geometry" />
+        </mxCell>
+        <mxCell id="s_chart1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.1;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="" vertex="1">
+          <mxGeometry height="220" width="303" x="46" y="204" as="geometry" />
+        </mxCell>
+        <mxCell id="s_chart1_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=14;fontColor=#000000;" value="月度支出趋势图" vertex="1">
+          <mxGeometry height="24" width="150" x="122" y="213" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lgrid0" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="378" as="sourcePoint" />
+            <mxPoint x="321" y="378" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ly0" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="0" vertex="1">
+          <mxGeometry height="16" width="36" x="60" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lgrid1" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="354" as="sourcePoint" />
+            <mxPoint x="321" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ly1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="3,000" vertex="1">
+          <mxGeometry height="16" width="36" x="60" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lgrid2" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="330" as="sourcePoint" />
+            <mxPoint x="321" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ly2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="6,000" vertex="1">
+          <mxGeometry height="16" width="36" x="60" y="322" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lgrid3" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="306" as="sourcePoint" />
+            <mxPoint x="321" y="306" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ly3" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="9,000" vertex="1">
+          <mxGeometry height="16" width="36" x="60" y="298" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lgrid4" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="282" as="sourcePoint" />
+            <mxPoint x="321" y="282" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ly4" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="12,000" vertex="1">
+          <mxGeometry height="16" width="36" x="60" y="274" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lgrid5" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="258" as="sourcePoint" />
+            <mxPoint x="321" y="258" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ly5" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="15,000" vertex="1">
+          <mxGeometry height="16" width="36" x="60" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="s_laxisx" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="378" as="sourcePoint" />
+            <mxPoint x="321" y="378" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_laxisy" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;strokeWidth=0.9;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="108" y="378" as="sourcePoint" />
+            <mxPoint x="108" y="258" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_lbar0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b8b8b8;strokeColor=#777777;strokeWidth=0.8;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="" vertex="1">
+          <mxGeometry height="25" width="30" x="129" y="353" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lx0" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="2026-01" vertex="1">
+          <mxGeometry height="16" width="50" x="119" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lbar1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b8b8b8;strokeColor=#777777;strokeWidth=0.8;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="" vertex="1">
+          <mxGeometry height="115" width="30" x="200" y="263" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lx1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="2026-03" vertex="1">
+          <mxGeometry height="16" width="50" x="190" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lbar2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b8b8b8;strokeColor=#777777;strokeWidth=0.8;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="" vertex="1">
+          <mxGeometry height="63" width="30" x="271" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="s_lx2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="2026-04" vertex="1">
+          <mxGeometry height="16" width="50" x="261" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="s_chart2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.1;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="" vertex="1">
+          <mxGeometry height="220" width="303" x="371" y="204" as="geometry" />
+        </mxCell>
+        <mxCell id="s_chart2_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=14;fontColor=#000000;" value="本月收支对比图" vertex="1">
+          <mxGeometry height="24" width="150" x="447" y="213" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rgrid0" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433" y="378" as="sourcePoint" />
+            <mxPoint x="646" y="378" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ry0" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="0" vertex="1">
+          <mxGeometry height="16" width="37" x="384" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rgrid1" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433" y="348" as="sourcePoint" />
+            <mxPoint x="646" y="348" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ry1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="3,000" vertex="1">
+          <mxGeometry height="16" width="37" x="384" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rgrid2" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433" y="318" as="sourcePoint" />
+            <mxPoint x="646" y="318" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ry2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="6,000" vertex="1">
+          <mxGeometry height="16" width="37" x="384" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rgrid3" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433" y="288" as="sourcePoint" />
+            <mxPoint x="646" y="288" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ry3" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="9,000" vertex="1">
+          <mxGeometry height="16" width="37" x="384" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rgrid4" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#d7d7d7;strokeWidth=0.8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433" y="258" as="sourcePoint" />
+            <mxPoint x="646" y="258" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_ry4" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#555555;" value="12,000" vertex="1">
+          <mxGeometry height="16" width="37" x="384" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="s_raxisx" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433" y="378" as="sourcePoint" />
+            <mxPoint x="646" y="378" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_raxisy" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;strokeWidth=0.9;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="433" y="378" as="sourcePoint" />
+            <mxPoint x="433" y="258" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s_rbar0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b8b8b8;strokeColor=#777777;strokeWidth=0.8;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="" vertex="1">
+          <mxGeometry height="111" width="45" x="464" y="267" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rx0" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=10;fontColor=#555555;" value="收入" vertex="1">
+          <mxGeometry height="16" width="54" x="460" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rbar1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b8b8b8;strokeColor=#777777;strokeWidth=0.8;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="" vertex="1">
+          <mxGeometry height="74" width="45" x="570" y="304" as="geometry" />
+        </mxCell>
+        <mxCell id="s_rx1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=10;fontColor=#555555;" value="支出" vertex="1">
+          <mxGeometry height="16" width="54" x="566" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="s_note" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=SimSun;fontSize=11;fontColor=#333333;" value="支持根据当前统计口径导出交易流水明细" vertex="1">
+          <mxGeometry height="18" width="240" x="46" y="452" as="geometry" />
+        </mxCell>
+        <mxCell id="s_export" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f8f8;strokeColor=#000000;strokeWidth=1;fontFamily=SimSun;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="下载明细报表" vertex="1">
+          <mxGeometry height="28" width="120" x="550" y="442" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

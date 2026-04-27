@@ -163,7 +163,7 @@
   \clearpage%
   \if@openright%
     \ifodd\c@page\relax\else%
-      \null\thispagestyle{xdu@front}\newpage%
+      \null\thispagestyle{xdu@empty}\newpage%
     \fi%
   \fi}
 \ifxdu@bachelor%
@@ -294,7 +294,7 @@
   \@startsection {section}{1}{\z@}%
   {\dimen0}%
   {2ex}%
-  {\sihao[1.429]\filcenter}}
+  {\fontsize{14pt}{20pt}\selectfont\filcenter}}
 \else
 \titleformat{\section}[block]{\xiaosan}{\thesection}{1ex}{}
 \titlespacing{\section}{0pt}{2ex}{2ex}
@@ -634,14 +634,16 @@
 \renewcommand\theequation{\ifnum \c@chapter>\z@ \thechapter%
                           -\fi\@arabic\c@equation}
 \let\old@tabular\@tabular
-\def\xdu@tabular{\wuhao\old@tabular}
+\def\xdu@fivefont{\fontsize{10.5pt}{15.75pt}\selectfont}
+\def\xdu@tabular{\xdu@fivefont\old@tabular}
+\let\@tabular\xdu@tabular
 \ifxdu@english
-\DeclareCaptionLabelFormat{xdu@cap}{{\wuhao#1~\rmfamily#2}}
+\DeclareCaptionLabelFormat{xdu@cap}{{\xdu@fivefont#1~\rmfamily#2}}
 \else
-\DeclareCaptionLabelFormat{xdu@cap}{{\wuhao#1\rmfamily#2}}
+\DeclareCaptionLabelFormat{xdu@cap}{{\xdu@fivefont#1\rmfamily#2}}
 \fi
-\DeclareCaptionLabelSeparator{xdu@sep}{\hspace{1em}}
-\DeclareCaptionFont{xdu@capfont}{\wuhao}
+\DeclareCaptionLabelSeparator{xdu@sep}{\space}
+\DeclareCaptionFont{xdu@capfont}{\xdu@fivefont}
 \captionsetup{labelformat=xdu@cap,
               labelsep=xdu@sep,
               font=xdu@capfont,
@@ -653,7 +655,7 @@
 \renewenvironment{table}{%
   \renewcommand* {\@floatboxreset}{%
     \reset@font\@setminipage}
-  \dawu\@float{table}%
+  \xdu@fivefont\@float{table}%
 }{%
   \end@float\normalsize
 }
@@ -751,7 +753,8 @@
 \def\@onlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
 \renewenvironment{thebibliography}[1]{%
   \chapter*{\bibname}%
-  \wuhao[1.5]%
+  \renewcommand\baselinestretch{1}%
+  \fontsize{10.5pt}{15.75pt}\selectfont%
   \list{\@biblabel{\@arabic\c@enumiv}}%
   {\renewcommand{\makelabel}[1]{##1\hfill}
     \settowidth\labelwidth{1.1cm}

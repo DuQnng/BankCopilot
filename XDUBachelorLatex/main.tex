@@ -59,7 +59,7 @@
 \end{cabstract}
 
 \begin{ckeywords}
-智能客服机器人；自然语言处理；银行业务；账单分析；交互优化
+智能客服机器人\quad 自然语言处理\quad 银行业务\quad 账单分析\quad 交互优化
 \end{ckeywords}
 
 % 英文摘要
@@ -68,7 +68,7 @@ With the development of online banking services and intelligent service channels
 \end{eabstract}
 
 \begin{ekeywords}
-intelligent customer service robot; natural language processing; banking service; bill analysis; interaction optimization
+intelligent customer service robot\quad natural language processing\quad banking service\quad bill analysis\quad interaction optimization
 \end{ekeywords}
 
 % 生成论文的封面、声明页、中英文摘要
@@ -98,13 +98,13 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-bank-ai-service-scenario-simsun.pdf}
+    \includegraphics[width=0.92\linewidth]{image/fig-bank-ai-service-scenario-simsun.png}
     \caption{银行智能客服应用场景示意图}
 \end{figure}
 
 \section{课题目标与研究内容}
 
-本课题的总体目标是设计并实现一个面向银行业务的智能客服机器人原型，重点研究自然语言交互、业务意图解析、对话状态管理、银行业务服务集成和前端交互优化等内容。系统以文本自然语言交互为主要方式，围绕用户在个人银行业务中的高频需求提供智能化辅助。
+本课题的总体目标是设计并实现一个面向银行业务的智能客服机器人原型。课题重点研究自然语言交互、业务意图解析、对话状态管理、银行业务服务集成和前端交互优化等内容。系统以文本自然语言交互为主要方式，围绕用户在个人银行业务中的高频需求提供智能化辅助。
 
 结合任务书要求和项目源码实现，本文的主要研究内容包括以下几个方面。
 
@@ -179,7 +179,7 @@ Spring Boot 是系统后端的主体框架，用于快速构建 RESTful Web 服�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-tech-stack.pdf}
+    \includegraphics[width=0.92\linewidth]{image/fig-tech-stack.png}
     \caption{系统技术栈结构图}
 \end{figure}
 
@@ -234,7 +234,7 @@ BankCopilot 面向银行个人用户，目标是通过智能客服机器人降�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-ai-usecase.pdf}
+    \includegraphics[width=0.92\linewidth]{image/fig-ai-usecase.png}
     \caption{AI 智能客服用例图}
 \end{figure}
 
@@ -242,12 +242,13 @@ BankCopilot 面向银行个人用户，目标是通过智能客服机器人降�
 
 \section{系统架构设计}
 
-系统采用前后端分离架构。前端由 Vue 3 应用负责页面展示和用户交互，后端由 Spring Boot 应用负责业务处理和数据访问，MySQL 负责数据持久化，DashScope 通义千问负责自然语言意图解析和分析性回复生成。前端通过 /api 代理访问后端接口，后端通过 WebClient 访问大模型服务。
+系统采用前后端分离架构。前端由 Vue 3 应用负责页面展示和用户交互，后端由 Spring Boot 应用负责业务处理和数据访问，MySQL 负责数据持久化，DashScope 通义千问负责自然语言意图解析和分析性回复生成。前端通过 /api 代理访问后端接口，后端通过 WebClient 访问大模型服务。系统总体架构如图\ref{fig:system-architecture} 所示。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.86\linewidth,trim=1.0cm 0 0 0,clip]{image/fig-system-architecture.pdf}
+    \includegraphics[width=0.86\linewidth,trim=1.0cm 0 0 0,clip]{image/fig-system-architecture.png}
     \caption{系统总体架构图}
+    \label{fig:system-architecture}
 \end{figure}
 
 在该架构中，AI 助手并不是独立于业务系统之外的聊天模块，而是业务系统的一层自然语言交互入口。用户先通过自然语言输入页面操作，在前端应用的智能助手接入到后端应用的接口入口层，进行请求分发后进入AI编排层，通过DashScope进行意图分析出意图intent，通过intent分发业务，再调用帐户，流水，统计或收款人服务，查询MySQL数据库，将结果封装后返回前端。
@@ -257,13 +258,13 @@ BankCopilot 面向银行个人用户，目标是通过智能客服机器人降�
 
 AI 模块由接口层、编排层、模型调用层、业务服务层和前端展示层组成。接口层对应 AssistantController，提供 /assistant/chat、/assistant/chat/stream 和 /assistant/brief 三类接口。编排层对应 AssistantService，负责处理待确认状态、调用 parseIntentByQwen、分发不同 intent、封装 trace 和 explain。模型调用层由 QwenClient 实现，统一封装通义千问请求。业务服务层包括 AccountService、TransactionService、StatisticsService 和 PayeeService。前端展示层由 AssistantPanel 负责。
 
-这种模块划分的核心思想是“模型不直接接触数据库，业务不依赖模型自由发挥”。AssistantService 处于 AI 模块的中心位置，它既要理解模型返回的意图字段，又要根据业务规则决定是否继续执行。对于普通查询，服务层可以直接调用账户或流水服务；对于缺少月份的流水查询，服务层会保存待补全状态并追问用户；对于转账请求，服务层会生成待确认对象并等待用户下一轮确认。不同业务路径虽然都从聊天输入开始，但后端处理策略并不相同。
+这种模块划分的核心思想是“模型不直接接触数据库，业务不依赖模型自由发挥”。如图\ref{fig:ai-request-architecture}，AssistantService 处于 AI 模块的中心位置，它既要理解模型返回的意图字段，又要根据业务规则决定是否继续执行。对于普通查询，服务层可以直接调用账户或流水服务；对于缺少月份的流水查询，服务层会保存待补全状态并追问用户；对于转账请求，服务层会生成待确认对象并等待用户下一轮确认。不同业务路径虽然都从聊天输入开始，但后端处理策略并不相同。
 
 AI 模块还承担结果适配工作。业务服务返回的通常是对象、列表或聚合数据，而用户更希望看到简明文本、图表和下一步操作入口。因此 AssistantService 会把业务结果转换为 AssistantChatResponse，前端再根据 chartType、chartData、trace、explain 和 exportUrl 等字段决定如何展示。该设计使回复内容和展示形式解耦，可以在不破坏原有接口的基础上扩展，增加新的图表类型或统计指标。
 
 \begin{table}[H]
     \centering
-    \caption{AI 模块与源码对应关系}
+    \caption{AI 模块主要职责}
     \label{tab:ai-module-source}
     \begin{tabular}{|p{0.18\linewidth}|p{0.27\linewidth}|p{0.45\linewidth}|}
         \hline
@@ -284,8 +285,9 @@ AI 模块还承担结果适配工作。业务服务返回的通常是对象、�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-ai-request-architecture.pdf}
+    \includegraphics[width=0.92\linewidth]{image/fig-ai-request-architecture.png}
     \caption{AI 请求处理架构图}
+    \label{fig:ai-request-architecture}
 \end{figure}
 
 \section{数据库设计}
@@ -313,13 +315,13 @@ AI 模块还承担结果适配工作。业务服务返回的通常是对象、�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-database-er.pdf}
+    \includegraphics[width=0.92\linewidth]{image/fig-database-er.png}
     \caption{数据库 ER 图}
 \end{figure}
 
 \section{接口与交互设计}
 
-AI 相关接口主要包括普通聊天接口、流式聊天接口和简报接口。普通聊天接口用于非流式请求或流式失败后的降级处理；流式聊天接口用于提升用户等待体验；简报接口用于获取周报或月报数据。
+AI 相关接口主要包括普通聊天接口、流式聊天接口，简报接口以及Excel导出接口。普通聊天接口用于非流式请求或流式失败后的降级处理；流式聊天接口用于提升用户等待体验；简报接口用于获取周报或月报数据；导出接口用于导出明细数据Excel。
 
 \begin{table}[H]
     \centering
@@ -352,7 +354,7 @@ AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.22\linewidth]{image/fig-ai-chat-flow.pdf}
+    \includegraphics[width=1.22\linewidth]{image/fig-ai-chat-flow.png}
     \caption{AI 聊天请求总体流程图}
 \end{figure}
 
@@ -366,7 +368,7 @@ AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法�
 
 AI 查余额对应 balance 意图。当用户输入“查一下我的余额”“我的账户信息”等表达时，parseIntentByQwen 会将 intent 解析为 balance。AssistantService 随后调用 handleBalance 方法，通过 AccountServiceImpl.getAccountInfo 查询当前登录用户的账户信息。
 
-handleBalance 返回的内容包括户名、账号、账户类型、账户状态和余额。该功能实现较为直接，但它体现了系统设计中的关键原则：AI 只识别用户想查余额，余额数据本身必须来自数据库账户表，而不是来自模型生成。
+handleBalance 返回的内容包括户名、账号、账户类型、账户状态和余额。该功能实现虽较为直接，但它体现了系统设计中的关键原则：AI 只识别用户想查余额，余额数据本身必须来自数据库账户表，而不是来自模型生成。
 
 余额查询功能虽然业务逻辑相对简单，但在本论文中具有基础性意义。该功能证明 AI 助手已经能够从自然语言入口进入真实后端服务，而不是只返回固定话术。同时还为后续流水查询、统计分析和转账功能提供了账户上下文基础。若余额查询无法保证数据准确，后续涉及金额分析和资金操作的功能就缺少可信前提。因此本文将其作为核心功能之一进行说明。
 
@@ -389,7 +391,7 @@ handleBalance 返回的内容包括户名、账号、账户类型、账户状态
 
 AI 查流水对应 transactions 意图。用户可以使用自然语言指定交易类型、时间范围和条数限制。例如“查最近 3 条支出记录”会被解析为 txnType=支出、limit=3、timeRange=latest；“查今天的流水”会被解析为 timeRange=day；“查前几天的支出记录”会经过 Time.normalizeTimeByText 纠偏为 recent\_days。
 
-handleTransactions 方法会根据解析结果构造 TransactionQueryDTO，并调用 Time.fillTimeRange 填充 startTime 和 endTime。随后系统调用 TransactionServiceImpl.getTransactions 进行分页查询，底层 SQL 由 TransactionMapper.xml 中的 selectTransactions 完成。查询结果由 convertTransactionResultToChat 格式化为自然语言列表，并对对方账号进行脱敏处理。
+handleTransactions 方法会根据解析结果构造 TransactionQueryDTO，并调用 Time.fillTimeRange 填充 startTime 和 endTime。随后系统调用 TransactionServiceImpl.getTransactions 进行查询，底层 SQL 由 TransactionMapper.xml 中的 selectTransactions 完成。查询结果由 convertTransactionResultToChat 格式化为自然语言列表，并对对方账号进行脱敏处理。
 
 对于缺少月份的日期查询，系统设计了多轮补全机制。当 needMonth 为 true 且存在 day 但 month 为空时，系统将当前查询保存在 pendingTxnQueryMap 中，并提示用户补充月份。用户回复“1 月”后，下一轮请求会优先进入 handlePendingTransactionQuery，而不是被当作新的普通问题重新解析。该方法会读取待补全状态、解析月份、构造 TransactionQueryDTO，并继续调用流水查询服务完成查询。
 
@@ -399,7 +401,7 @@ handleTransactions 方法会根据解析结果构造 TransactionQueryDTO，并�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{image/fig-transaction-multiturn.pdf}
+    \includegraphics[width=\linewidth]{image/fig-transaction-multiturn.png}
     \caption{AI 查流水多轮补全时序图}
     \label{fig:transaction-multiturn}
 \end{figure}
@@ -427,19 +429,6 @@ handleTransactions 方法会根据解析结果构造 TransactionQueryDTO，并�
 
 AI 账单统计与分析对应 statistics 意图。系统支持 sum、count、max 和 trend 四类统计指标，分别用于统计总金额、流水笔数、最大一笔交易和趋势数据。用户输入“统计这个月总支出”时，系统会构造 txnType=支出、metric=sum、timeRange=month 的 StatisticsQueryDTO；用户输入“看最近 7 天支出趋势”时，系统会构造 txnType=支出、metric=trend、timeRange=recent\_days、groupBy=day 的查询对象。
 
-StatisticsServiceImpl 根据 metric 调用不同 Mapper 方法。sumAmount 用于总额统计，countByStatistics 用于笔数统计，maxTransaction 用于最大一笔交易，statisticsTrend 用于趋势聚合。当用户查询整体收支概览时，系统还会通过 sumIncomeAndExpense、statisticsByCounterparty 生成收支对比和按对方账号聚合的图表数据。因此，账单统计与分析本质上是对交易流水查询能力的进一步聚合和解释：流水查询返回明细记录，统计分析则在同一数据基础上完成汇总、趋势和概览。
-
-统计分析文本的生成采用“事实构造 + 模型总结 + 规则兜底”的设计。AssistantService 会将统计标题、统计类型、统计指标、时间范围、统计值、趋势明细、主要对方账号和异常信号等内容整理成 facts，然后请求通义千问生成自然语言分析总结。若模型输出为空、过于模板化或包含不支持的消费分类内容，系统会回退到规则化总结。与上一节多轮查流水不同，统计分析功能的重点不是多个参与对象之间的消息时序，而是自然语言条件如何被转换为统计 DTO，并经过确定性 SQL 聚合、事实整理和模型表达生成完整分析结果，因此本文使用流程图描述该处理管线。
-
-图\ref{fig:statistics-analysis-flow} 展示了 AI 账单统计与分析的整体处理流程。系统先解析 statistics 意图并构造 StatisticsQueryDTO，再由 StatisticsServiceImpl 和 TransactionMapper.xml 完成总额、笔数、最大值或趋势等确定性统计。统计结果被封装为 StatisticsResultVO 后，AssistantService 进一步整理 facts 并调用大模型生成分析总结；当模型输出不符合约束时，系统使用规则化总结兜底，最后将 reply、chartData、explain 和 exportUrl 等字段返回前端展示。
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.88\linewidth]{image/fig-statistics-analysis-flow.pdf}
-    \caption{AI 账单统计与分析流程图}
-    \label{fig:statistics-analysis-flow}
-\end{figure}
-
 \begin{table}[H]
     \centering
     \caption{统计指标与实现方法对应关系}
@@ -459,6 +448,19 @@ StatisticsServiceImpl 根据 metric 调用不同 Mapper 方法。sumAmount 用�
     \end{tabular}
 \end{table}
 
+StatisticsServiceImpl 根据 metric 调用不同 Mapper 方法。sumAmount 用于总额统计，countByStatistics 用于笔数统计，maxTransaction 用于最大一笔交易，statisticsTrend 用于趋势聚合。当用户查询整体收支概览时，系统还会通过 sumIncomeAndExpense、statisticsByCounterparty 生成收支对比和按对方账号聚合的图表数据。因此，账单统计与分析本质上是对交易流水查询能力的进一步聚合和解释：流水查询返回明细记录，统计分析则在同一数据基础上完成汇总、趋势和概览。
+
+统计分析文本的生成采用“事实构造 + 模型总结 + 规则兜底”的设计。AssistantService 会将统计标题、统计类型、统计指标、时间范围、统计值、趋势明细、主要对方账号和异常信号等内容整理成 facts，然后请求通义千问生成自然语言分析总结。若模型输出为空、过于模板化或包含不支持的标签，消费类别等内容，系统会兜底返回规则化总结。与上一节多轮查流水不同，统计分析功能的重点不是多个参与对象之间的消息时序，而是自然语言条件如何被转换为统计 DTO，并经过确定性 SQL 聚合、事实整理和模型表达生成完整分析结果。
+
+图\ref{fig:statistics-analysis-flow} 展示了 AI 账单统计与分析的整体处理流程。系统先解析 statistics 意图并构造 StatisticsQueryDTO，再由 StatisticsServiceImpl 和 TransactionMapper.xml 完成总额、笔数、最大值或趋势等确定性统计。统计结果被封装为 StatisticsResultVO 后，AssistantService 进一步整理 facts 并调用大模型生成分析总结；当模型输出不符合约束时，系统使用规则化总结兜底，最后将 reply、chartData、explain 和 exportUrl 等字段返回前端展示。
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\linewidth]{image/fig-statistics-analysis-flow.png}
+    \caption{AI 账单统计与分析流程图}
+    \label{fig:statistics-analysis-flow}
+\end{figure}
+
 前端根据 AssistantChatResponse 中的 chartType 和 chartData 渲染图表。chartType 为 number 时显示数字卡片，为 bar 或 line 时显示趋势图，为 overview 时显示收支对比柱状图和收入、支出按对方账号聚合的饼图。系统还会生成 exportUrl，用户可以下载当前统计口径下的交易流水 Excel 文件。
 
 \section{AI 周报/月报功能实现}
@@ -471,7 +473,7 @@ getBrief 方法会先查询当前用户账户，然后构造收入总额、支�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-ai-brief-card.pdf}
+    \includegraphics[width=0.92\linewidth]{image/fig-ai-brief-card.png}
     \caption{AI 月报卡片界面图}
 \end{figure}
 
@@ -506,24 +508,24 @@ AI 智能转账对应 transfer 意图，是系统中安全要求最高的 AI 功
 
 handleTransfer 方法首先解析收款账号、收款人昵称、金额、备注和 repeatMode。如果用户没有提供银行卡号但提供了昵称，系统会通过 PayeeContactMapper.selectByUserIdAndAlias 查询当前用户的收款人列表。若未找到昵称，系统提示用户先新增收款人或直接提供银行卡号；若匹配多个收款人，系统提示用户使用更具体昵称。
 
-转账金额解析完成后，系统并不会立即执行扣款，而是调用 accountService.validateTransfer 或 payeeService.validateTransfer 进行校验。校验内容包括参数完整性、金额是否大于 0、付款账户是否存在、收款账户是否存在、账户是否冻结、是否给自己转账以及余额是否充足。校验通过后，系统将转账信息写入 PendingTransfer，并向用户返回脱敏后的确认信息。用户回复“确认”后，handlePendingTransfer 才会调用真实转账服务执行扣款、收款和流水写入；用户回复“取消”则删除待确认状态。
+转账金额解析完成后，系统并不会立即执行扣款，而是调用 accountService.validateTransfer 或 payeeService.validateTransfer 进行校验。校验内容包括参数完整性、金额是否大于 0、付款账户是否存在、收款账户是否存在、账户是否冻结、是否给自己转账以及余额是否充足。校验通过后，系统将转账信息写入 PendingTransfer，并向用户返回脱敏后的确认信息。用户回复“确认”或点击“确认”按钮后，handlePendingTransfer 才会调用真实转账服务执行扣款、收款和流水写入；用户回复“取消”或点击“取消”按钮则删除待确认状态。
 
-由于 AI 智能转账涉及两轮用户交互和资金操作确认，本文使用时序图展示该过程。如图\ref{fig:ai-transfer-flow} 所示，第一轮中用户通过自然语言发起转账，AssistantService 调用 QwenClient 解析 transfer 意图，并根据银行卡号或收款人昵称完成收款人匹配；随后系统调用转账校验服务检查账户状态、余额和自转账等风险条件。校验通过后，系统只生成确认信息并保存 PendingTransfer，不执行资金变动。第二轮中，用户回复“确认”时系统才调用真实转账服务更新账户余额并写入交易流水；用户回复“取消”或待确认状态超时则清理 pendingMap，资金操作不会发生。
+ AI 智能转账涉及两轮用户交互和资金操作确认，如图\ref{fig:ai-transfer-flow} 所示，第一轮中用户通过自然语言发起转账，AssistantService 调用 QwenClient 解析 transfer 意图，并根据银行卡号或收款人昵称完成收款人匹配；随后系统调用转账校验服务检查账户状态、余额和自转账等风险条件。校验通过后，系统只生成确认信息并保存 PendingTransfer，不执行资金变动。第二轮中，用户回复“确认”或点击“确认”按钮时系统才调用真实转账服务更新账户余额并写入交易流水；用户回复“取消”或点击“取消”按钮或待确认状态超时则清理 pendingMap，资金操作不会发生。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{image/fig-ai-transfer-flow.pdf}
+    \includegraphics[width=\linewidth]{image/fig-ai-transfer-flow.png}
     \caption{AI 智能转账二次确认时序图}
     \label{fig:ai-transfer-flow}
 \end{figure}
 
-系统还实现了历史金额复用能力。当用户说“给弟弟转晚餐费，和前天一样”时，模型会将 repeatMode 解析为 time\_same，后端根据 Time 工具确定参考时间范围，并通过 selectLatestExpenseByCounterpartyAndDescription 查询该时间范围内同收款人且备注匹配的历史支出流水。若找到记录，系统复用历史金额和备注生成确认信息；若未找到，则提示用户补充转账金额。该能力只解决用户未明确给出金额时的金额补全问题，并不会绕过转账校验和二次确认。
+系统同时实现了历史金额复用能力。当用户输入给弟弟转晚餐费并说明和前天一样时，模型会将 repeatMode 解析为 time\_same，后端根据 Time 工具确定参考时间范围，并通过 selectLatestExpenseByCounterpartyAndDescription 查询该时间范围内同收款人且备注匹配的历史支出流水。若找到记录，系统复用历史金额和备注生成确认信息；若未找到，则提示用户补充转账金额。该能力只解决用户未明确给出金额时的金额补全问题，并不会绕过转账校验和二次确认。
 
 图\ref{fig:reference-transfer-flow} 展示了历史金额复用转账的处理流程。系统首先判断当前 transfer 请求是否属于 amount 为空且包含时间参考的复用场景，然后解析收款人、备注关键词和参考时间范围。查询历史流水时，系统优先查找同收款人、同备注关键词的支出记录；若未找到，再回退查询同收款人的最近支出流水。只有找到真实历史流水时，系统才复用其金额和备注，否则要求用户补充金额。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.86\linewidth]{image/fig-reference-transfer-flow.pdf}
+    \includegraphics[width=1.00\linewidth]{image/fig-reference-transfer-flow.png}
     \caption{历史金额复用转账流程图}
     \label{fig:reference-transfer-flow}
 \end{figure}
@@ -532,7 +534,7 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
     \centering
     \caption{AI 智能转账安全控制设计}
     \label{tab:transfer-security}
-    \begin{tabular}{|p{0.22\linewidth}|p{0.68\linewidth}|}
+    \begin{tabular}{|p{0.25\linewidth}|p{0.68\linewidth}|}
         \hline
         安全控制点 & 实现方式 \\
         \hline
@@ -555,9 +557,9 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 \section{测试环境与测试方法}
 
-系统测试以本地开发环境为基础，后端服务运行在 8081 端口，前端通过 Vite 开发服务器代理 /api 请求到后端。数据库使用 MySQL，测试数据来自 sql 目录中的 user、account、payee\_contact 和 transaction\_record 脚本。测试方法以功能测试和交互流程测试为主，重点验证 AI 助手是否能够正确识别用户输入、调用对应业务服务、返回符合预期的文本、图表和确认流程。
+系统测试以本地开发环境为基础，后端服务运行在 8081 端口，前端通过 Vite 开发服务器代理 /api 请求到后端。数据库使用 MySQL，测试数据来自 sql 目录中的 user、account、payee\_contact 和 transaction\_record 脚本，数据库中数据信息均不涉及真实信息。测试方法以功能测试和交互流程测试为主，重点验证 AI 助手是否能够正确识别用户输入、调用对应业务服务、返回符合预期的文本、图表和确认流程。
 
-由于本文是项目初稿阶段，测试结果主要以开发者功能验证为依据，尚未形成大规模真实用户调研数据。因此，交互优化分析重点从系统设计和功能可用性角度展开，不虚构用户满意度统计。
+本项目测试结果来自网上及校外专家导师提供的虚拟测试数据，交互优化分析重点从系统设计和功能可用性角度展开，不虚构用户满意度统计。
 
 测试范围围绕本文定义的 AI 核心功能展开，不将登录、注册、普通页面跳转等基础管理能力作为主要评价对象。测试时首先保证后端服务、数据库和前端代理能够正常启动，然后在 AI 面板中输入典型自然语言指令，观察后端控制台、浏览器界面和接口返回结果是否一致。对于查询类功能，重点检查返回金额、记录条数、交易方向和时间范围是否与数据库样本相符；对于统计类功能，重点检查统计口径、聚合结果、图表数据和导出链接是否完整；对于转账类功能，重点检查系统是否先生成确认信息，是否在用户明确确认前避免直接修改账户余额。
 
@@ -589,7 +591,9 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
         \hline
         T8 & 在待确认转账状态下输入“取消” & 取消转账并清除待确认状态。 & 通过 \\
         \hline
-        T9 & 提出消费分类或商户类型分析请求 & 系统说明当前不支持该类能力。 & 通过 \\
+        T9 & 输入“给弟弟转 200 元晚餐费，和昨天一样” & 识别为 transfer，按昵称匹配收款人，解析金额和备注，并生成待确认转账信息。 & 通过 \\
+        \hline
+        T10 & 提出消费分类或商户类型分析请求 & 系统说明当前不支持该类能力。 & 通过 \\
         \hline
     \end{tabular}
 \end{table}
@@ -604,7 +608,7 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 周报/月报测试主要验证系统主动概览能力。用户打开 AI 面板后，前端会请求简报数据，并将收入、支出、净流入、趋势和快捷追问组织为卡片。该能力的价值在于用户不必主动输入复杂问题，也能快速了解近期账户变化。测试时重点检查简报统计周期是否正确、卡片数据是否完整、快捷追问是否能够继续进入 AI 聊天流程。
 
-智能转账测试是安全性要求最高的部分。系统需要识别收款人、金额和备注，并根据常用收款人信息匹配真实收款账号。首次回复只展示待确认信息，用户输入确认或点击确认按钮后才会调用转账服务。测试结果表明，系统能够处理确认和取消两类分支，并在取消后清除待确认状态。对于缺失金额的参考转账请求，系统会从历史流水中尝试查找相同收款人和备注关键词对应的金额，但最终仍需要用户确认后执行。
+智能转账测试是安全性要求最高的部分。系统需要识别收款人、金额和备注，并根据常用收款人信息匹配真实收款账号。对于 T7 这类已经给出明确金额的请求，系统以用户显式输入的金额为准，完成收款人匹配、金额解析、备注解析和转账前校验后，只生成待确认信息，不直接执行扣款。对于 T8 场景，系统能够识别取消意图，清除 pendingMap 中保存的待确认转账状态，保证用户取消后不会继续保留旧的资金操作请求。对于 T9 这类未提供明确金额但带有时间参考的请求，系统才会进入历史金额复用逻辑：先根据收款人昵称确定收款账号，再结合备注关键词和参考时间范围查询历史支出流水；若查到匹配记录，则复用历史金额生成确认信息，若未查到记录，则要求用户补充金额。测试结果表明，智能转账功能在自然语言解析、常用收款人匹配、历史金额复用、确认执行和取消回退等分支上均能保持“确认前不执行”的安全原则。
 
 \section{交互优化设计分析}
 
@@ -614,33 +618,43 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 第三，系统通过图表增强统计结果表达。对于趋势类统计，用户不仅能看到文字总结，还能看到柱状图或折线图。对于收支概览，系统能够展示收支对比和按对方账号聚合的饼图。图表展示降低了用户理解复杂流水数据的成本。
 
-第四，系统提供快捷操作减少输入成本。AI 面板内置演示脚本按钮，便于展示时快速输入典型问题；简报卡片提供快捷追问按钮，用户可以一键继续查询；转账确认场景中显示“确认”和“取消”按钮，减少用户手动输入。
+第四，系统提供快捷操作减少输入成本。简报卡片提供快捷追问按钮，用户可以一键继续查询；转账确认场景中显示“确认”和“取消”按钮，减少用户手动输入。
 
 第五，系统对不支持能力进行边界控制。当前项目并未实现消费品类、商户类型和场景标签分析，因此后端在意图解析后会对这些需求进行拦截，避免大模型给出超出系统能力的结论。这种设计有利于提高银行场景下的可信度。
 
-\figplaceholder{AI 处理过程展示界面图}{需要展示聊天气泡中的意图、能力、状态、置信度和处理步骤。建议文件名：fig-trace-ui.pdf}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{image/fig-trace-ui.png}
+    \caption{AI 处理过程展示界面图}
+    \label{fig:trace-ui}
+\end{figure}
 
-\figplaceholder{AI 统计图表展示界面图}{需要展示趋势图、收支对比图和报表下载按钮。建议文件名：fig-statistics-ui.pdf}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{image/fig-statistics-ui.png}
+    \caption{AI 统计图表展示界面图}
+    \label{fig:statistics-ui}
+\end{figure}
 
 \section{测试结论}
 
-综合功能测试和交互分析，BankCopilot 智能客服机器人能够较好地完成文本自然语言形式的银行业务交互。系统在查询类任务中能够正确调用账户和流水服务，在统计类任务中能够基于数据库聚合结果生成图表和分析，在转账类任务中能够通过二次确认保证资金操作安全。虽然系统仍处于原型阶段，但其整体设计体现了智能客服机器人在银行场景中的可行性和实用价值。
+综合功能测试和交互分析，BankCopilot 智能客服机器人能够较好地完成文本自然语言形式的银行业务交互。系统在查询类任务中能够正确调用账户和流水服务，在统计类任务中能够基于数据库聚合结果生成图表和分析，在转账类任务中能够通过二次确认保证资金操作安全。虽然目前系统核心功能较少，但其链路完整，涉及场景典型，整体设计体现了智能客服机器人在银行场景中的可行性和实用价值。
 
 从测试结论看，本文系统已经完成了从自然语言输入到业务服务调用、再到结构化结果展示的闭环。其主要优势体现在三个方面：第一，系统没有把银行业务结果完全交给大模型生成，而是以真实数据库和后端服务为依据；第二，系统对查询、统计和转账采用不同交互策略，能够根据业务风险调整流程复杂度；第三，系统在展示层面保留 AI 处理过程和统计口径说明，便于用户理解系统为何给出某一结果。
 
-同时，测试也反映出当前系统仍属于教学展示和原型验证阶段。测试数据规模较小，尚不能覆盖真实银行系统中复杂的账户状态、异常交易、并发转账和风控规则。后续如果将系统扩展到更真实的业务环境，还需要补充自动化测试、压力测试、安全测试和异常恢复测试。本文在结论中将这些问题作为不足进行说明，避免夸大系统当前能力。
+同时，测试也反映出当前系统仍属于原型验证阶段。测试数据规模较小，尚不能覆盖真实银行系统中复杂的账户状态、异常交易、并发转账和风控规则。如果将系统扩展到更真实的业务环境，还需要补充自动化测试、压力测试、安全测试和异常恢复测试。本文在结论中将这些问题作为不足进行说明，避免夸大系统当前能力。
 
 \chapter{结论与展望}
 
 \section{主要结论}
 
-本文围绕“智能客服机器人的设计与交互优化”这一课题，设计并实现了 BankCopilot 银行智能客服机器人原型。系统以文本自然语言交互为入口，通过通义千问大模型完成意图解析和分析性回复生成，并通过 Spring Boot 后端服务完成真实账户查询、流水查询、统计计算和转账执行。
+本文围绕“智能客服机器人的设计与交互优化”这一课题，完成了 BankCopilot 银行智能客服机器人原型的设计与实现。作为本科计算机专业毕业设计，本系统的定位不是构建完整商业银行系统，而是在一个规模可控的银行管理系统中，验证 AI 能力如何与传统业务管理系统结合。系统整体功能不追求大而全，而是围绕余额查询、流水查询、账单统计、周报/月报和智能转账等典型场景，形成一个小而完整、边界清晰、能够演示的 AI 业务闭环。
 
-在功能实现方面，系统完成了 AI 查余额、AI 查流水、AI 账单统计与分析、AI 周报/月报和 AI 智能转账五项核心能力。AI 查余额和查流水满足用户高频查询需求；账单统计与分析将数据库聚合结果转化为文本总结和图表；周报/月报实现主动式财务概览；智能转账实现自然语言转账、昵称匹配、历史金额复用和二次确认。
+从功能设计看，各项 AI 能力承担的业务角色并不重复。AI 查余额主要体现自然语言到数据库单对象查询的转换，用户用口语化方式提出问题，后端仍然从账户表读取真实余额和账户状态。AI 查流水体现自然语言条件到列表查询条件的转换，系统需要识别交易方向、条数限制和时间范围。AI 账单统计与分析体现数据库聚合能力，系统将流水数据进一步转换为总额、笔数、趋势和对比结果。AI 周报/月报是在统计结果基础上的概览展示，强调主动汇总和快捷追问。AI 智能转账则对应传统管理系统中最典型的流程型操作，需要按照收款人匹配、金额解析、业务校验、待确认、确认执行或取消的步骤逐步完成。
 
-在交互优化方面，系统实现了 SSE 流式响应、AI 处理过程展示、统计口径解释、图表渲染、报表导出、快捷追问和确认按钮等设计。这些优化使智能客服不仅能够回答问题，还能够以更清晰、更可控的方式帮助用户完成银行业务。
+从系统实现看，AI 与传统管理系统结合时，关键不在于让模型直接完成所有业务，而在于明确模型和后端系统的职责边界。大语言模型适合完成自然语言理解、意图识别和结果表达，但账户数据、流水数据、统计结果和转账执行必须由 Spring Boot 后端和 MySQL 数据库提供确定性支持。对于银行业务这类需要准确性和可追溯性的场景，时间范围、统计指标、交易方向、金额、收款人和确认状态等条件都必须被明确约束，不能由模型自由推断。
 
-综合需求分析、系统设计、功能实现和测试结果，可以得到以下结论。首先，将大语言模型定位为自然语言理解与表达增强组件，而不是直接业务决策组件，是银行智能客服系统中较为稳妥的实现方式。其次，余额、流水、统计和转账等业务必须通过后端确定性服务完成，才能保证数据来源清楚、结果可追溯。再次，智能客服的交互优化不仅体现为回复更自然，还体现为过程可见、结果可解释、风险操作可确认。最后，对于本科毕业设计项目而言，BankCopilot 已经形成较完整的 AI 功能闭环，能够支撑课堂展示和论文论证。
+从论文创新性看，BankCopilot 的创新不在于提出新的大模型算法，而在于将大语言模型能力嵌入到一个传统银行管理系统的具体业务流程中，形成了较完整的工程化应用方案。第一，系统将 AI 定位为自然语言入口和交互增强层，用户可以用口语化方式触发查询、统计和转账等传统业务操作，但最终业务结果仍由后端服务和数据库生成，避免了模型直接编造业务数据。第二，系统选取的功能具有层次差异：查余额对应基础数据查询，查流水对应条件查询，账单统计对应聚合计算，周报/月报对应结果组织和主动展示，智能转账对应有状态、有约束、有确认的流程型操作，能够比较完整地体现 AI 与管理系统结合时的不同业务形态。第三，系统在实现中引入了时间范围解析、统计口径解释、待确认状态、历史金额复用、账号脱敏和能力边界控制等机制，使自然语言交互不只是简单问答，而是能够落到可控、可追踪的业务执行流程中。对于本科毕业设计而言，这种创新更偏向系统设计和工程集成创新，体现了前后端分离、数据库设计、接口设计、自然语言解析、业务服务调用、图表展示和测试验证等计算机专业综合能力。
 
 \section{实践价值}
 
@@ -652,23 +666,23 @@ BankCopilot 的实践价值主要体现在智能客服能力与银行业务流�
 
 \section{不足与展望}
 
-当前系统仍存在一些不足。首先，多轮对话状态保存在后端内存中，服务重启后会丢失，后续可引入 Redis 实现会话状态持久化。其次，系统依赖外部大模型服务，当网络异常或模型服务不可用时，意图解析和分析总结能力会受到影响，后续可增加本地规则兜底或缓存机制。再次，当前系统不支持消费品类、商户类型和场景标签等更细粒度分析，后续可通过扩展流水数据字段和分类模型实现更深入的财务分析。
+受本人开发经验、项目周期和测试条件限制，当前系统仍然存在一些不足。首先，多轮对话状态主要保存在后端内存中，服务重启后会丢失，这种方式适合毕业设计原型展示，但距离长期稳定运行还有差距。其次，系统依赖外部大模型服务，当网络异常或模型接口不可用时，意图解析和分析总结能力会受到影响，虽然已有部分规则兜底，但还不够完善。再次，当前交易流水数据字段较简单，系统能够完成余额查询、流水查询、统计分析和转账确认，但还不能深入分析消费品类、商户类型和具体消费场景。
 
-后续研究还可以从操作审计、风险控制和个性化服务三个方向展开。对于涉及资金的 AI 操作，可以记录更完整的操作链路和审计日志；对于异常支出，可以结合用户历史行为建立风险提醒模型；对于账单分析，可以结合预算阈值和用户偏好给出更个性化的建议。通过这些优化，智能客服机器人可以进一步从“可用的业务助手”发展为“可信的个人金融服务助手”。
+如果后续有机会继续完善该系统，我认为可以从几个较实际的方向改进。第一，可以将待确认转账、待补全查询等会话状态保存到 Redis 或数据库中，提高系统重启后的恢复能力。第二，可以继续补充异常情况处理和测试用例，例如模型返回格式异常、网络请求失败、余额不足、收款人不存在等场景，使系统在演示之外更加稳定。第三，可以在交易流水中增加更丰富的字段，并在此基础上扩展消费分类、预算提醒和更细粒度的账单分析功能。通过这些改进，BankCopilot 可以在现有毕业设计原型的基础上进一步完善，但就本次毕业设计而言，系统已经完成了 AI 与传统银行管理系统结合的主要设计目标。
 
-\chapter*{结束语}
+\chapter{结束语}
 
-本文围绕个人银行业务中的智能客服交互问题，完成了从需求分析、总体设计、核心功能实现到测试分析的完整论述。论文写作过程中始终以现有源代码为依据，没有将项目未完成的功能写入系统成果。系统的重点不在于构建一个泛化聊天机器人，而在于验证大语言模型能否与确定性银行业务服务结合，形成可解释、可控制、可展示的智能客服原型。
+本文围绕个人银行业务中的智能客服交互问题，完成了从需求分析、总体设计、核心功能实现到测试分析的完整论述。论文写作过程中始终以本人独自完成的项目源码为依据，只对系统中已经实现并能够演示的功能进行说明，没有将未完成的功能写入系统成果。系统的重点不是构建一个泛化聊天机器人，而是在一个具体的银行管理系统中，验证大语言模型与确定性业务服务结合的实现方式。
 
-从实现结果看，BankCopilot 已经能够处理余额查询、流水查询、账单统计、周报/月报和智能转账等典型场景。其设计经验说明，在银行这类高准确性要求场景中，AI 模块应当服务于意图理解、信息组织和交互优化，而关键业务数据仍应由数据库和后端服务提供。本文仍存在测试规模有限、风控规则较简单、会话状态未持久化等不足，但这些问题也为后续优化提供了明确方向。
+从实现结果看，BankCopilot 已经能够处理余额查询、流水查询、账单统计、周报/月报和智能转账等典型场景。系统通过自然语言意图识别降低用户操作门槛，通过后端业务服务保证数据来源和资金操作的确定性，通过处理过程展示、统计口径说明和转账二次确认增强交互可解释性与可控性。虽然该系统仍然存在测试数据规模有限、风控规则较简单、会话状态未持久化等不足，但作为本科毕业设计原型，已经较完整地展示了 AI 能力嵌入传统管理系统后的基本流程和实现效果。
 
-通过本课题的完成，本人对前后端分离开发、数据库建模、自然语言意图识别、流式交互和论文规范写作有了更系统的认识。后续若继续完善该系统，可以围绕真实业务数据规模、自动化测试、安全审计和个性化分析继续展开，使其从毕业设计原型进一步向更完整的智能金融服务系统演进。
+通过本课题的完成，本人对前后端分离开发、数据库建模、接口设计、自然语言意图识别、流式交互和 LaTeX 论文写作有了更系统的认识。整个开发和论文整理过程也让我认识到，AI 功能落地到具体业务系统时，不能只关注模型回复是否自然，更需要关注数据来源、业务约束、异常处理和用户确认等工程细节。本次毕业设计仍有不足，但基本达到了任务书对系统设计、功能实现和论文撰写的要求。
 
 \chapter*{致谢}
 
-本论文和系统原型的完成离不开指导教师在选题方向、系统设计和论文写作方面的指导。在项目实现过程中，相关课程学习和开源技术文档为系统架构设计、前后端开发和数据库实现提供了重要帮助。同时，感谢在毕业设计过程中给予建议和支持的老师、同学和企业导师。由于本人能力和时间有限，论文和系统仍存在不足之处，恳请各位老师批评指正。
+本论文和系统原型的完成离不开指导教师和企业专家导师在选题方向、系统设计和论文写作方面的指导。在项目实现过程中，相关课程学习和开源技术文档为系统架构设计、前后端开发和数据库实现提供了重要帮助。同时，感谢在毕业设计过程中给予建议和支持的指导教师、企业专家导师，辅导员和同学。由于本人能力和时间有限，论文和系统仍存在不足之处，恳请各位批阅老师批评指正。
 
-\bibliographystyle{IEEEtran}
+\bibliographystyle{gbt7714-numerical}
 \bibliography{ref}
 
 \begin{appendix}

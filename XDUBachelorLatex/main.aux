@@ -36,10 +36,12 @@
 \@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  第{四}章\hskip 1ex系统总体设计}{13}{chapter.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4.1}系统架构设计}{13}{section.4.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces 系统总体架构图}}{13}{figure.caption.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}AI 模块设计}{13}{section.4.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces AI 模块与源码对应关系}}{14}{table.caption.14}\protected@file@percent }
-\newlabel{tab:ai-module-source}{{4.1}{14}{AI 模块与源码对应关系}{table.caption.14}{}}
+\newlabel{fig:system-architecture}{{4.1}{13}{系统总体架构图}{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}AI 模块设计}{14}{section.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces AI 模块主要职责}}{14}{table.caption.14}\protected@file@percent }
+\newlabel{tab:ai-module-source}{{4.1}{14}{AI 模块主要职责}{table.caption.14}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces AI 请求处理架构图}}{15}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:ai-request-architecture}{{4.2}{15}{AI 请求处理架构图}{figure.caption.15}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.3}数据库设计}{15}{section.4.3}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces AI 功能相关数据表说明}}{15}{table.caption.16}\protected@file@percent }
 \newlabel{tab:ai-database}{{4.2}{15}{AI 功能相关数据表说明}{table.caption.16}{}}
@@ -53,18 +55,18 @@
 \@writefile{toc}{\contentsline {section}{\numberline {5.2}AI 查余额功能实现}{21}{section.5.2}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces AI 查余额功能实现说明}}{21}{table.caption.21}\protected@file@percent }
 \newlabel{tab:balance}{{5.1}{21}{AI 查余额功能实现说明}{table.caption.21}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}AI 查流水功能实现}{21}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}AI 查流水功能实现}{22}{section.5.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces AI 查流水多轮补全时序图}}{23}{figure.caption.22}\protected@file@percent }
 \newlabel{fig:transaction-multiturn}{{5.2}{23}{AI 查流水多轮补全时序图}{figure.caption.22}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces AI 查流水测试输入与处理方式}}{23}{table.caption.23}\protected@file@percent }
 \newlabel{tab:transaction-query}{{5.2}{23}{AI 查流水测试输入与处理方式}{table.caption.23}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.4}AI 账单统计与分析功能实现}{23}{section.5.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces AI 账单统计与分析流程图}}{25}{figure.caption.24}\protected@file@percent }
-\newlabel{fig:statistics-analysis-flow}{{5.3}{25}{AI 账单统计与分析流程图}{figure.caption.24}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces 统计指标与实现方法对应关系}}{26}{table.caption.25}\protected@file@percent }
-\newlabel{tab:statistics-metric}{{5.3}{26}{统计指标与实现方法对应关系}{table.caption.25}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces 统计指标与实现方法对应关系}}{24}{table.caption.24}\protected@file@percent }
+\newlabel{tab:statistics-metric}{{5.3}{24}{统计指标与实现方法对应关系}{table.caption.24}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces AI 账单统计与分析流程图}}{25}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:statistics-analysis-flow}{{5.3}{25}{AI 账单统计与分析流程图}{figure.caption.25}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.5}AI 周报/月报功能实现}{26}{section.5.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces AI 月报卡片界面图}}{27}{figure.caption.26}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces AI 月报卡片界面图}}{26}{figure.caption.26}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces AI 周报/月报返回字段说明}}{27}{table.caption.27}\protected@file@percent }
 \newlabel{tab:brief-fields}{{5.4}{27}{AI 周报/月报返回字段说明}{table.caption.27}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.6}AI 智能转账功能实现}{27}{section.5.6}\protected@file@percent }
@@ -81,34 +83,35 @@
 \newlabel{tab:test-cases}{{6.1}{32}{AI 核心功能测试用例表}{table.caption.32}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {6.3}交互优化设计分析}{33}{section.6.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces AI 处理过程展示界面图}}{34}{figure.caption.33}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces AI 统计图表展示界面图}}{34}{figure.caption.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.4}测试结论}{34}{section.6.4}\protected@file@percent }
+\newlabel{fig:trace-ui}{{6.1}{34}{AI 处理过程展示界面图}{figure.caption.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces AI 统计图表展示界面图}}{35}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:statistics-ui}{{6.2}{35}{AI 统计图表展示界面图}{figure.caption.34}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}测试结论}{35}{section.6.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  第{七}章\hskip 1ex结论与展望}{37}{chapter.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {7.1}主要结论}{37}{section.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}实践价值}{37}{section.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}实践价值}{38}{section.7.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {7.3}不足与展望}{38}{section.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  结束语}{39}{section*.36}\protected@file@percent }
-\bibstyle{IEEEtran}
+\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  第{八}章\hskip 1ex结束语}{41}{chapter.8}\protected@file@percent }
+\bibstyle{gbt7714-numerical}
 \bibdata{ref}
-\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  致谢}{41}{section*.37}\protected@file@percent }
-\bibcite{vaswani2017attention}{{1}{}{{}}{{}}}
-\bibcite{brown2020language}{{2}{}{{}}{{}}}
-\bibcite{zhao2023survey}{{3}{}{{}}{{}}}
-\bibcite{springboot}{{4}{}{{}}{{}}}
-\bibcite{vue}{{5}{}{{}}{{}}}
-\bibcite{echarts}{{6}{}{{}}{{}}}
-\bibcite{mybatis}{{7}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  参考文献}{43}{section*.38}\protected@file@percent }
-\providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  附录~A\hskip 1ex主要接口与数据结构}{45}{appendix.A}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {A.1}AI 聊天请求结构}{45}{section.A.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {A.1}{\ignorespaces AssistantChatRequest 请求字段}}{45}{table.caption.40}\protected@file@percent }
-\newlabel{tab:assistant-request}{{A.1}{45}{AssistantChatRequest 请求字段}{table.caption.40}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.2}AI 聊天响应结构}{45}{section.A.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {A.2}{\ignorespaces AssistantChatResponse 响应字段}}{45}{table.caption.41}\protected@file@percent }
-\newlabel{tab:assistant-response}{{A.2}{45}{AssistantChatResponse 响应字段}{table.caption.41}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.3}统计查询结构}{45}{section.A.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {A.3}{\ignorespaces StatisticsQueryDTO 字段说明}}{45}{table.caption.42}\protected@file@percent }
-\newlabel{tab:statistics-query}{{A.3}{45}{StatisticsQueryDTO 字段说明}{table.caption.42}{}}
+\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  致谢}{43}{section*.37}\protected@file@percent }
+\bibcite{vaswani2017attention}{{1}{2017}{{Vaswani et~al.}}{{Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, and Polosukhin}}}
+\bibcite{brown2020language}{{2}{2020}{{Brown et~al.}}{{Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal, Neelakantan, Shyam, Sastry, Askell, Agarwal, Herbert-Voss, Krueger, Henighan, Child, Ramesh, Ziegler, Wu, Winter, Hesse, Chen, Sigler, Litwin, Gray, Chess, Clark, Berner, McCandlish, Radford, Sutskever, and Amodei}}}
+\bibcite{zhao2023survey}{{3}{2023}{{Zhao et~al.}}{{Zhao, Zhou, Li, Tang, Wang, Hou, Min, Zhang, Zhang, Dong, Du, Yang, Chen, Chen, Jiang, Ren, Li, Tang, Liu, Liu, Nie, and Wen}}}
+\bibcite{springboot}{{4}{2025}{{Spring Team}}{{}}}
+\bibcite{vue}{{5}{2025}{{Vue.js Team}}{{}}}
+\bibcite{echarts}{{6}{2025}{{Apache ECharts Team}}{{}}}
+\bibcite{mybatis}{{7}{2025}{{MyBatis Team}}{{}}}
+\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  参考文献}{45}{section*.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries  附录~A\hskip 1ex主要接口与数据结构}{47}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}AI 聊天请求结构}{47}{section.A.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {A.1}{\ignorespaces AssistantChatRequest 请求字段}}{47}{table.caption.40}\protected@file@percent }
+\newlabel{tab:assistant-request}{{A.1}{47}{AssistantChatRequest 请求字段}{table.caption.40}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}AI 聊天响应结构}{47}{section.A.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {A.2}{\ignorespaces AssistantChatResponse 响应字段}}{47}{table.caption.41}\protected@file@percent }
+\newlabel{tab:assistant-response}{{A.2}{47}{AssistantChatResponse 响应字段}{table.caption.41}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.3}统计查询结构}{47}{section.A.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {A.3}{\ignorespaces StatisticsQueryDTO 字段说明}}{47}{table.caption.42}\protected@file@percent }
+\newlabel{tab:statistics-query}{{A.3}{47}{StatisticsQueryDTO 字段说明}{table.caption.42}{}}
 \ttl@finishall
-\gdef \@abspage@last{55}
+\gdef \@abspage@last{57}
