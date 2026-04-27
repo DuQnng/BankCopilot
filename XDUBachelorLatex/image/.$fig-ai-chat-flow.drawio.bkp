@@ -1,0 +1,191 @@
+<mxfile host="Electron" agent="ChatGPT">
+  <diagram id="ai-chat-flow" name="Page-1">
+    <mxGraphModel dx="1285" dy="705" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1530" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="开始 接收 AI 聊天请求" vertex="1">
+          <mxGeometry height="60" width="150" x="440" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="validate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="读取并修剪 message 校验输入非空" vertex="1">
+          <mxGeometry height="65" width="210" x="410" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="empty" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="message 是否为空？" vertex="1">
+          <mxGeometry height="85" width="150" x="440" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="param_error" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="抛出参数异常 message 不能为空" vertex="1">
+          <mxGeometry height="65" width="180" x="650" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="pending_transfer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="优先处理待确认转账 handlePendingTransfer(userId, msg)" vertex="1">
+          <mxGeometry height="70" width="250" x="390" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="transfer_hit" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="是否返回 转账状态结果？" vertex="1">
+          <mxGeometry height="90" width="170" x="430" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="transfer_result" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="返回转账结果 确认执行 / 取消 / 超时" vertex="1">
+          <mxGeometry height="65" width="190" x="650" y="448" as="geometry" />
+        </mxCell>
+        <mxCell id="pending_txn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="优先处理待补全流水查询 handlePendingTransactionQuery(userId, msg)" vertex="1">
+          <mxGeometry height="70" width="270" x="380" y="555" as="geometry" />
+        </mxCell>
+        <mxCell id="txn_hit" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="是否返回 补全查询结果？" vertex="1">
+          <mxGeometry height="90" width="170" x="430" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="txn_result" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="返回流水补全结果-&amp;gt;继续追问 / 查询完成 / 取消 / 超时" vertex="1">
+          <mxGeometry height="70" width="215" x="650" y="666" as="geometry" />
+        </mxCell>
+        <mxCell id="parse" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="调用 parseIntentByQwen 解析自然语言意图" vertex="1">
+          <mxGeometry height="65" width="240" x="395" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="normalize" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="Time.normalizeTimeByText 进行时间解析与纠偏" vertex="1">
+          <mxGeometry height="65" width="240" x="395" y="875" as="geometry" />
+        </mxCell>
+        <mxCell id="intent" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="根据 intent 进行业务分发" vertex="1">
+          <mxGeometry height="100" width="170" x="430" y="980" as="geometry" />
+        </mxCell>
+        <mxCell id="transfer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="transfer handleTransfer 收款人识别 / 金额解析 转账校验 / 写入待确认状态" vertex="1">
+          <mxGeometry height="100" width="210" x="50" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="transactions" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="transactions handleTransactions 构造查询条件 必要时保存待补全状态" vertex="1">
+          <mxGeometry height="100" width="210" x="315" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="balance" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="balance handleBalance 调用 AccountService 查询账户与余额" vertex="1">
+          <mxGeometry height="100" width="210" x="580" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="statistics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="statistics handleStatistics 构造 StatisticsQueryDTO 统计计算与分析总结" vertex="1">
+          <mxGeometry height="100" width="220" x="845" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="fallback" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="other fallbackChat 不支持能力或闲聊兜底" vertex="1">
+          <mxGeometry height="100" width="210" x="1115" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="response" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="封装 AssistantChatResponse reply / trace / explain / chartData / exportUrl" vertex="1">
+          <mxGeometry height="75" width="310" x="520" y="1330" as="geometry" />
+        </mxCell>
+        <mxCell id="finish" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="结束 Result.success(response)" vertex="1">
+          <mxGeometry height="55" width="170" x="590" y="1440" as="geometry" />
+        </mxCell>
+        <mxCell id="note" parent="1" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="&lt;b&gt;流程依据&lt;/b&gt;&lt;br/&gt;AssistantService.chat 首先校验输入，然后按顺序处理待确认转账和待补全流水查询；只有当前用户没有命中的多轮状态时，才调用大模型解析新请求并按 intent 分发。" vertex="1">
+          <mxGeometry height="125" width="310" x="870" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" parent="1" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="&lt;b&gt;多轮状态优先&lt;/b&gt;&lt;br/&gt;“确认”优先解释为上一次转账确认；“1月”优先解释为上一次流水查询的月份补充，而不是重新作为普通聊天解析。" vertex="1">
+          <mxGeometry height="115" width="275" x="60" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="validate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="validate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="empty">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="empty" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="param_error" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="empty" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="pending_transfer" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="pending_transfer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="transfer_hit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="transfer_hit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="transfer_result" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="transfer_hit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="pending_txn" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="pending_txn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="txn_hit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="txn_hit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="txn_result" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="txn_hit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="parse" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="parse" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="normalize">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="normalize" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="intent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="intent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="transfer" value="transfer">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="155" y="1050" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="intent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="transactions" value="transactions">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="1070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="intent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="balance" value="balance">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="515" y="1110" />
+              <mxPoint x="685" y="1110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="intent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="statistics" value="statistics">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="955" y="1070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="intent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="fallback" value="other">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1220" y="1040" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="transfer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="155" y="1300" />
+              <mxPoint x="570" y="1300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="transactions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="1285" />
+              <mxPoint x="620" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="balance" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="1290" />
+              <mxPoint x="680" y="1290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="statistics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="955" y="1280" />
+              <mxPoint x="730" y="1280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="fallback" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1220" y="1300" />
+              <mxPoint x="780" y="1300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23" edge="1" parent="1" source="response" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" target="finish">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

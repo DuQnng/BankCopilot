@@ -1,0 +1,158 @@
+<mxfile host="Electron" agent="ChatGPT">
+  <diagram id="reference-transfer-flow" name="Page-1">
+    <mxGraphModel dx="1500" dy="2000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1330" pageHeight="1900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="用户输入
+“给弟弟转晚餐费，和前天一样”" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="405" y="30" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="parse" value="parseIntentByQwen
+intent=transfer
+payeeAlias=弟弟, amount=空
+description=晚餐费, repeatMode=time_same" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="370" y="135" width="330" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="is_repeat" value="是否为历史金额复用？
+amount 为空且 repeatMode/time reference 命中" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="435" y="270" width="200" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="normal_amount" value="非复用场景
+要求用户提供金额
+或按普通转账流程处理" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="740" y="292" width="230" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="resolve_payee" value="解析并匹配收款人
+PayeeContactMapper.selectByUserIdAndAlias
+得到 toAccountNo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="370" y="430" width="330" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="payee_found" value="收款人是否唯一匹配？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="435" y="550" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="payee_fail" value="提示新增收款人
+或提供完整银行卡号" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="735" y="565" width="230" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="resolve_range" value="resolveReferenceRange
+Time.fillTimeRange 计算参考时间范围
+如前天 00:00:00 至 23:59:59" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="370" y="690" width="330" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="range_ok" value="参考时间是否可解析？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="435" y="820" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="range_fail" value="提示补充参考时间
+如昨天、前天、上个月" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="735" y="835" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="keyword" value="buildDescriptionKeywordCandidates
+从备注与原始输入提取关键词
+如 晚餐费 / 晚餐" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="370" y="960" width="330" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="query1" value="优先查询同收款人 + 同备注流水
+selectLatestExpenseByCounterpartyAndDescription" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="340" y="1085" width="390" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="found1" value="是否找到匹配流水？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="435" y="1215" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="query2" value="未找到则回退
+查询同收款人最近一笔支出
+selectLatestExpenseByCounterparty" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="730" y="1225" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="found2" value="是否找到历史支出？" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="800" y="1360" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="not_found" value="不猜测金额
+提示用户补充转账金额" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="1070" y="1375" width="230" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="reuse" value="复用历史流水金额与备注
+amount = abs(reference.amount)
+description = reference.description
+生成 referenceSummary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="370" y="1500" width="330" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="validate" value="进入普通转账校验
+validateTransfer
+校验账户、余额、自转账、冻结状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="370" y="1645" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="pending" value="生成确认信息并保存 PendingTransfer
+回复用户确认后才执行" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="370" y="1780" width="330" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="note1" value="&lt;b&gt;安全原则&lt;/b&gt;&lt;br/&gt;找不到历史流水时不由模型猜金额，而是要求用户补充金额。" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="60" y="1360" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" value="&lt;b&gt;查询依据&lt;/b&gt;&lt;br/&gt;当前用户账户、收款账号、参考时间范围、备注关键词。历史金额来自 transaction_record 的支出流水。" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="770" y="990" width="300" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="note3" value="&lt;b&gt;与普通转账衔接&lt;/b&gt;&lt;br/&gt;历史金额复用只解决 amount 缺失问题，后续仍必须走转账校验和二次确认。" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" vertex="1">
+          <mxGeometry x="760" y="1610" width="300" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="start" target="parse" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="parse" target="is_repeat" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="is_repeat" target="normal_amount" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="is_repeat" target="resolve_payee" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="resolve_payee" target="payee_found" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="payee_found" target="payee_fail" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="payee_found" target="resolve_range" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="resolve_range" target="range_ok" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="range_ok" target="range_fail" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="range_ok" target="keyword" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="keyword" target="query1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="query1" target="found1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="found1" target="query2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="query2" target="found2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.0;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="found2" target="not_found" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="found1" target="reuse" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="found2" target="reuse" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="reuse" target="validate" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.15;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=13;" parent="1" source="validate" target="pending" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

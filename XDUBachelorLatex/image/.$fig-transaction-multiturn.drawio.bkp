@@ -1,0 +1,296 @@
+<mxfile host="Electron" agent="ChatGPT">
+  <diagram id="transaction-multiturn" name="Page-1">
+    <mxGraphModel dx="1900" dy="1050" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1660" pageHeight="940" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="frame1" value="&lt;b&gt;第一轮：用户只给出日期，系统追问月份&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=top;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="15" y="125" width="1625" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="frame2" value="&lt;b&gt;第二轮：用户补充月份，系统继续完成查询&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=top;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="15" y="465" width="1625" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="p_user" value="用户" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="55" y="40" width="90" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_user" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="100.0" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_panel" value="AssistantPanel.vue
+前端聊天面板" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="185" y="30" width="135" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_panel" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="252.5" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_controller" value="AssistantController
+/chat/stream" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="365" y="30" width="135" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_controller" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="432.5" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_service" value="AssistantService
+chat()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="555" y="30" width="140" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_service" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="625.0" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_qwen" value="QwenClient
+parseIntent" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="750" y="30" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_qwen" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="815.0" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_time" value="Time.java
+时间处理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="925" y="30" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_time" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="985.0" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_pending" value="pendingTxnQueryMap
+待补全状态" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1105" y="30" width="145" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_pending" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1177.5" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_txsvc" value="TransactionService
+getTransactions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1310" y="30" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_txsvc" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1385.0" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="p_mapper" value="TransactionMapper.xml
+selectTransactions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1525" y="30" width="160" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l_mapper" style="shape=line;html=1;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=4 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1605.0" y="90" width="1" height="815" as="geometry" />
+        </mxCell>
+        <mxCell id="a_panel1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="247.5" y="150" width="10" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="a_controller1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="427.5" y="175" width="10" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="a_service1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="620.0" y="200" width="10" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="a_qwen1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="810.0" y="225" width="10" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a_time1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="980.0" y="285" width="10" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a_pending1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1172.5" y="330" width="10" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a_panel2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="247.5" y="505" width="10" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="a_controller2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="427.5" y="530" width="10" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="a_service2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="620.0" y="555" width="10" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a_pending2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1172.5" y="580" width="10" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a_qwen2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="810.0" y="640" width="10" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a_time2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="980.0" y="700" width="10" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="a_txsvc" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1380.0" y="745" width="10" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="a_mapper" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#000000;strokeWidth=1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1600.0" y="770" width="10" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="输入“查17号收入记录”" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100.0" y="155" as="sourcePoint" />
+            <mxPoint x="252.5" y="155" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="POST /assistant/chat/stream" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="252.5" y="180" as="sourcePoint" />
+            <mxPoint x="432.5" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="chat(userId, message)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="432.5" y="205" as="sourcePoint" />
+            <mxPoint x="625.0" y="205" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="parseIntentByQwen(message)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="230" as="sourcePoint" />
+            <mxPoint x="815.0" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="intent=transactions
+txnType=收入, day=17
+month=空, needMonth=true" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="815.0" y="255" as="sourcePoint" />
+            <mxPoint x="625.0" y="255" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="normalizeTimeByText" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="290" as="sourcePoint" />
+            <mxPoint x="985.0" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="纠偏后仍缺 month" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="985.0" y="315" as="sourcePoint" />
+            <mxPoint x="625.0" y="315" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="put(userId, PendingTransactionQuery)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="335" as="sourcePoint" />
+            <mxPoint x="1177.5" y="335" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="AssistantChatResponse
+追问月份 + trace" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="365" as="sourcePoint" />
+            <mxPoint x="432.5" y="365" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="SSE message" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="432.5" y="390" as="sourcePoint" />
+            <mxPoint x="252.5" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="显示：“请问你要查询几月17号的收入记录？”" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="252.5" y="415" as="sourcePoint" />
+            <mxPoint x="100.0" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="回复“1月”" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100.0" y="510" as="sourcePoint" />
+            <mxPoint x="252.5" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" value="POST /assistant/chat/stream" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="252.5" y="535" as="sourcePoint" />
+            <mxPoint x="432.5" y="535" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m14" value="chat(userId, message)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="432.5" y="560" as="sourcePoint" />
+            <mxPoint x="625.0" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m15" value="get(userId)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="585" as="sourcePoint" />
+            <mxPoint x="1177.5" y="585" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m16" value="返回 PendingTransactionQuery" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1177.5" y="610" as="sourcePoint" />
+            <mxPoint x="625.0" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m17" value="解析补充内容" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="645" as="sourcePoint" />
+            <mxPoint x="815.0" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m18" value="month=1" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="815.0" y="670" as="sourcePoint" />
+            <mxPoint x="625.0" y="670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m19" value="Time.extractMonth(parsed, msg)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="705" as="sourcePoint" />
+            <mxPoint x="985.0" y="705" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m20" value="合法月份 1" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="985.0" y="730" as="sourcePoint" />
+            <mxPoint x="625.0" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m21" value="buildTransactionQueryFromPending
+getTransactions(q)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="750" as="sourcePoint" />
+            <mxPoint x="1385.0" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m22" value="selectTransactions(q)" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1385.0" y="775" as="sourcePoint" />
+            <mxPoint x="1605.0" y="775" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m23" value="返回流水列表" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1605.0" y="800" as="sourcePoint" />
+            <mxPoint x="1385.0" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m24" value="PageResult&lt;TransactionVO&gt;" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1385.0" y="825" as="sourcePoint" />
+            <mxPoint x="625.0" y="825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m25" value="convertTransactionResultToChat
+账号脱敏并封装回复" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625.0" y="850" as="sourcePoint" />
+            <mxPoint x="432.5" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m26" value="SSE message / done" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="432.5" y="875" as="sourcePoint" />
+            <mxPoint x="252.5" y="875" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m27" value="展示流水列表或“未查询到记录”" style="endArrow=block;endFill=1;html=1;rounded=0;strokeColor=#000000;strokeWidth=1;dashed=1;dashPattern=6 4;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="252.5" y="900" as="sourcePoint" />
+            <mxPoint x="100.0" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note1" value="&lt;b&gt;条件判断&lt;/b&gt;&lt;br/&gt;needMonth=true 且 day 不为空且 month 为空时，才进入多轮补全。" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1180" y="135" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" value="&lt;b&gt;状态优先&lt;/b&gt;&lt;br/&gt;第二轮 chat 会先执行 handlePendingTransactionQuery，不会把“1月”当作新的普通问题。" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="710" y="500" width="285" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="note3" value="&lt;b&gt;异常分支&lt;/b&gt;&lt;br/&gt;若 pending 超过 10 分钟，则提示重新描述；若用户回复“取消”，则删除 pending 并取消本次查询。" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="650" width="285" height="85" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

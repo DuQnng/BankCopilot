@@ -1,0 +1,528 @@
+<mxfile host="Electron" agent="ChatGPT">
+  <diagram id="database-er" name="Page-1">
+    <mxGraphModel dx="643" dy="450" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="840" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="note" parent="1" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=left;verticalAlign=middle;spacing=8;fontFamily=Songti SC,Times New Roman;fontSize=13;" value="&lt;b&gt;说明&lt;/b&gt;&lt;br/&gt;本项目 AI 功能主要读取 account、transaction_record、payee_contact 和 user 四张表。余额查询读取 account/user；流水和统计读取 transaction_record；昵称转账读取 payee_contact/account；转账执行后写入 transaction_record。" vertex="1">
+          <mxGeometry height="135" width="335" x="825" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-1" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="user表" vertex="1">
+          <mxGeometry height="240" width="340" x="60" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-2" parent="JPib_cVFR9CA3qpC4d9N-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;fontStyle=1" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-3" parent="JPib_cVFR9CA3qpC4d9N-2" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="PK" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-4" parent="JPib_cVFR9CA3qpC4d9N-2" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;id&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-14" parent="JPib_cVFR9CA3qpC4d9N-2" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot; style=&quot;font-size: 13px;&quot;&gt;int unsigned&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-18" parent="JPib_cVFR9CA3qpC4d9N-2" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;用户主键，自增&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-5" parent="JPib_cVFR9CA3qpC4d9N-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-6" parent="JPib_cVFR9CA3qpC4d9N-5" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-7" parent="JPib_cVFR9CA3qpC4d9N-5" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;username&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-15" parent="JPib_cVFR9CA3qpC4d9N-5" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot; style=&quot;font-size: 13px;&quot;&gt;varchar(20)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-19" parent="JPib_cVFR9CA3qpC4d9N-5" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;用户名，唯一&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-8" parent="JPib_cVFR9CA3qpC4d9N-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-9" parent="JPib_cVFR9CA3qpC4d9N-8" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-10" parent="JPib_cVFR9CA3qpC4d9N-8" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;password&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-16" parent="JPib_cVFR9CA3qpC4d9N-8" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot; style=&quot;font-size: 13px;&quot;&gt;varchar(32)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-20" parent="JPib_cVFR9CA3qpC4d9N-8" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="登录密码" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-11" parent="JPib_cVFR9CA3qpC4d9N-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-12" parent="JPib_cVFR9CA3qpC4d9N-11" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-13" parent="JPib_cVFR9CA3qpC4d9N-11" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;phone&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-17" parent="JPib_cVFR9CA3qpC4d9N-11" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;varchar(20)&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-21" parent="JPib_cVFR9CA3qpC4d9N-11" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="手机号，非空" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-45" parent="JPib_cVFR9CA3qpC4d9N-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="340" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-46" parent="JPib_cVFR9CA3qpC4d9N-45" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-47" parent="JPib_cVFR9CA3qpC4d9N-45" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;name&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-48" parent="JPib_cVFR9CA3qpC4d9N-45" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot; style=&quot;font-size: 13px;&quot;&gt;varchar(32)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-49" parent="JPib_cVFR9CA3qpC4d9N-45" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="用户姓名，非空" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-40" parent="JPib_cVFR9CA3qpC4d9N-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="340" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-41" parent="JPib_cVFR9CA3qpC4d9N-40" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-42" parent="JPib_cVFR9CA3qpC4d9N-40" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;create_time&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-43" parent="JPib_cVFR9CA3qpC4d9N-40" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;datetime&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-44" parent="JPib_cVFR9CA3qpC4d9N-40" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="创建时间，非空" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-35" parent="JPib_cVFR9CA3qpC4d9N-1" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="340" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-36" parent="JPib_cVFR9CA3qpC4d9N-35" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-37" parent="JPib_cVFR9CA3qpC4d9N-35" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;update_time&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-38" parent="JPib_cVFR9CA3qpC4d9N-35" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;datetime&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-39" parent="JPib_cVFR9CA3qpC4d9N-35" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="更新时间，非空" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-91" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="user表" vertex="1">
+          <mxGeometry height="280" width="340" x="440" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-92" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-93" parent="JPib_cVFR9CA3qpC4d9N-92" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="PK" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-94" parent="JPib_cVFR9CA3qpC4d9N-92" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;id&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-95" parent="JPib_cVFR9CA3qpC4d9N-92" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;bigint&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-96" parent="JPib_cVFR9CA3qpC4d9N-92" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;用户主键，自增&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-132" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="40" width="340" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-133" parent="JPib_cVFR9CA3qpC4d9N-132" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="FK" vertex="1">
+          <mxGeometry height="40" width="30" as="geometry">
+            <mxRectangle height="40" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-134" parent="JPib_cVFR9CA3qpC4d9N-132" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;user_id&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="30" as="geometry">
+            <mxRectangle height="40" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-135" parent="JPib_cVFR9CA3qpC4d9N-132" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;bigint&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="90" x="110" as="geometry">
+            <mxRectangle height="40" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-136" parent="JPib_cVFR9CA3qpC4d9N-132" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="所属用户 ID，逻辑关联 `user.id" vertex="1">
+          <mxGeometry height="40" width="140" x="200" as="geometry">
+            <mxRectangle height="40" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-97" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-98" parent="JPib_cVFR9CA3qpC4d9N-97" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-99" parent="JPib_cVFR9CA3qpC4d9N-97" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;account_no&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-100" parent="JPib_cVFR9CA3qpC4d9N-97" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot; style=&quot;font-size: 13px;&quot;&gt;varchar(20)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-101" parent="JPib_cVFR9CA3qpC4d9N-97" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;银行账号&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-102" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-103" parent="JPib_cVFR9CA3qpC4d9N-102" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-104" parent="JPib_cVFR9CA3qpC4d9N-102" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;account_type&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-105" parent="JPib_cVFR9CA3qpC4d9N-102" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot; style=&quot;font-size: 13px;&quot;&gt;varchar(32)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-106" parent="JPib_cVFR9CA3qpC4d9N-102" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="账户类型，默认“储蓄卡”" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-107" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="340" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-108" parent="JPib_cVFR9CA3qpC4d9N-107" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-109" parent="JPib_cVFR9CA3qpC4d9N-107" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;balance&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-110" parent="JPib_cVFR9CA3qpC4d9N-107" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;varchar(20)&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-111" parent="JPib_cVFR9CA3qpC4d9N-107" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="账户余额，默认 0.00" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-112" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="340" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-113" parent="JPib_cVFR9CA3qpC4d9N-112" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-114" parent="JPib_cVFR9CA3qpC4d9N-112" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;status&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-115" parent="JPib_cVFR9CA3qpC4d9N-112" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot; style=&quot;font-size: 13px;&quot;&gt;varchar(32)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-116" parent="JPib_cVFR9CA3qpC4d9N-112" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="账户状态，默认“正常”" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-117" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="340" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-118" parent="JPib_cVFR9CA3qpC4d9N-117" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-119" parent="JPib_cVFR9CA3qpC4d9N-117" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;create_time&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-120" parent="JPib_cVFR9CA3qpC4d9N-117" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;datetime&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-121" parent="JPib_cVFR9CA3qpC4d9N-117" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="创建时间，非空" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-122" parent="JPib_cVFR9CA3qpC4d9N-91" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="340" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-123" parent="JPib_cVFR9CA3qpC4d9N-122" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-124" parent="JPib_cVFR9CA3qpC4d9N-122" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;update_time&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-125" parent="JPib_cVFR9CA3qpC4d9N-122" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;datetime&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-126" parent="JPib_cVFR9CA3qpC4d9N-122" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="更新时间，非空" vertex="1">
+          <mxGeometry height="30" width="140" x="200" as="geometry">
+            <mxRectangle height="30" width="140" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-137" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="user表" vertex="1">
+          <mxGeometry height="260" width="380" x="50" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-138" parent="JPib_cVFR9CA3qpC4d9N-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="380" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-139" parent="JPib_cVFR9CA3qpC4d9N-138" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="PK" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-140" parent="JPib_cVFR9CA3qpC4d9N-138" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;span style=&quot;font-family: &amp;quot;Songti SC&amp;quot;, &amp;quot;Times New Roman&amp;quot;; font-size: 13px;&quot;&gt;id&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-141" parent="JPib_cVFR9CA3qpC4d9N-138" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;bigint&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-142" parent="JPib_cVFR9CA3qpC4d9N-138" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;交易流水主键，自增&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="180" x="200" as="geometry">
+            <mxRectangle height="30" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-143" parent="JPib_cVFR9CA3qpC4d9N-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="40" width="380" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-144" parent="JPib_cVFR9CA3qpC4d9N-143" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="FK" vertex="1">
+          <mxGeometry height="40" width="30" as="geometry">
+            <mxRectangle height="40" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-145" parent="JPib_cVFR9CA3qpC4d9N-143" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;account_id&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="30" as="geometry">
+            <mxRectangle height="40" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-146" parent="JPib_cVFR9CA3qpC4d9N-143" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;bigint&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="90" x="110" as="geometry">
+            <mxRectangle height="40" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-147" parent="JPib_cVFR9CA3qpC4d9N-143" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;所属账户 ID，逻辑关联 `account.id&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="180" x="200" as="geometry">
+            <mxRectangle height="40" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-178" parent="JPib_cVFR9CA3qpC4d9N-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="40" width="380" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-179" parent="JPib_cVFR9CA3qpC4d9N-178" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="FK" vertex="1">
+          <mxGeometry height="40" width="30" as="geometry">
+            <mxRectangle height="40" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-180" parent="JPib_cVFR9CA3qpC4d9N-178" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="counterparty&lt;div&gt;_account_no&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="80" x="30" as="geometry">
+            <mxRectangle height="40" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-181" parent="JPib_cVFR9CA3qpC4d9N-178" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="varchar(20)" vertex="1">
+          <mxGeometry height="40" width="90" x="110" as="geometry">
+            <mxRectangle height="40" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-182" parent="JPib_cVFR9CA3qpC4d9N-178" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=5;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;对方账号，逻辑关联 `account.account_no`，可为空&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="180" x="200" as="geometry">
+            <mxRectangle height="40" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-148" parent="JPib_cVFR9CA3qpC4d9N-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="380" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-149" parent="JPib_cVFR9CA3qpC4d9N-148" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-150" parent="JPib_cVFR9CA3qpC4d9N-148" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;type&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-151" parent="JPib_cVFR9CA3qpC4d9N-148" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;varchar(10)&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-152" parent="JPib_cVFR9CA3qpC4d9N-148" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;交易类型，收入或支出，非空&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="180" x="200" as="geometry">
+            <mxRectangle height="30" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-153" parent="JPib_cVFR9CA3qpC4d9N-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="380" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-154" parent="JPib_cVFR9CA3qpC4d9N-153" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-155" parent="JPib_cVFR9CA3qpC4d9N-153" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;amount&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-156" parent="JPib_cVFR9CA3qpC4d9N-153" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;decimal(12,2)&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-157" parent="JPib_cVFR9CA3qpC4d9N-153" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;交易金额，支出为负数，非空&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="180" x="200" as="geometry">
+            <mxRectangle height="30" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-158" parent="JPib_cVFR9CA3qpC4d9N-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="380" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-159" parent="JPib_cVFR9CA3qpC4d9N-158" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-160" parent="JPib_cVFR9CA3qpC4d9N-158" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;description&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-161" parent="JPib_cVFR9CA3qpC4d9N-158" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;varchar(255)&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-162" parent="JPib_cVFR9CA3qpC4d9N-158" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;交易备注&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="180" x="200" as="geometry">
+            <mxRectangle height="30" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-163" parent="JPib_cVFR9CA3qpC4d9N-137" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="380" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-164" parent="JPib_cVFR9CA3qpC4d9N-163" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" vertex="1">
+          <mxGeometry height="30" width="30" as="geometry">
+            <mxRectangle height="30" width="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-165" parent="JPib_cVFR9CA3qpC4d9N-163" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;trade_time&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="80" x="30" as="geometry">
+            <mxRectangle height="30" width="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-166" parent="JPib_cVFR9CA3qpC4d9N-163" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font face=&quot;Songti SC, Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;datetime&lt;/span&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="110" as="geometry">
+            <mxRectangle height="30" width="90" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JPib_cVFR9CA3qpC4d9N-167" parent="JPib_cVFR9CA3qpC4d9N-163" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;fontFamily=&#39;Times New Roman&#39;,&#39;Songti SC&#39;;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;交易时间，默认当前时间&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="180" x="200" as="geometry">
+            <mxRectangle height="30" width="180" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

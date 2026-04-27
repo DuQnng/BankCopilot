@@ -1,0 +1,121 @@
+<mxfile host="Electron" agent="ChatGPT">
+  <diagram id="ai-request-architecture" name="Page-1">
+    <mxGraphModel dx="1414" dy="763" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="740" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="front" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;前端展示层：&lt;/b&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;AssistantPanel.vue&lt;/span&gt;&lt;ul&gt;&lt;li style=&quot;text-align: left;&quot;&gt;聊天输入 / 简报卡片&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;图表渲染 / 过程追踪&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;确认与取消按钮&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="145" width="250" x="55" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;接口层：&lt;/b&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;AssistantController.java&lt;/span&gt;&lt;ul&gt;&lt;li style=&quot;text-align: left;&quot;&gt;/assistant/chat&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;/assistant/chat/stream&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;/assistant/brief&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="130" width="250" x="50" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f9f9f9;strokeColor=#000000;strokeWidth=1.5;shadow=0;align=center;verticalAlign=top;spacingTop=10;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;AI 编排层：AssistantService.java&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. 处理待确认转账状态 pendingMap&lt;br&gt;2. 处理待补全流水查询 pendingTxnQueryMap&lt;br&gt;3. 调用 parseIntentByQwen 识别 intent&lt;br&gt;4. 按 intent 分发到余额、流水、统计、转账&lt;br&gt;5. 封装 trace、explain 与 AssistantChatResponse" vertex="1">
+          <mxGeometry height="150" width="340" x="420" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="qwen" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;模型调用层：&lt;/b&gt;QwenClient.java&lt;br&gt;&lt;ul&gt;&lt;li style=&quot;text-align: left;&quot;&gt;通义千问请求封装&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;自然语言 → intent JSON&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;统计事实 → 分析总结&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="135" width="250" x="55" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="business" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;业务服务层：&lt;/b&gt;AccountService/TransactionService&lt;div&gt;/&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;StatisticsService/&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;PayeeService&lt;/span&gt;&lt;div&gt;&lt;br&gt;&lt;ul&gt;&lt;li style=&quot;text-align: left;&quot;&gt;余额查询&amp;nbsp;&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;流水查询&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;统计计算&amp;nbsp;&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;转账校验与执行&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="215" width="255" x="900" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="time" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;时间处理辅助模块：&lt;/b&gt;Time.java&lt;br&gt;&lt;ul&gt;&lt;li style=&quot;text-align: left;&quot;&gt;自然语言时间纠偏&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;时间范围填充&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="85" width="285" x="870" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="data" parent="1" style="shape=cylinder3d;boundedLbl=1;backgroundOutline=1;size=15;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;业务数据来源&lt;/b&gt;&lt;br&gt;由业务 Service 访问&lt;br&gt;账户、流水、收款人数据" vertex="1">
+          <mxGeometry height="120" width="195" x="930" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="response" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;响应适配对象：&lt;/b&gt;AssistantChatResponse&lt;br&gt;reply / chartType / chartData&lt;br&gt;trace / explain / exportUrl" vertex="1">
+          <mxGeometry height="110" width="355" x="425" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="boundary" parent="1" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;strokeWidth=1.1;shadow=0;align=center;verticalAlign=middle;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="&lt;b&gt;设计约束&lt;/b&gt;&lt;br&gt;模型不直接接触数据库；业务不依赖模型自由发挥。&lt;br&gt;账户、流水、统计和转账结果均由后端确定性服务产生。" vertex="1">
+          <mxGeometry height="90" width="315" x="860" y="615" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="front" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="api" value="聊天请求 / 流式请求 / 简报请求">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="service" value="转交 message 与当前用户 id">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="365" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;startArrow=block;startFill=1;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="qwen" value="解析自然语言意图&lt;br&gt;生成统计总结">
+          <mxGeometry relative="1" x="-0.2195" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="630" y="430" />
+              <mxPoint x="350" y="430" />
+              <mxPoint x="350" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="qwen" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.1;dashed=1;dashPattern=6 4;endArrow=none;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="service" value="intent、槽位字段、分析文本">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="605" />
+              <mxPoint x="410" y="470" />
+              <mxPoint x="670" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;startArrow=block;startFill=1;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="business" value="按 intent 调用确定性业务服务">
+          <mxGeometry relative="1" x="-0.1429" y="15" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="870" y="215" />
+              <mxPoint x="870" y="215" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.1;dashed=1;dashPattern=6 4;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="time" value="时间纠偏与范围填充">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="80" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="business" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.1;dashed=1;dashPattern=6 4;endArrow=none;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="service" value="账户对象 / 流水列表&lt;br&gt;统计结果 / 转账校验结果">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="340" />
+              <mxPoint x="810" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="business" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;startArrow=block;startFill=1;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="data" value="真实业务数据">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" value="结果适配">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="360" />
+              <mxPoint x="710" y="360" />
+            </Array>
+            <mxPoint x="710" y="290" as="sourcePoint" />
+            <mxPoint x="710" y="575" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="response" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="front" value="返回前端展示">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="415" y="630" />
+              <mxPoint x="335" y="630" />
+              <mxPoint x="335" y="115" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="qwen" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.1;dashed=1;dashPattern=6 4;endArrow=none;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="data" value="无直接访问">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="705" />
+              <mxPoint x="840" y="705" />
+              <mxPoint x="840" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
