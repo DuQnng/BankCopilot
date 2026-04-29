@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.4.26)  29 APR 2026 23:31
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.4.26)  30 APR 2026 00:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3110,7 +3110,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 577--577
 imesNewRoman(0)/m/n/10.5 , day=17, need-
  []
 
-[32]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [32]
 Overfull \hbox (7.31819pt too wide) in paragraph at lines 590--603
  [][] 
  []
@@ -3158,16 +3161,41 @@ Overfull \hbox (7.3247pt too wide) in paragraph at lines 763--796
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4582) has occurred while \output is active []
 
  [42]
 [43]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [44]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4441) has occurred while \output is active []
 
  [45]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [46]
+[47] [48]
+Underfull \hbox (badness 10000) in paragraph at lines 982--982
+[]|\TU/TimesNewRoman(0)/m/n/10.95 sql \TU/AdobeSongStd(0)/m/n/10.95 脚 本 中 的 \TU
+/TimesNewRoman(0)/m/n/10.95 user\TU/AdobeSongStd(0)/m/n/10.95 、| \TU/TimesNewRo
+man(0)/m/n/10.95 ac-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 982--982
+\TU/TimesNewRoman(0)/m/n/10.95 count\TU/AdobeSongStd(0)/m/n/10.95 、| \TU/TimesN
+ewRoman(0)/m/n/10.95 transaction_record
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [49]
+Underfull \hbox (badness 3343) in paragraph at lines 1036--1036
+[]|\TU/AdobeSongStd(0)/m/n/8 任 务 编
+ []
+
+[50] [51]
 File: image/fig-trace-ui.png Graphic file (type bmp)
 <image/fig-trace-ui.png>
 File: image/fig-statistics-ui.png Graphic file (type bmp)
@@ -3175,64 +3203,78 @@ File: image/fig-statistics-ui.png Graphic file (type bmp)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [46]
+ [52]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [47]
-[48]
+ [53]
+[54]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [49
+ [55
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [50]
-[51] [52
+ [56]
+[57] [58
 
-] [53] [54
+] [59] [60
 
-] (./main.bbl [55] [56
+] (./main.bbl [61] [62
 
 ]
-Underfull \hbox (badness 2285) in paragraph at lines 43--47
+Underfull \hbox (badness 2285) in paragraph at lines 52--58
 []\TU/TimesNewRoman(0)/m/n/10.5 Bank of America.  A decade of AI innovation: Bo
 fA’s virtual assistant erica sur-
  []
 
 
-Underfull \hbox (badness 5939) in paragraph at lines 43--47
+Underfull \hbox (badness 5939) in paragraph at lines 52--58
 \TU/TimesNewRoman(0)/m/n/10.5 passes 3 billion client interactions[M/OL].  Char
 lotte: Bank of America News-
  []
 
 
-Underfull \hbox (badness 1400) in paragraph at lines 49--53
+Underfull \hbox (badness 1400) in paragraph at lines 60--65
 []\TU/TimesNewRoman(0)/m/n/10.5 JPMorgan Chase & Co.  2016 annual report[M/OL].
   New York: JPMorgan Chase
  []
 
-) [57] [58
+) [63] [64
 
-] [59] (./main.aux)
+] [65]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [66]
+
+Package xeCJK Warning: Unknown CJK family `\CJKttdefault' is being ignored.
+(xeCJK)                
+(xeCJK)                Try to use `\setCJKmonofont[<...>]{<...>}' to define
+(xeCJK)                it.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [67]
+[68] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/08/05>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 217886120096202BE3A1141AD2BC1272;6892.
+(rerunfilecheck)             Checksum: 3AB866D2066045166C954C0707875255;7393.
  )
 (\end occurred inside a group at level 1)
 
 ### semi simple group (level 1) entered at line 75 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 22154 strings out of 468168
- 448014 string characters out of 5432820
- 873784 words of memory out of 5000000
- 50537 multiletter control sequences out of 15000+600000
- 647997 words of font info for 199 fonts, out of 8000000 for 9000
+ 22239 strings out of 468168
+ 452916 string characters out of 5432820
+ 880000 words of memory out of 5000000
+ 50619 multiletter control sequences out of 15000+600000
+ 648666 words of font info for 205 fonts, out of 8000000 for 9000
  1349 hyphenation exceptions out of 8191
- 89i,10n,120p,2315b,704s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,10n,120p,2315b,732s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (69 pages).
+Output written on main.pdf (78 pages).

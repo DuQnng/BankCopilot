@@ -29,7 +29,7 @@
 \contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{六}章\hskip 1exAI 智能客服核心功能设计与实现}{27}{chapter.6}%
 \contentsline {section}{\numberline {6.1}AI 请求处理总体流程}{27}{section.6.1}%
 \contentsline {section}{\numberline {6.2}AI 语音输入功能实现}{29}{section.6.2}%
-\contentsline {section}{\numberline {6.3}AI 情绪安抚与人工客服引导功能实现}{30}{section.6.3}%
+\contentsline {section}{\numberline {6.3}AI 情绪安抚与人工客服引导功能实现}{29}{section.6.3}%
 \contentsline {section}{\numberline {6.4}FAQ 知识库问答功能实现}{30}{section.6.4}%
 \contentsline {section}{\numberline {6.5}AI 查余额功能实现}{31}{section.6.5}%
 \contentsline {section}{\numberline {6.6}AI 查流水功能实现}{31}{section.6.6}%
@@ -40,17 +40,21 @@
 \contentsline {section}{\numberline {7.1}测试环境与测试方法}{41}{section.7.1}%
 \contentsline {section}{\numberline {7.2}意图识别准确性测试}{41}{section.7.2}%
 \contentsline {section}{\numberline {7.3}功能测试}{43}{section.7.3}%
-\contentsline {section}{\numberline {7.4}交互优化设计分析}{45}{section.7.4}%
-\contentsline {section}{\numberline {7.5}测试结论}{47}{section.7.5}%
-\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{八}章\hskip 1ex结论与展望}{49}{chapter.8}%
-\contentsline {section}{\numberline {8.1}主要结论}{49}{section.8.1}%
-\contentsline {section}{\numberline {8.2}实践价值}{50}{section.8.2}%
-\contentsline {section}{\numberline {8.3}不足与展望}{50}{section.8.3}%
-\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{九}章\hskip 1ex结束语}{53}{chapter.9}%
-\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 致谢}{55}{section*.41}%
-\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 参考文献}{57}{section*.42}%
-\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 附录~A\hskip 1ex主要接口与数据结构}{59}{appendix.A}%
-\contentsline {section}{\numberline {A.1}AI 聊天请求结构}{59}{section.A.1}%
-\contentsline {section}{\numberline {A.2}AI 聊天响应结构}{59}{section.A.2}%
-\contentsline {section}{\numberline {A.3}统计查询结构}{59}{section.A.3}%
+\contentsline {section}{\numberline {7.4}用户体验测试与反馈分析}{46}{section.7.4}%
+\contentsline {section}{\numberline {7.5}交互优化设计分析}{51}{section.7.5}%
+\contentsline {section}{\numberline {7.6}测试结论}{53}{section.7.6}%
+\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{八}章\hskip 1ex结论与展望}{55}{chapter.8}%
+\contentsline {section}{\numberline {8.1}主要结论}{55}{section.8.1}%
+\contentsline {section}{\numberline {8.2}实践价值}{56}{section.8.2}%
+\contentsline {section}{\numberline {8.3}不足与展望}{56}{section.8.3}%
+\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{九}章\hskip 1ex结束语}{59}{chapter.9}%
+\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 致谢}{61}{section*.51}%
+\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 参考文献}{63}{section*.52}%
+\contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 附录~A\hskip 1ex主要接口与数据结构}{65}{appendix.A}%
+\contentsline {section}{\numberline {A.1}AI 聊天请求结构}{65}{section.A.1}%
+\contentsline {section}{\numberline {A.2}AI 聊天响应结构}{65}{section.A.2}%
+\contentsline {section}{\numberline {A.3}统计查询结构}{65}{section.A.3}%
+\contentsline {section}{\numberline {A.4}FAQ 知识库表结构}{66}{section.A.4}%
+\contentsline {section}{\numberline {A.5}FAQ 查询日志结构}{66}{section.A.5}%
+\contentsline {section}{\numberline {A.6}测试样本说明}{67}{section.A.6}%
 \contentsfinish 
