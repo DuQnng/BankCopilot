@@ -11,87 +11,70 @@
   \let\eprint\href
 \fi
 
-\bibitem[Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez,
-  Kaiser, and Polosukhin]{vaswani2017attention}
+\bibitem[Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, and Polosukhin]{vaswani2017attention}
 VASWANI A, SHAZEER N, PARMAR N, et~al.
 \newblock Attention is all you need\allowbreak[C]//\allowbreak
 Advances in Neural Information Processing Systems: Vol.~30.
 \newblock 2017.
 
-\bibitem[Brown et~al.(2020)Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal,
-  Neelakantan, Shyam, Sastry, Askell, Agarwal, Herbert-Voss, Krueger, Henighan,
-  Child, Ramesh, Ziegler, Wu, Winter, Hesse, Chen, Sigler, Litwin, Gray, Chess,
-  Clark, Berner, McCandlish, Radford, Sutskever, and Amodei]{brown2020language}
+\bibitem[Brown et~al.(2020)Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal, Neelakantan, Shyam, Sastry, Askell, Agarwal, Herbert-Voss, Krueger, Henighan, Child, Ramesh, Ziegler, Wu, Winter, Hesse, Chen, Sigler, Litwin, Gray, Chess, Clark, Berner, McCandlish, Radford, Sutskever, and Amodei]{brown2020language}
 BROWN T~B, MANN B, RYDER N, et~al.
 \newblock Language models are few-shot learners\allowbreak[C]//\allowbreak
 Advances in Neural Information Processing Systems: Vol.~33.
 \newblock 2020: 1877-1901.
 
-\bibitem[Zhao et~al.(2023)Zhao, Zhou, Li, Tang, Wang, Hou, Min, Zhang, Zhang,
-  Dong, Du, Yang, Chen, Chen, Jiang, Ren, Li, Tang, Liu, Liu, Nie, and
-  Wen]{zhao2023survey}
+\bibitem[Zhao et~al.(2023)Zhao, Zhou, Li, Tang, Wang, Hou, Min, Zhang, Zhang, Dong, Du, Yang, Chen, Chen, Jiang, Ren, Li, Tang, Liu, Liu, Nie, and Wen]{zhao2023survey}
 ZHAO W~X, ZHOU K, LI J, et~al.
 \newblock A survey of large language models\allowbreak[A/OL].
 \newblock arXiv (2023).
 \newblock \url{https://arxiv.org/abs/2303.18223}.
 
-\bibitem[Alcazar et~al.(2024)Alcazar, Baird, Cronenweth, Hayashi, and
-  Isaacson]{kcfed2024corebanking}
+\bibitem[Alcazar et~al.(2024)Alcazar, Baird, Cronenweth, Hayashi, and Isaacson]{kcfed2024corebanking}
 ALCAZAR J, BAIRD S, CRONENWETH E, et~al.
 \newblock Core banking systems and options for modernization\allowbreak[R].
 \newblock Kansas City: Federal Reserve Bank of Kansas City, 2024.
 
-\bibitem[Crisanto et~al.(2024)Crisanto, Leuterio, Prenio, and
-  Yong]{bis2024regulatingai}
+\bibitem[Crisanto et~al.(2024)Crisanto, Leuterio, Prenio, and Yong]{bis2024regulatingai}
 CRISANTO J~C, LEUTERIO C~B, PRENIO J, et~al.
-\newblock Regulating AI in the financial sector: recent developments and main
-  challenges: FSI Insights No. 63\allowbreak[R].
+\newblock Regulating AI in the financial sector: recent developments and main challenges: FSI Insights No. 63\allowbreak[R].
 \newblock Basel: Bank for International Settlements, 2024.
 
 \bibitem[{Bank of America}(2025)]{bofa2025erica}
 {Bank of America}.
-\newblock A decade of AI innovation: BofA's virtual assistant erica surpasses 3
-  billion client interactions\allowbreak[M/OL].
+\newblock A decade of AI innovation: BofA's virtual assistant erica surpasses 3 billion client interactions\allowbreak[M/OL].
 \newblock Charlotte: Bank of America Newsroom, 2025.
-\newblock
-  \url{https://newsroom.bankofamerica.com/content/newsroom/press-releases/2025/08/a-decade-of-ai-innovation--bofa-s-virtual-assistant-erica-surpas.html}.
+\newblock \url{https://newsroom.bankofamerica.com/content/newsroom/press-releases/2025/08/a-decade-of-ai-innovation--bofa-s-virtual-assistant-erica-surpas.html}.
 
 \bibitem[{JPMorgan Chase \& Co.}(2017)]{jpmorgan2016annual}
 {JPMorgan Chase \& Co.}
 \newblock 2016 annual report\allowbreak[M/OL].
 \newblock New York: JPMorgan Chase \& Co., 2017.
-\newblock
-  \url{https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/2016-annualreport.pdf}.
+\newblock \url{https://www.jpmorganchase.com/content/dam/jpmc/jpmorgan-chase-and-co/investor-relations/documents/2016-annualreport.pdf}.
 
 \bibitem[{China Merchants Bank}(2025)]{cmb2024annual}
 {China Merchants Bank}.
 \newblock 2024 annual report\allowbreak[M/OL].
 \newblock Shenzhen: China Merchants Bank, 2025.
-\newblock
-  \url{https://www.cmbchina.com/cmbir/intro.aspx?type=report&version=B}.
+\newblock \url{https://www.cmbchina.com/cmbir/intro.aspx?type=report&version=B}.
 
 \bibitem[{Bank for International Settlements}(2025)]{bis2025explainability}
 {Bank for International Settlements}.
-\newblock Managing explanations: how regulators can address AI
-  explainability\allowbreak[R].
+\newblock Managing explanations: how regulators can address AI explainability\allowbreak[R].
 \newblock Basel: Bank for International Settlements, 2025.
 
 \bibitem[{National Institute of Standards and Technology}(2023)]{nist2023airmf}
 {National Institute of Standards and Technology}.
-\newblock Artificial intelligence risk management framework: AI RMF 1.0: NIST
-  AI 100-1\allowbreak[R].
+\newblock Artificial intelligence risk management framework: AI RMF 1.0: NIST AI 100-1\allowbreak[R].
 \newblock Gaithersburg: National Institute of Standards and Technology, 2023.
 
-\bibitem[{International Committee on Credit
-  Reporting}(2020)]{worldbank2020creditscoring}
+\bibitem[{International Committee on Credit Reporting}(2020)]{worldbank2020creditscoring}
 {International Committee on Credit Reporting}.
 \newblock Credit scoring approaches guidelines\allowbreak[R].
 \newblock Washington, DC: World Bank Group, 2020.
 
 \bibitem[Leo et~al.(2019)Leo, Sharma, and Maddulety]{leo2019mlbanking}
 LEO M, SHARMA S, MADDULETY K.
-\newblock Machine learning in banking risk management: a literature
-  review\allowbreak[J].
+\newblock Machine learning in banking risk management: a literature review\allowbreak[J].
 \newblock Risks, 2019, 7\allowbreak (1): 29.
 
 \bibitem[{Spring Team}(2025)]{springboot}

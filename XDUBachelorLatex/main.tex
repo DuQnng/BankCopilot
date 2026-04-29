@@ -496,7 +496,7 @@ AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法�
 
 \section{AI 语音输入功能实现}
 
-语音输入功能主要在前端中实现。该配置说明系统面向中文短句输入，允许在识别过程中把临时结果及时显示到输入框中。
+语音输入功能主要在前端中实现，系统面向中文短句输入，允许在识别过程中把临时结果及时显示到输入框中。
 
 用户点击“语音输入”按钮后，toggleVoiceInput 方法会启动语音识别，并将 voiceListening 设置为 true。识别过程中，onresult 事件会读取 event.results 中的转写文本，并通过 mergeSpeechText 方法与原输入框内容合并，最终写入 chatInput。用户可以在识别后继续手动修改文本，也可以直接点击发送按钮。后续流程与普通文本输入完全一致，仍然由 /assistant/chat/stream 接口发送到后端，再由 AssistantService 进行意图解析、业务分发和结果封装。
 
