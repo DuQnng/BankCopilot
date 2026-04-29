@@ -15,7 +15,7 @@
 \contentsline {section}{\numberline {3.1}大语言模型与自然语言意图识别}{11}{section.3.1}%
 \contentsline {section}{\numberline {3.2}自然语言处理方案选择与比较}{12}{section.3.2}%
 \contentsline {section}{\numberline {3.3}Spring Boot 后端技术}{13}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Vue 与前端交互技术}{13}{section.3.4}%
+\contentsline {section}{\numberline {3.4}Vue 与前端交互技术}{14}{section.3.4}%
 \contentsline {section}{\numberline {3.5}数据持久化与统计分析技术}{14}{section.3.5}%
 \contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{四}章\hskip 1ex系统需求分析}{17}{chapter.4}%
 \contentsline {section}{\numberline {4.1}系统总体需求}{17}{section.4.1}%
@@ -29,11 +29,13 @@
 \contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{六}章\hskip 1exAI 智能客服核心功能设计与实现}{27}{chapter.6}%
 \contentsline {section}{\numberline {6.1}AI 请求处理总体流程}{27}{section.6.1}%
 \contentsline {section}{\numberline {6.2}AI 语音输入功能实现}{29}{section.6.2}%
-\contentsline {section}{\numberline {6.3}AI 查余额功能实现}{30}{section.6.3}%
-\contentsline {section}{\numberline {6.4}AI 查流水功能实现}{30}{section.6.4}%
-\contentsline {section}{\numberline {6.5}AI 账单统计与分析功能实现}{32}{section.6.5}%
-\contentsline {section}{\numberline {6.6}AI 周报/月报功能实现}{35}{section.6.6}%
-\contentsline {section}{\numberline {6.7}AI 智能转账功能实现}{36}{section.6.7}%
+\contentsline {section}{\numberline {6.3}AI 情绪安抚与人工客服引导功能实现}{30}{section.6.3}%
+\contentsline {section}{\numberline {6.4}FAQ 知识库问答功能实现}{30}{section.6.4}%
+\contentsline {section}{\numberline {6.5}AI 查余额功能实现}{31}{section.6.5}%
+\contentsline {section}{\numberline {6.6}AI 查流水功能实现}{31}{section.6.6}%
+\contentsline {section}{\numberline {6.7}AI 账单统计与分析功能实现}{33}{section.6.7}%
+\contentsline {section}{\numberline {6.8}AI 周报/月报功能实现}{36}{section.6.8}%
+\contentsline {section}{\numberline {6.9}AI 智能转账功能实现}{37}{section.6.9}%
 \contentsline {chapter}{\xiaosi \CJKfamily {song}\bfseries 第{七}章\hskip 1ex系统测试与交互优化分析}{41}{chapter.7}%
 \contentsline {section}{\numberline {7.1}测试环境与测试方法}{41}{section.7.1}%
 \contentsline {section}{\numberline {7.2}意图识别准确性测试}{41}{section.7.2}%

@@ -6,6 +6,7 @@ import com.idea.assistant.PendingTransfer;
 import com.idea.common.ErrorCode;
 import com.idea.dto.*;
 import com.idea.entity.Account;
+import com.idea.entity.FaqKnowledge;
 import com.idea.entity.PayeeContact;
 import com.idea.entity.Result;
 import com.idea.entity.TransactionRecord;
@@ -50,6 +51,7 @@ public class AssistantService {
     private final TransactionServiceImpl transactionService;
     private final StatisticsService statisticsService;
     private final PayeeService payeeService;
+    private final FaqKnowledgeService faqKnowledgeService;
     private final PayeeContactMapper payeeContactMapper;
     private final TransactionMapper transactionMapper;
 
@@ -58,6 +60,7 @@ public class AssistantService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Map<Long, PendingTransactionQuery> pendingTxnQueryMap = new ConcurrentHashMap<>();
     private static final Duration PENDING_TTL = Duration.ofMinutes(10);
+    private static final String HUMAN_SERVICE_PHONE = "010-1234-5678";
 
     public Result chat(Long userId, AssistantChatRequest req) {
         String msg = req.getMessage() == null ? "" : req.getMessage().trim();
@@ -78,13 +81,19 @@ public class AssistantService {
             return pendingTxnResult;
         }
 
-        // 3. 解析意图
+        // 3. 情绪异常或投诉类表达优先进入安抚与人工客服引导
+        Result emotionResult = handleEmotionSupport(msg);
+        if (emotionResult != null) {
+            return emotionResult;
+        }
+
+        // 4. 解析意图
         JsonNode parsed = parseIntentByQwen(msg);
         parsed = Time.normalizeTimeByText(msg, parsed);
         String intent = parsed.path("intent").asText("");
         log.info("assistant intent parsed, userId={}, intent={}", userId, intent);
 
-        // 4. 分发处理
+        // 5. 分发处理
         switch (intent) {
             case "transfer":
                 return handleTransfer(userId, parsed, msg);
@@ -95,9 +104,7 @@ public class AssistantService {
             case "statistics":
                 return handleStatistics(userId, parsed);
             default:
-                AssistantChatResponse fallback = new AssistantChatResponse(fallbackChat(msg));
-                attachTrace(fallback, "other", "qwen_fallback", "completed", "medium", "", List.of("进入闲聊兜底"));
-                return Result.success(fallback);
+                return handleFaqOrFallback(userId, msg);
         }
 
     }
@@ -1141,6 +1148,52 @@ public class AssistantService {
         return Result.success(response);
     }
 
+    private Result handleFaqOrFallback(Long userId, String msg) {
+        FaqKnowledgeService.FaqSearchResult faqResult = faqKnowledgeService.search(msg);
+        faqKnowledgeService.logQuery(userId, msg, faqResult);
+
+        if (faqResult.isHit()) {
+            FaqKnowledge faq = faqResult.getBest().getFaq();
+            String reply = "根据知识库，" + safe(faq.getAnswer());
+            AssistantChatResponse response = new AssistantChatResponse(reply);
+            attachTrace(response, "faq", "faq_knowledge_base", "completed", "high", "",
+                    List.of(
+                            "进入 FAQ 知识库检索",
+                            "命中问题：" + safe(faq.getStandardQuestion()),
+                            "匹配得分：" + formatScorePercent(faqResult.getBest().getScore()) + "%",
+                            "返回知识库标准答案"
+                    ));
+            return Result.success(response);
+        }
+
+        if (faqResult.isRecommend()) {
+            StringBuilder reply = new StringBuilder("我还不能完全确定你的问题，可能想咨询：");
+            int index = 1;
+            for (FaqKnowledgeService.ScoredFaq item : faqResult.getRecommendations()) {
+                FaqKnowledge faq = item.getFaq();
+                reply.append("\n").append(index++).append(". ").append(safe(faq.getStandardQuestion()));
+            }
+            reply.append("\n你可以直接输入对应问题，或补充描述后再问一次。");
+
+            AssistantChatResponse response = new AssistantChatResponse(reply.toString());
+            attachTrace(response, "faq", "faq_knowledge_base", "recommend", "medium", "",
+                    List.of(
+                            "进入 FAQ 知识库检索",
+                            "未达到直接回答阈值",
+                            "返回相似问题推荐"
+                    ));
+            return Result.success(response);
+        }
+
+        AssistantChatResponse fallback = new AssistantChatResponse(fallbackChat(msg));
+        List<String> steps = new ArrayList<>();
+        steps.add("进入 FAQ 知识库检索");
+        steps.add(faqResult.isKnowledgeUnavailable() ? "知识库表暂不可用，跳过 FAQ 检索" : "知识库未命中");
+        steps.add("进入闲聊兜底");
+        attachTrace(fallback, "other", "qwen_fallback", "completed", "medium", "", steps);
+        return Result.success(fallback);
+    }
+
     private JsonNode parseIntentByQwen(String userMsg) {
         String system = """
 你是银行智能客服的“意图解析器”。请把用户话解析成严格 JSON，不要输出多余文字。
@@ -1156,6 +1209,8 @@ public class AssistantService {
 2. 用户表达查交易记录、查流水、查收入记录、查支出记录等，intent 输出 transactions。
 3. 用户表达“统计、汇总、分析、总共、多少笔、最大一笔、趋势、对比”等账单分析需求时，intent 输出 statistics。
 3.1 若用户要求“按消费类别/支出种类/商户类型/场景标签”统计，当前系统不支持，请 intent 输出 other。
+3.2 用户询问银行卡挂失、密码找回、验证码、手续费、转账到账时间、转账限额、防诈骗、陌生人要求转账、贷款材料、人工客服、网点等常见咨询问题时，intent 输出 other，交给知识库处理。
+3.3 用户问“转账多久到账/跨行转账要多久/转账失败怎么办/转账限额是多少”属于咨询问题，不是发起转账，intent 输出 other。
 
 4. 当 intent=transfer 时必须给：
    toAccountNo（明确说了银行卡号时填写，否则空字符串）
@@ -1274,6 +1329,25 @@ public class AssistantService {
         ));
         String content = raw.path("choices").get(0).path("message").path("content").asText("我明白啦，你可以再说具体一点~");
         return sanitizeModelReply(content, "当前可支持：查余额、查流水、转账确认、收支统计与趋势分析。");
+    }
+
+    private Result handleEmotionSupport(String msg) {
+        String emotionType = detectEmotionType(msg);
+        if (emotionType.isBlank()) {
+            return null;
+        }
+        String reply = switch (emotionType) {
+            case "complaint" -> "我理解你现在可能对服务结果不满意。为了避免问题继续扩大，建议先保留相关交易记录或页面截图，我也可以继续帮你查询余额、流水或统计信息。若需要人工进一步处理，请拨打虚拟客服电话 "
+                    + HUMAN_SERVICE_PHONE + " 联系人工客服。";
+            case "angry" -> "我能理解你现在比较着急或生气。涉及账户和资金的问题建议先不要重复提交操作，我可以继续帮你查询余额、流水或核对转账状态。若需要人工介入，请拨打虚拟客服电话 "
+                    + HUMAN_SERVICE_PHONE + " 联系人工客服。";
+            default -> "我理解你现在可能有些担心。你可以先把问题说清楚，我会尽量帮你查询余额、流水、统计或转账确认信息。若需要人工协助，请拨打虚拟客服电话 "
+                    + HUMAN_SERVICE_PHONE + " 联系人工客服。";
+        };
+        AssistantChatResponse response = new AssistantChatResponse(reply);
+        attachTrace(response, "emotion_support", "rule_emotion", "completed", "medium", "",
+                List.of("检测到异常情绪或投诉表达", "先进行安抚说明", "提示人工客服电话"));
+        return Result.success(response);
     }
 
     private boolean isRepeatByTimeReference(JsonNode parsed, String rawMsg, String repeatMode) {
@@ -1496,6 +1570,36 @@ public class AssistantService {
 
     private String safe(String s) {
         return s == null ? "" : s;
+    }
+
+    private String formatScorePercent(double score) {
+        return BigDecimal.valueOf(score * 100).setScale(2, RoundingMode.HALF_UP).toPlainString();
+    }
+
+    private String detectEmotionType(String msg) {
+        if (msg == null || msg.isBlank()) {
+            return "";
+        }
+        String text = msg.toLowerCase();
+        String[] complaintKeywords = new String[]{"我要投诉", "投诉你们", "客服投诉", "服务太差", "乱扣", "扣错"};
+        for (String keyword : complaintKeywords) {
+            if (text.contains(keyword.toLowerCase())) {
+                return "complaint";
+            }
+        }
+        String[] angryKeywords = new String[]{"生气", "气死", "愤怒", "火大", "烦死", "垃圾", "太差了", "崩溃"};
+        for (String keyword : angryKeywords) {
+            if (text.contains(keyword.toLowerCase())) {
+                return "angry";
+            }
+        }
+        String[] anxiousKeywords = new String[]{"很着急", "急死", "焦虑", "担心", "害怕", "慌"};
+        for (String keyword : anxiousKeywords) {
+            if (text.contains(keyword.toLowerCase())) {
+                return "anxious";
+            }
+        }
+        return "";
     }
 
     private void sendEvent(SseEmitter emitter, String event, Object data) throws IOException {
