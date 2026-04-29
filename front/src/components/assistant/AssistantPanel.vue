@@ -1,5 +1,5 @@
 <script setup>
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { ElMessage } from 'element-plus'
 import { chatAssistantApi, streamAssistantApi, fetchAssistantBriefApi } from '@/api/assistant'
 import * as echarts from 'echarts'
@@ -23,6 +23,11 @@ const briefLoading = ref(false)
 const briefData = ref(null)
 const chatBodyRef = ref(null)
 const selectedBriefPeriod = ref('month')
+const voiceSupported = ref(true)
+const voiceListening = ref(false)
+
+let speechRecognition = null
+let voiceBaseInput = ''
 
 const chatList = ref([
   {
@@ -92,6 +97,72 @@ const demoScripts = [
   '查最近5条支出记录',
   '向6222000012345678转100元，备注午餐'
 ]
+
+const mergeSpeechText = (base, transcript) => {
+  const left = base.trim()
+  const right = transcript.trim()
+  if (!left) return right
+  if (!right) return left
+  const needSpace = !/[，。！？、；：,.!?;:\s]$/.test(left)
+  return `${left}${needSpace ? ' ' : ''}${right}`
+}
+
+const initSpeechRecognition = () => {
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  voiceSupported.value = Boolean(Recognition)
+  if (!Recognition) return
+
+  speechRecognition = new Recognition()
+  speechRecognition.lang = 'zh-CN'
+  speechRecognition.continuous = false
+  speechRecognition.interimResults = true
+  speechRecognition.maxAlternatives = 1
+
+  speechRecognition.onstart = () => {
+    voiceBaseInput = chatInput.value
+    voiceListening.value = true
+  }
+
+  speechRecognition.onresult = (event) => {
+    let transcript = ''
+    for (let i = 0; i < event.results.length; i += 1) {
+      transcript += event.results[i][0].transcript
+    }
+    chatInput.value = mergeSpeechText(voiceBaseInput, transcript)
+  }
+
+  speechRecognition.onerror = (event) => {
+    const messageMap = {
+      'not-allowed': '浏览器未允许麦克风权限',
+      'audio-capture': '未检测到可用麦克风',
+      'no-speech': '没有识别到语音内容'
+    }
+    ElMessage.warning(messageMap[event.error] || '语音识别失败，请重试')
+  }
+
+  speechRecognition.onend = () => {
+    voiceListening.value = false
+  }
+}
+
+const toggleVoiceInput = () => {
+  if (!voiceSupported.value || !speechRecognition) {
+    ElMessage.warning('当前浏览器不支持语音识别，请使用 Chrome 或 Edge')
+    return
+  }
+  if (chatLoading.value) return
+
+  if (voiceListening.value) {
+    speechRecognition.stop()
+    return
+  }
+
+  try {
+    speechRecognition.start()
+  } catch (error) {
+    ElMessage.warning('语音识别正在启动，请稍后再试')
+  }
+}
 
 const scrollToBottom = async () => {
   await nextTick()
@@ -404,8 +475,15 @@ const needConfirm = () => {
 }
 
 onMounted(async () => {
+  initSpeechRecognition()
   selectedBriefPeriod.value = resolveBriefPeriod()
   await loadAssistantBrief()
+})
+
+onBeforeUnmount(() => {
+  if (!speechRecognition) return
+  speechRecognition.onend = null
+  speechRecognition.abort()
 })
 </script>
 
@@ -537,6 +615,14 @@ onMounted(async () => {
       />
       <div class="chat-send">
         <el-button @click="fillDemoScript" :disabled="chatLoading">填入演示脚本</el-button>
+        <el-button
+          :type="voiceListening ? 'danger' : 'default'"
+          :disabled="chatLoading"
+          @click="toggleVoiceInput"
+        >
+          <el-icon><Microphone /></el-icon>
+          {{ voiceListening ? '停止录音' : '语音输入' }}
+        </el-button>
         <el-button type="primary" @click="sendChat()" :loading="chatLoading">发送</el-button>
       </div>
     </div>
@@ -710,6 +796,8 @@ onMounted(async () => {
 .chat-send {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .brief-card {
