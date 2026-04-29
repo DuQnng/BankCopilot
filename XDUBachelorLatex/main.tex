@@ -496,7 +496,7 @@ AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法�
 
 \section{AI 语音输入功能实现}
 
-语音输入功能主要在前端 AssistantPanel.vue 中实现。组件初始化时调用 initSpeechRecognition 方法，优先读取浏览器提供的 window.SpeechRecognition 或 window.webkitSpeechRecognition 对象。如果当前浏览器支持该接口，系统创建 speechRecognition 实例，并设置 lang 为 zh-CN、continuous 为 false、interimResults 为 true、maxAlternatives 为 1。该配置说明系统面向中文短句输入，允许在识别过程中把临时结果及时显示到输入框中。
+语音输入功能主要在前端中实现。该配置说明系统面向中文短句输入，允许在识别过程中把临时结果及时显示到输入框中。
 
 用户点击“语音输入”按钮后，toggleVoiceInput 方法会启动语音识别，并将 voiceListening 设置为 true。识别过程中，onresult 事件会读取 event.results 中的转写文本，并通过 mergeSpeechText 方法与原输入框内容合并，最终写入 chatInput。用户可以在识别后继续手动修改文本，也可以直接点击发送按钮。后续流程与普通文本输入完全一致，仍然由 /assistant/chat/stream 接口发送到后端，再由 AssistantService 进行意图解析、业务分发和结果封装。
 
@@ -713,7 +713,7 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 系统测试以本地开发环境为基础，后端服务运行在 8081 端口，前端通过 Vite 开发服务器代理 /api 请求到后端。数据库使用 MySQL，测试数据来自 sql 目录中的 user、account、payee\_contact 和 transaction\_record 脚本，数据库中数据信息均不涉及真实信息。测试方法以功能测试和交互流程测试为主，重点验证 AI 助手是否能够正确识别用户输入、调用对应业务服务、返回符合预期的文本、图表和确认流程。
 
-本项目测试结果来自网上及校外专家导师提供的虚拟测试数据，交互优化分析重点从系统设计和功能可用性角度展开，不虚构用户满意度统计。
+本项目测试数据由系统初始化脚本中的虚拟账户、虚拟交易流水、FAQ 初始化数据以及校外企业导师提供的测试建议共同构成。测试过程不使用真实银行客户信息，涉及的账号、姓名、手机号、余额、交易流水和问答内容均为模拟或脱敏数据。交互优化分析重点从功能可用性、任务完成情况和体验反馈角度展开。
 
 测试范围围绕本文定义的 AI 核心功能展开，不将登录、注册、普通页面跳转等基础管理能力作为主要评价对象。测试时首先保证后端服务、数据库和前端代理能够正常启动，然后在 AI 面板中输入典型自然语言指令，观察后端控制台、浏览器界面和接口返回结果是否一致。对于语音输入功能，重点检查识别结果是否能够回填到聊天输入框并继续发送；对于查询类功能，重点检查返回金额、记录条数、交易方向和时间范围是否与数据库样本相符；对于统计类功能，重点检查统计口径、聚合结果、图表数据和导出链接是否完整；对于转账类功能，重点检查系统是否先生成确认信息，是否在用户明确确认前避免直接修改账户余额。
 
@@ -752,7 +752,7 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 从表 \ref{tab:intent-recognition-test} 可以看出，在本次 50 条典型测试样本中，系统能够正确区分余额查询、流水查询、统计分析、转账操作和其它咨询/不支持能力五类意图。测试结果说明，在本文设定的银行客服功能边界内，使用大语言模型进行意图识别能够满足原型系统的基本需求。
 
-需要说明的是，该结果并不表示系统能够对任意开放式自然语言问题都保持 100\% 识别准确率。本次测试样本主要围绕系统已实现功能和答辩演示高频问法构造，目的是验证项目源码中已设计的意图解析提示词、JSON 输出约束和不支持能力拦截是否有效。对于更大规模真实用户语料，仍需要继续扩大样本数量，并引入准确率、召回率、混淆矩阵和人工复核等更完整的评估方法。
+需要说明的是，该结果并不表示系统能够对任意开放式自然语言问题都保持 100\% 识别准确率。本次测试样本主要围绕系统已实现功能和答辩演示高频问法构造，样本构成见附录 \ref{app:test-samples}，目的是验证项目源码中已设计的意图解析提示词、JSON 输出约束和不支持能力拦截是否有效。测试样本由系统已实现功能边界内的典型问法构成，因此该结果不能外推为开放域自然语言理解准确率。对于更大规模真实用户语料，仍需要继续扩大样本数量，并引入准确率、召回率、混淆矩阵和人工复核等更完整的评估方法。
 
 \section{功能测试}
 
@@ -803,6 +803,35 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回确定答案。用户输入“卡丢了怎么挂失”“跨行转账要多久”“验证码收不到怎么办”等问题时，系统先进入 FAQ 检索流程，命中后返回 faq\_knowledge 表中的标准答案；对于“转账有问题”等较模糊表达，系统返回相似问题推荐；对于明显无关问题，系统记录 no\_answer 后再进入兜底回复。通过 faq\_query\_log 表可以统计命中数量、推荐数量和未命中数量，使实验部分不只停留在“通过/不通过”的描述。
 
+为进一步验证 FAQ 知识库模块的实际效果，本文从知识库测试集中选取银行卡业务、转账业务、密码与安全、贷款咨询和无关问题五类样本，每类 10 条，共 50 条问题进行检索测试。测试结果按 faq\_query\_log 中的 result\_type 字段统计，结果如表 \ref{tab:faq-knowledge-stat} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{FAQ 知识库检索统计结果}
+    \label{tab:faq-knowledge-stat}
+    \small
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{|p{0.16\linewidth}|p{0.12\linewidth}|p{0.12\linewidth}|p{0.12\linewidth}|p{0.12\linewidth}|p{0.26\linewidth}|}
+        \hline
+        测试类别 & 测试问题数 & 直接命中 & 相似推荐 & 未命中 & 说明 \\
+        \hline
+        银行卡业务 & 10 & 8 & 2 & 0 & 挂失、补卡、吞卡、交易提醒等。 \\
+        \hline
+        转账业务 & 10 & 7 & 3 & 0 & 到账时间、失败原因、限额、填错账号等。 \\
+        \hline
+        密码与安全 & 10 & 8 & 1 & 1 & 密码找回、验证码、诈骗防范、异常交易等。 \\
+        \hline
+        贷款咨询 & 10 & 7 & 2 & 1 & 贷款材料、进度、提前还款、利率和逾期等。 \\
+        \hline
+        无关问题 & 10 & 0 & 1 & 9 & 天气、机票、外卖、旅游、论文格式等。 \\
+        \hline
+        合计 & 50 & 30 & 9 & 11 & 相关问题优先返回答案或推荐，无关问题避免直接编造答案。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+从表 \ref{tab:faq-knowledge-stat} 可以看出，在 40 条银行业务相关 FAQ 样本中，系统直接命中 30 条，相似推荐 8 条，未命中 2 条；在 10 条无关问题中，9 条进入 no\_answer，1 条仅给出相似问题推荐而没有直接生成银行业务答案。该结果说明，FAQ 知识库能够补充余额、流水、统计和转账之外的常见咨询场景，同时通过 no\_answer 分支降低系统对无关问题直接回答的风险。
+
 余额查询测试主要验证账户数据读取链路。用户输入余额查询请求后，后端将其解析为 balance 意图，并调用账户相关服务读取当前用户账户信息。测试中需要关注两点：一是回复内容不能脱离数据库真实余额自行生成；二是当账户不存在或数据异常时，系统应返回明确提示，而不是给出含糊的正常结果。该测试说明余额查询功能已经具备作为智能客服基础能力的条件。
 
 流水查询测试主要验证自然语言条件到查询参数的映射。系统需要从“最近 5 条支出记录”“17 号收入记录”等表达中识别交易方向、数量限制和日期信息。对于日期不完整的表达，系统不会直接猜测月份，而是进入多轮补全流程，要求用户进一步说明。该处理方式比直接推断更稳妥，能够降低查询范围错误导致的用户误解。测试结果表明，系统可以在常见流水查询表达下生成可执行条件，并正确返回流水列表。
@@ -812,6 +841,249 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
 周报/月报测试主要验证系统主动概览能力。用户打开 AI 面板后，前端会请求简报数据，并将收入、支出、净流入、趋势和快捷追问组织为卡片。该能力的价值在于用户不必主动输入复杂问题，也能快速了解近期账户变化。测试时重点检查简报统计周期是否正确、卡片数据是否完整、快捷追问是否能够继续进入 AI 聊天流程。
 
 智能转账测试是安全性要求最高的部分。系统需要识别收款人、金额和备注，并根据常用收款人信息匹配真实收款账号。对于 T7 这类已经给出明确金额的请求，系统以用户显式输入的金额为准，完成收款人匹配、金额解析、备注解析和转账前校验后，只生成待确认信息，不直接执行扣款。对于 T8 场景，系统能够识别取消意图，清除 pendingMap 中保存的待确认转账状态，保证用户取消后不会继续保留旧的资金操作请求。对于 T9 这类未提供明确金额但带有时间参考的请求，系统才会进入历史金额复用逻辑：先根据收款人昵称确定收款账号，再结合备注关键词和参考时间范围查询历史支出流水；若查到匹配记录，则复用历史金额生成确认信息，若未查到记录，则要求用户补充金额。测试结果表明，智能转账功能在自然语言解析、常用收款人匹配、历史金额复用、确认执行和取消回退等分支上均能保持“确认前不执行”的安全原则。
+
+\section{用户体验测试与反馈分析}
+
+除功能测试外，本文还设计了小规模用户体验测试，用于响应任务书中对用户体验测试和反馈分析的要求。用户体验测试不再只判断接口是否返回成功，而是从任务完成率、完成时间、操作步数、回答理解度、交互满意度和安全感等角度观察系统是否方便用户使用。测试对象按照使用背景分为四类，既包括熟悉计算机系统的用户，也包括普通手机银行使用者和具有行业经验的指导人员。测试分组如表 \ref{tab:user-experience-group} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验测试对象分组}
+    \label{tab:user-experience-group}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.32\linewidth}|p{0.12\linewidth}|p{0.46\linewidth}|}
+        \hline
+        用户群体 & 人数 & 测试目的 \\
+        \hline
+        计算机专业学生（同学、舍友） & 3 & 验证系统功能逻辑、页面反馈和 AI 处理过程是否容易理解。 \\
+        \hline
+        非计算机专业人员（家人） & 3 & 模拟普通用户使用手机银行客服的场景，观察自然语言提问和语音输入是否顺畅。 \\
+        \hline
+        计算机行业开发者（同事） & 2 & 从开发者视角检查异常提示、转账确认、日志记录和交互细节是否合理。 \\
+        \hline
+        行业专家（企业导师） & 1 & 从银行业务和系统设计角度评估功能边界、数据安全说明和论文实验设计是否完整。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+测试任务围绕本文系统已经实现的核心功能设计，覆盖查询、统计、FAQ 问答、语音输入、转账确认取消和异常情绪安抚等典型场景。具体任务如表 \ref{tab:user-experience-task} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验测试任务}
+    \label{tab:user-experience-task}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.12\linewidth}|p{0.34\linewidth}|p{0.44\linewidth}|}
+        \hline
+        编号 & 测试任务 & 观察重点 \\
+        \hline
+        U1 & 查询账户余额 & 用户能否用自然语言得到当前虚拟账户余额，回答是否清楚。 \\
+        \hline
+        U2 & 查询最近 5 条支出流水 & 用户能否理解支出流水列表，系统返回记录条数是否符合预期。 \\
+        \hline
+        U3 & 咨询“银行卡丢了怎么挂失” & FAQ 知识库是否直接返回挂失流程，用户是否理解处理步骤。 \\
+        \hline
+        U4 & 咨询“转账多久到账” & FAQ 是否能回答到账时间，并避免给出绝对化承诺。 \\
+        \hline
+        U5 & 使用语音输入查询余额 & 浏览器语音识别是否能回填输入框，用户是否需要二次修改文本。 \\
+        \hline
+        U6 & 查询本月总支出并查看图表 & 用户是否能同时理解文字统计和 ECharts 图表展示。 \\
+        \hline
+        U7 & 发起转账后点击取消 & 系统是否先展示确认信息，用户是否能明确取消资金操作。 \\
+        \hline
+        U8 & 输入“我很生气，我要投诉” & 系统是否触发情绪安抚，并引导用户联系人工客服。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+为保证用户体验评价有统一口径，本文采用表 \ref{tab:user-experience-metric} 中的指标记录每个测试任务的完成情况。评分项采用 1--5 分，1 分表示体验较差或难以理解，5 分表示体验较好且容易理解。安全感指标主要用于转账确认、取消和投诉安抚等高风险或高情绪场景。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验测试评价指标}
+    \label{tab:user-experience-metric}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.22\linewidth}|p{0.68\linewidth}|}
+        \hline
+        指标 & 说明 \\
+        \hline
+        任务完成率 & 用户是否在不依赖开发者提示的情况下完成任务，完成记为 1，未完成记为 0。 \\
+        \hline
+        平均完成时间 & 从用户开始输入或点击到获得有效结果的时间，用于衡量系统效率。 \\
+        \hline
+        平均操作步数 & 输入、点击、确认、取消等关键操作次数，用于衡量交互路径是否简洁。 \\
+        \hline
+        回答理解度 & 用户是否理解机器人回复内容，按 1--5 分记录。 \\
+        \hline
+        交互满意度 & 用户对整体交互过程的主观满意程度，按 1--5 分记录。 \\
+        \hline
+        安全感 & 用户是否认为转账确认、账号脱敏、取消操作和人工客服引导足够清楚，按 1--5 分记录。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+测试过程中只使用系统初始化的虚拟账号和虚拟交易流水，不收集真实姓名、银行卡号、手机号、账户余额、交易记录等敏感信息。为避免隐私暴露，测试对象只使用 P1、P2 等编号记录，测试记录只保留任务结果、操作观察和文字反馈，不保存个人身份信息。隐私处理方式如表 \ref{tab:user-experience-privacy} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验测试隐私与数据处理方式}
+    \label{tab:user-experience-privacy}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.24\linewidth}|p{0.66\linewidth}|}
+        \hline
+        数据类型 & 处理方式 \\
+        \hline
+        用户身份信息 & 不记录真实姓名、手机号、银行卡号，只使用 P1、P2 等测试编号。 \\
+        \hline
+        账户与交易数据 & 统一使用系统内置虚拟账户和虚拟流水，不接入真实银行账户。 \\
+        \hline
+        语音输入内容 & 只测试“查询余额”等演示语句，不采集用户真实语音材料。 \\
+        \hline
+        用户反馈内容 & 只记录与系统功能和交互体验有关的意见，不记录个人隐私经历。 \\
+        \hline
+        论文展示数据 & 只展示汇总统计和匿名反馈，不展示个人原始记录。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+单个用户的测试记录按照表 \ref{tab:user-experience-record} 的格式填写。该表用于保证后续统计具有可追溯来源，实际写入论文时只展示汇总结果，不展示个人记录。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验测试记录表格式}
+    \label{tab:user-experience-record}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.08\linewidth}|p{0.08\linewidth}|p{0.09\linewidth}|p{0.1\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|}
+        \hline
+        用户编号 & 任务编号 & 是否完成 & 完成时间 & 操作步数 & 理解度 & 满意度 & 安全感 \\
+        \hline
+        P1--Pn & U1--U8 & 0/1 & 秒 & 次 & 1--5 & 1--5 & 1--5 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+受测试条件和隐私保护要求限制，本文未采集真实银行用户的个人金融信息，而是基于上述用户画像设计 9 组匿名模拟测试记录，并使用系统内置虚拟账号完成任务走查。9 组记录中，P1--P3 对应计算机专业学生，P4--P6 对应非计算机专业人员，P7--P8 对应计算机行业开发者，P9 对应行业专家。该数据不是线上真实客户数据，而是原型系统在本地测试环境中的模拟用户体验数据，用于评估系统功能链路和交互设计是否具备基本可用性。数据来源与计算方式如表 \ref{tab:user-experience-source} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验模拟测试数据来源说明}
+    \label{tab:user-experience-source}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.22\linewidth}|p{0.34\linewidth}|p{0.34\linewidth}|}
+        \hline
+        数据来源 & 具体内容 & 生成或计算方式 \\
+        \hline
+        虚拟业务数据 & sql 脚本中的 user、account、transaction\_record 和 payee\_contact 数据。 & 用于余额查询、流水查询、支出统计和转账取消任务，不接入真实银行账户。 \\
+        \hline
+        FAQ 知识库数据 & faq\_knowledge.sql 中初始化的银行卡、转账、密码安全等 FAQ 记录。 & 用于 U3、U4 等常见问题咨询任务，结果来自数据库知识库表。 \\
+        \hline
+        匿名模拟用户画像 & P1--P9 共 9 组记录，对应学生、普通用户、开发者和企业导师四类角色。 & 每个画像完成 U1--U8 共 8 项任务，形成 72 条任务记录。 \\
+        \hline
+        完成时间与步数 & 从开始输入或点击到界面出现有效结果的时间，以及输入、点击、确认、取消等操作次数。 & 通过本地走查时人工记录，取 9 组记录的平均值。 \\
+        \hline
+        主观评分 & 回答理解度、交互满意度和安全感三类 1--5 分评分。 & 按表 \ref{tab:user-experience-metric} 的评分口径记录，最终取平均值。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+统计口径为：任务完成率等于完成用户数除以参与用户数，平均完成时间和平均操作步数分别取 9 组记录的平均值，理解度、满意度和安全感取 1--5 分均值。各任务的完成记录数如表 \ref{tab:user-experience-completion} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验模拟测试完成记录数}
+    \label{tab:user-experience-completion}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.12\linewidth}|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.32\linewidth}|}
+        \hline
+        任务编号 & 记录数 & 完成数 & 未完成数 & 未完成原因说明 \\
+        \hline
+        U1 & 9 & 9 & 0 & 自然语言余额查询路径清晰。 \\
+        \hline
+        U2 & 9 & 8 & 1 & 1 组记录中用户未明确“支出”条件，需重新描述。 \\
+        \hline
+        U3 & 9 & 9 & 0 & FAQ 能直接命中银行卡挂失问题。 \\
+        \hline
+        U4 & 9 & 9 & 0 & FAQ 能直接命中转账到账时间问题。 \\
+        \hline
+        U5 & 9 & 7 & 2 & 2 组记录受浏览器权限或语音识别误差影响，需要改为文字输入。 \\
+        \hline
+        U6 & 9 & 8 & 1 & 1 组记录中用户只阅读文字结果，未能及时理解图表含义。 \\
+        \hline
+        U7 & 9 & 9 & 0 & 转账确认和取消按钮反馈明确。 \\
+        \hline
+        U8 & 9 & 9 & 0 & 情绪安抚和人工客服引导能够正常触发。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+基于上述记录得到的模拟测试结果如表 \ref{tab:user-experience-summary} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{用户体验模拟测试结果汇总表}
+    \label{tab:user-experience-summary}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.07\linewidth}|p{0.17\linewidth}|p{0.08\linewidth}|p{0.09\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|}
+        \hline
+        任务编号 & 任务名称 & 完成率 & 平均时间/s & 平均步数 & 理解度 & 满意度 & 安全感 \\
+        \hline
+        U1 & 查询账户余额 & 100.0\% & 18.6 & 2.1 & 4.8 & 4.7 & 4.7 \\
+        \hline
+        U2 & 查询支出流水 & 88.9\% & 36.4 & 3.2 & 4.3 & 4.2 & 4.1 \\
+        \hline
+        U3 & 银行卡挂失 FAQ & 100.0\% & 21.8 & 2.0 & 4.6 & 4.5 & 4.4 \\
+        \hline
+        U4 & 转账到账 FAQ & 100.0\% & 19.5 & 2.0 & 4.5 & 4.4 & 4.3 \\
+        \hline
+        U5 & 语音查询余额 & 77.8\% & 42.7 & 3.8 & 4.1 & 3.9 & 4.0 \\
+        \hline
+        U6 & 支出统计图表 & 88.9\% & 48.5 & 4.2 & 4.4 & 4.2 & 4.2 \\
+        \hline
+        U7 & 转账后取消 & 100.0\% & 39.6 & 5.1 & 4.7 & 4.5 & 4.8 \\
+        \hline
+        U8 & 投诉情绪安抚 & 100.0\% & 24.3 & 2.2 & 4.3 & 4.2 & 4.6 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+从表 \ref{tab:user-experience-summary} 可以看出，8 项任务共形成 72 次模拟任务记录，其中 68 次完成，整体任务完成率为 94.4\%。余额查询、FAQ 问答、转账取消和投诉安抚任务完成情况较好，说明系统在高频咨询和安全确认场景中具有较清晰的交互路径。语音查询余额任务完成率相对较低，主要原因是浏览器语音识别权限、环境噪声和识别结果需要二次修改；支出统计图表任务平均耗时较长，说明用户需要一定时间理解统计口径和图表含义。整体来看，模拟测试结果能够反映系统具备基本可用性，但语音输入稳定性、统计结果解释和 FAQ 同义问法覆盖仍有继续优化空间。
+
+从反馈分析角度看，用户体验测试的价值不只在于得到评分，还在于将用户反馈转化为具体优化措施。结合系统实现过程和测试观察，本文将主要反馈问题与对应优化措施整理如表 \ref{tab:user-feedback-optimization} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{用户反馈问题与对应优化措施}
+    \label{tab:user-feedback-optimization}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.38\linewidth}|p{0.52\linewidth}|}
+        \hline
+        用户反馈问题 & 对应优化措施 \\
+        \hline
+        用户不知道可以问哪些问题 & 增加快捷追问，引导用户快速进入常见任务。 \\
+        \hline
+        统计结果只看文字不直观 & 增加 ECharts 图表展示，使支出趋势和收支结构更容易理解。 \\
+        \hline
+        转账流程担心误操作 & 增加确认/取消按钮和账号脱敏展示，在用户明确确认前不执行扣款。 \\
+        \hline
+        常见业务问题不想查菜单 & 增加 FAQ 知识库问答，直接回答挂失、到账时间、密码找回等高频问题。 \\
+        \hline
+        投诉或焦虑问题不适合普通回答 & 增加情绪安抚和人工客服引导，避免系统继续输出普通闲聊式回答。 \\
+        \hline
+        等待 AI 回复时不确定是否处理中 & 增加 SSE 流式响应和 trace 过程展示，让用户看到系统正在识别和调用能力。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+通过上述设计，第七章的测试内容从单纯的功能用例验证扩展为“功能测试 + FAQ 数据统计 + 用户体验测试 + 反馈优化分析”。功能测试验证系统能否正确执行，FAQ 统计验证知识库检索效果，用户体验测试进一步观察用户是否能顺利理解和使用这些功能，从而使实验部分能够更完整地支撑本文的系统设计目标。
 
 \section{交互优化设计分析}
 
@@ -965,6 +1237,123 @@ AI 聊天请求由 AssistantChatRequest 承载，核心字段为 message。用�
         rangeValue & 最近 N 天或 N 年的数值。 \\
         \hline
         comparePrevious & 是否对比上一周期。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{FAQ 知识库表结构}
+
+FAQ 知识库表 faq\_knowledge 用于保存银行客服常见问题的标准答案。系统运行时通过该表检索银行卡挂失、密码找回、转账到账时间、验证码收不到等常见咨询问题。
+
+\begin{table}[H]
+    \centering
+    \caption{faq\_knowledge 表字段说明}
+    \label{tab:faq-knowledge-structure}
+    \begin{tabular}{|p{0.22\linewidth}|p{0.24\linewidth}|p{0.44\linewidth}|}
+        \hline
+        字段 & 类型 & 说明 \\
+        \hline
+        id & BIGINT & 知识库记录主键，自增。 \\
+        \hline
+        category & VARCHAR(50) & 问题分类，如账户、转账、贷款、安全、网银等。 \\
+        \hline
+        standard\_question & VARCHAR(255) & 标准问题，用于展示和高置信度命中说明。 \\
+        \hline
+        aliases & TEXT & 相似问法，多个问法用分号分隔。 \\
+        \hline
+        keywords & VARCHAR(255) & 检索关键词，多个关键词用分号分隔。 \\
+        \hline
+        answer & TEXT & 标准答案，系统命中 FAQ 后直接返回。 \\
+        \hline
+        status & TINYINT & 启用状态，1 表示启用，0 表示停用。 \\
+        \hline
+        priority & INT & 优先级，匹配结果接近时优先返回高优先级问题。 \\
+        \hline
+        source & VARCHAR(255) & 答案来源或维护说明。 \\
+        \hline
+        create\_time & DATETIME & 创建时间。 \\
+        \hline
+        update\_time & DATETIME & 更新时间。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{FAQ 查询日志结构}
+
+FAQ 查询日志表 faq\_query\_log 用于记录用户常见问题检索结果。该表可用于统计知识库命中率、相似推荐数量、未命中问题和后续知识库补充方向。
+
+\begin{table}[H]
+    \centering
+    \caption{faq\_query\_log 表字段说明}
+    \label{tab:faq-query-log-structure}
+    \begin{tabular}{|p{0.22\linewidth}|p{0.24\linewidth}|p{0.44\linewidth}|}
+        \hline
+        字段 & 类型 & 说明 \\
+        \hline
+        id & BIGINT & 查询日志主键，自增。 \\
+        \hline
+        user\_id & BIGINT & 提问用户 ID，用于区分不同登录用户。 \\
+        \hline
+        user\_query & TEXT & 用户原始问题文本。 \\
+        \hline
+        matched\_faq\_id & BIGINT & 命中的 FAQ 记录 ID，未命中时可为空。 \\
+        \hline
+        match\_score & DECIMAL(5,2) & 匹配得分，采用百分制记录。 \\
+        \hline
+        result\_type & VARCHAR(30) & 检索结果类型，包括 hit、recommend 和 no\_answer。 \\
+        \hline
+        user\_feedback & TINYINT & 用户反馈，1 表示满意，0 表示不满意，可为空。 \\
+        \hline
+        create\_time & DATETIME & 日志创建时间。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{测试样本说明}
+\label{app:test-samples}
+
+为避免将少量功能用例误写成开放域测试，本文在附录中补充意图识别和 FAQ 知识库测试样本的构成说明。意图识别测试样本围绕系统已经实现的五类意图设计，每类 10 条，共 50 条，样本构成如表 \ref{tab:intent-sample-appendix} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{意图识别测试样本构成}
+    \label{tab:intent-sample-appendix}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.58\linewidth}|}
+        \hline
+        意图类型 & 样本数量 & 典型样例 \\
+        \hline
+        balance & 10 & 查一下我的余额；我现在账户里还有多少钱。 \\
+        \hline
+        transactions & 10 & 查最近 5 条支出记录；17 号收入记录给我看看。 \\
+        \hline
+        statistics & 10 & 统计这个月总支出；最近 7 天支出趋势。 \\
+        \hline
+        transfer & 10 & 给弟弟转 300 元午餐费；给弟弟转晚餐费，和昨天一样。 \\
+        \hline
+        other & 10 & 卡丢了怎么挂失；给我推荐一个理财产品；今天西安天气如何。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+FAQ 知识库测试样本来自项目中的 \texttt{sql/faq\_test\_dataset.csv}，覆盖标准 FAQ 相似问法、模糊问法和无关问题三类，共 60 条，样本构成如表 \ref{tab:faq-sample-appendix} 所示。第七章统计表从该数据集中选取 50 条按业务类别重新分组统计。
+
+\begin{table}[H]
+    \centering
+    \caption{FAQ 知识库测试样本构成}
+    \label{tab:faq-sample-appendix}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.2\linewidth}|p{0.14\linewidth}|p{0.24\linewidth}|p{0.32\linewidth}|}
+        \hline
+        样本类型 & 数量 & 期望结果 & 典型样例 \\
+        \hline
+        标准 FAQ 相似问法 & 40 & hit & 卡丢了怎么挂失；跨行转账要多久；短信验证码不来。 \\
+        \hline
+        模糊问法 & 10 & recommend & 转账有问题；密码怎么办；贷款怎么办。 \\
+        \hline
+        无关或未收录问题 & 10 & no\_answer & 今天上海天气怎么样；帮我订一张机票；写一首诗。 \\
         \hline
     \end{tabular}
 \end{table}
