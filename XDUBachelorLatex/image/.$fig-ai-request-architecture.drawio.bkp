@@ -35,7 +35,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e2" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.25;endArrow=block;endFill=1;fontFamily=Songti SC,Times New Roman;fontSize=14;" target="service" value="转交 message 与当前用户 id">
-          <mxGeometry relative="1" as="geometry">
+          <mxGeometry relative="1" x="-0.1765" y="-65" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
               <mxPoint x="365" y="350" />
             </Array>

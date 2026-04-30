@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="ChatGPT">
   <diagram id="bank-ai-service-scenario-simsun" name="银行智能客服典型应用场景">
-    <mxGraphModel dx="1178" dy="636" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="560" math="0" shadow="0">
+    <mxGraphModel dx="1178" dy="642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="560" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -38,16 +38,16 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="id12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;1.&lt;/span&gt; &lt;font&gt;余额查询&lt;/font&gt;&lt;/b&gt;&lt;font&gt;&lt;br&gt;&lt;span style=&quot;font-size: 11px; color: rgb(51, 51, 51);&quot;&gt;示例输入：查一下我的余额&lt;br&gt;输出：账户信息、余额、账户状态&lt;/span&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="90" as="geometry" />
+          <mxGeometry height="82" width="210" x="700" y="40" as="geometry" />
         </mxCell>
         <mxCell id="id14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;2.&lt;/span&gt; 流水查询&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：查最近 &lt;span style=&quot;&quot;&gt;5&lt;/span&gt; 条支出记录&lt;br&gt;输出：交易时间、金额、对方账号、备注&lt;/span&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="190" as="geometry" />
+          <mxGeometry height="82" width="210" x="700" y="140" as="geometry" />
         </mxCell>
         <mxCell id="id16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;3.&lt;/span&gt; 账单统计与分析&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：统计这个月总支出&lt;br&gt;输出：总额、趋势图、收支分析、导出报表&lt;/span&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="290" as="geometry" />
+          <mxGeometry height="82" width="210" x="700" y="240" as="geometry" />
         </mxCell>
         <mxCell id="id18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;4.&lt;/span&gt; 转账确认&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：给弟弟转 &lt;span style=&quot;&quot;&gt;300&lt;/span&gt; 元&lt;br&gt;输出：收款人匹配、余额校验&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;&lt;b&gt;二次确认后执行&lt;/b&gt;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="390" as="geometry" />
+          <mxGeometry height="82" width="210" x="700" y="327.5" as="geometry" />
         </mxCell>
         <mxCell id="id20" edge="1" parent="1" source="id4" style="endArrow=block;html=1;rounded=0;strokeColor=#222222;strokeWidth=1.6;fontFamily=Songti SC;fontSize=12;fontStyle=1;fontColor=#111111;labelBackgroundColor=#ffffff;" target="id5" value="自然语言输入">
           <mxGeometry relative="1" as="geometry" />
@@ -115,6 +115,15 @@
           <mxGeometry height="50" relative="1" width="50" as="geometry">
             <mxPoint x="640" y="290" as="sourcePoint" />
             <mxPoint x="727" y="399" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SheeuRHjm88a9DuDW2Tg-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;5.&lt;/span&gt;&amp;nbsp;常见问题资讯&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：我的卡丢失了怎么办&lt;br&gt;输出：银行卡丢失后请立即办理挂失，避免资金风险...&lt;/span&gt;" vertex="1">
+          <mxGeometry height="82" width="210" x="700" y="422" as="geometry" />
+        </mxCell>
+        <mxCell id="SheeuRHjm88a9DuDW2Tg-2" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SheeuRHjm88a9DuDW2Tg-1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="640" y="290" as="sourcePoint" />
+            <mxPoint x="730" y="469" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>

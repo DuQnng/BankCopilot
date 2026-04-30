@@ -52,6 +52,7 @@ public class AssistantService {
     private final StatisticsService statisticsService;
     private final PayeeService payeeService;
     private final FaqKnowledgeService faqKnowledgeService;
+    private final AssistantTestLogService assistantTestLogService;
     private final PayeeContactMapper payeeContactMapper;
     private final TransactionMapper transactionMapper;
 
@@ -63,7 +64,23 @@ public class AssistantService {
     private static final String HUMAN_SERVICE_PHONE = "010-1234-5678";
 
     public Result chat(Long userId, AssistantChatRequest req) {
-        String msg = req.getMessage() == null ? "" : req.getMessage().trim();
+        long startNanos = System.nanoTime();
+        String msg = req == null || req.getMessage() == null ? "" : req.getMessage().trim();
+        Result result = null;
+        RuntimeException error = null;
+        try {
+            result = doChat(userId, msg);
+            return result;
+        } catch (RuntimeException ex) {
+            error = ex;
+            throw ex;
+        } finally {
+            long durationMs = (System.nanoTime() - startNanos) / 1_000_000L;
+            assistantTestLogService.recordRuntime(userId, req, msg, result, durationMs, error);
+        }
+    }
+
+    private Result doChat(Long userId, String msg) {
         if (msg.isEmpty()) {
             throw BusinessException.of(ErrorCode.PARAM_INVALID, "message 不能为空");
         }

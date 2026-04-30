@@ -55,20 +55,20 @@
 
 % 中文摘要
 \begin{cabstract}
-随着银行业务线上化和服务渠道智能化的发展，传统人工客服在高频、重复业务中面临响应压力大、服务效率不稳定等问题。本文设计并实现了面向个人银行业务的智能客服机器人原型系统 BankCopilot。系统采用 Vue 3、Element Plus、ECharts、Spring Boot、MyBatis 和 MySQL 构建前后端业务能力，并接入通义千问大模型完成自然语言意图解析与分析性文本生成。系统实现了 AI 查余额、AI 查流水、AI 账单统计与分析、AI 周报/月报、AI 智能转账、FAQ 知识库问答、语音输入以及异常情绪安抚与人工客服引导等功能。设计上，大模型只负责理解输入和组织表达，语音识别负责将用户语音转写为文本，FAQ 答案来自数据库知识库表，情绪安抚由规则化关键词检测触发，账户查询、流水查询、统计计算和转账执行均由后端确定性服务完成。测试结果表明，系统能够支持文本输入和语音转文字输入形式的银行客服交互，并在安全性、可解释性和可演示性方面具有一定实用价值。
+随着银行业务线上化和智能服务渠道的发展，传统银行系统在余额查询、交易流水查询、账单统计和常见问题咨询等高频场景中，仍存在页面路径较长、筛选条件复杂、静态 FAQ 难以处理实时业务数据等问题。同时，银行业务涉及账户余额、交易流水和资金转账等敏感信息，若直接依赖大语言模型生成业务事实或执行资金操作，容易带来结果不可控和误操作风险。针对上述问题，本文设计并实现了面向个人银行业务的智能客服机器人原型系统 BankCopilot。系统采用 Vue 3、Element Plus、ECharts、Spring Boot、MyBatis 和 MySQL 构建前后端业务能力，并接入通义千问大模型完成自然语言意图解析与分析性文本生成。本文提出“大模型理解与表达、后端确定性服务提供业务事实和执行控制”的系统设计思路：大模型负责将用户输入解析为余额查询、流水查询、账单统计、FAQ 咨询或转账等结构化意图，账户数据、流水数据、统计结果和转账执行均由后端服务和数据库完成。系统实现了文本与语音转文字输入、AI 查余额、AI 查流水、AI 账单统计与分析、AI 周报/月报、FAQ 知识库问答、异常情绪安抚、人工客服引导和 AI 智能转账二次确认等功能，并通过 SSE 流式响应、处理过程展示、统计图表、快捷操作和导出链接优化交互体验。测试结果表明，系统 21 项后端自动化测试全部通过；80 条意图与分流测试样本通过率为 95.0\%；FAQ 知识库能够对银行相关问题返回标准答案或相似推荐，并对无关问题进入未命中分支；9 名匿名测试者在本地原型和虚拟演示业务数据环境下形成 81 条真实任务聊天记录，核心任务均能完成。结果说明，BankCopilot 能够在保持银行业务数据可追溯和资金操作可确认的前提下，缩短高频业务查询路径，补充常见问题分流能力，并提升智能客服交互的可解释性和可控性。
 \end{cabstract}
 
 \begin{ckeywords}
-智能客服机器人\quad 自然语言处理\quad 银行业务\quad 账单分析\quad 交互优化
+智能客服机器人\quad 大语言模型\quad 自然语言处理\quad 银行业务\quad 账单分析\quad 交互优化\quad 二次确认
 \end{ckeywords}
 
 % 英文摘要
 \begin{eabstract}
-With the development of online banking services and intelligent service channels, manual customer service faces increasing pressure in high-frequency and repetitive scenarios. This thesis designs and implements BankCopilot, an intelligent customer service robot prototype for personal banking services. The system uses Vue 3, Element Plus, ECharts, Spring Boot, MyBatis and MySQL to build front-end and back-end business capabilities, and uses the Qwen large language model for natural language intent parsing and analytical response generation. The implemented AI functions include balance inquiry, transaction inquiry, bill statistics and analysis, weekly or monthly brief generation, intelligent transfer confirmation, FAQ knowledge-base question answering, speech-to-text input, and emotional support with human service guidance. The model is responsible for understanding input and organizing natural language expressions, speech recognition converts user speech into text, FAQ answers come from the database knowledge table, emotion handling is triggered by rule-based keyword detection, while account query, transaction query, statistical calculation and transfer execution are completed by deterministic back-end services. The test results show that the system can support text input and speech-to-text banking service interaction and has practical value in security, explainability and demonstration.
+With the development of online banking services and intelligent service channels, traditional banking systems still have long operation paths, complex filtering conditions, and limited static FAQ support in high-frequency scenarios such as balance inquiry, transaction inquiry, bill statistics, and common service consultation. Meanwhile, banking services involve sensitive information such as account balances, transaction records, and fund transfers. If a large language model is allowed to directly generate business facts or execute fund operations, the system may suffer from uncontrollable results and mistaken operations. To address these problems, this thesis designs and implements BankCopilot, an intelligent customer service robot prototype for personal banking services. The system uses Vue 3, Element Plus, ECharts, Spring Boot, MyBatis, and MySQL to build front-end and back-end business capabilities, and integrates the Qwen large language model for natural language intent parsing and analytical response generation. This thesis adopts the design principle that the large language model is responsible for understanding and expression, while deterministic back-end services provide business facts and execution control. The model parses user input into structured intents such as balance inquiry, transaction inquiry, bill statistics, FAQ consultation, or transfer, whereas account data, transaction data, statistical results, and transfer execution are all handled by back-end services and the database. The system implements text and speech-to-text input, AI-based balance inquiry, transaction inquiry, bill statistics and analysis, weekly or monthly brief generation, FAQ knowledge-base question answering, emotional support, human service guidance, and two-step confirmation for intelligent transfer. It also improves interaction through SSE streaming responses, process tracing, statistical charts, quick actions, and export links. The test results show that all 21 back-end automated tests passed; the pass rate of 80 intent and routing test samples reached 95.0\%; the FAQ knowledge base could return standard answers or similar recommendations for banking-related questions and route irrelevant questions to the no-answer branch; nine anonymous testers generated 81 real task chat records in the local prototype environment with virtual demonstration business data, and the core tasks were completed. The results indicate that BankCopilot can shorten high-frequency business inquiry paths, supplement common-question routing, and improve the explainability and controllability of intelligent customer service while keeping banking data traceable and fund operations confirmable.
 \end{eabstract}
 
 \begin{ekeywords}
-intelligent customer service robot\quad natural language processing\quad banking service\quad bill analysis\quad interaction optimization
+intelligent customer service robot\quad large language model\quad natural language processing\quad banking service\quad bill analysis\quad interaction optimization\quad two-step confirmation
 \end{ekeywords}
 
 % 生成论文的封面、声明页、中英文摘要
@@ -84,25 +84,27 @@ intelligent customer service robot\quad natural language processing\quad banking
 
 \chapter{绪论}
 
-\section{研究背景与意义}
+\section{研究背景与问题提出}
 
 在数字化服务持续发展的背景下，银行业务从传统柜台办理逐步转向移动端、网页端和智能终端。用户在办理业务时，常常需要查询余额、查询交易流水、了解一段时间内的收支状况，或者发起转账等操作。这些需求频率高、重复性强，若完全依赖人工客服，不仅会增加银行服务成本，也会影响用户问题响应速度。因此，构建能够理解自然语言、连接业务系统并提供即时服务的智能客服机器人，具有较强的工程意义和应用价值。
 
-近年来，大语言模型在自然语言理解和文本生成方面表现出显著能力，使客服机器人从传统的基于规则或检索的问答系统逐步发展为能够处理开放式表达和多轮上下文对话的智能助手\cite{vaswani2017attention,brown2020language,zhao2023survey}。但在银行场景中，单纯依赖大模型直接回答并不可靠。银行业务涉及账户余额、交易流水和资金转账等敏感数据，要求系统具备准确性、可审计性和安全性。因此，本课题将大语言模型作为自然语言入口和表达增强工具，将真实业务查询、统计计算和资金操作交由后端确定性服务完成，从而在智能化体验和业务安全之间取得平衡。
+近年来，大语言模型在自然语言理解和文本生成方面表现出显著能力，使客服机器人从传统的基于规则或检索的问答系统逐步发展为能够处理开放式表达和多轮上下文对话的智能助手\cite{zhao2023survey}。但在银行场景中，单纯依赖大模型直接回答并不可靠。银行业务涉及账户余额、交易流水和资金转账等敏感数据，要求系统具备准确性、可审计性和安全性。因此，本课题将大语言模型作为自然语言入口和表达增强工具，将真实业务查询、统计计算和资金操作交由后端确定性服务完成，从而在智能化体验和业务安全之间取得平衡。
 
-BankCopilot 项目以银行智能客服为场景，实现了一个面向个人账户业务的 AI 助手。系统支持用户使用文本自然语言或语音转文字方式发起查询与操作请求，能够完成余额查询、流水查询、账单统计、周报/月报生成以及智能转账确认等功能。与普通客服问答系统相比，本系统的特点在于 AI 回复并非仅来自静态问答库，而是通过意图解析后调用真实账户、流水和统计服务，再将结果组织为用户可理解的文本、图表和报表导出链接。
+BankCopilot 项目以银行智能客服为场景，实现了一个面向个人账户业务的 AI 助手。为避免后文概念混用，本文将“客服机器人”“智能客服助手”“AI 助手”等表述统一指向 BankCopilot 智能客服机器人；其中“AI 助手”主要用于描述前端聊天入口和交互界面。系统支持用户使用文本自然语言或语音转文字方式发起查询与操作请求，能够完成余额查询、流水查询、账单统计、周报/月报生成以及智能转账确认等功能。与普通客服问答系统相比，本系统的特点在于 AI 回复并非仅来自静态问答库，而是通过意图解析后调用真实账户、流水和统计服务，再将结果组织为用户可理解的文本、图表和报表导出链接。
 
 从银行业务应用角度看，智能客服机器人并不只是一个问答窗口，而是业务入口、交互流程和风险控制逻辑的组合。用户在传统页面中完成一次流水查询，通常需要进入交易流水页面、选择交易类型、设置起止日期、调整分页参数，再阅读表格结果；而在智能客服交互中，用户可以直接表达“查最近 5 条支出记录”或“看最近 7 天支出趋势”。系统需要将这类口语化表达转换为后端能够执行的查询条件。该转换过程既涉及自然语言理解，也涉及业务规则约束。若只关注文本生成能力而忽略业务执行过程，智能客服就容易停留在演示层面，难以成为真正可用的银行服务入口。
 
 另一方面，银行业务对准确性和安全性要求较高。余额、流水和转账结果均属于用户关心的敏感信息，系统不能让模型根据语言习惯自行推断或编造金额。本文的设计思路是将大模型放在“理解用户意图”和“组织分析语言”的位置，将数据库查询、统计聚合和资金变动放在传统后端服务中执行。这样既可以利用大模型提升自然语言交互的灵活性，又可以通过确定性服务保证数据来源可追溯、业务流程可控制。该思路也是本文相对于简单聊天机器人实现的主要区别。
 
+结合银行智能客服的业务特点，本文将课题问题进一步细化为四个方面：第一，传统银行业务页面依赖菜单、表单和筛选条件，用户完成余额查询、流水筛选和账单统计等高频操作时路径较长；第二，普通 FAQ 问答只能处理固定咨询，难以连接账户、流水和统计等实时业务数据；第三，大语言模型虽然具备自然语言理解和表达能力，但不能直接作为余额、流水、统计金额和转账结果的事实来源；第四，转账等资金类操作具有较高风险，智能客服必须在参数解析、后端校验和用户确认之间建立清晰边界。因此，本文研究的核心问题不是简单构建一个聊天机器人，而是在银行业务原型系统中设计一种可解释、可控制、可验证的 AI 辅助交互流程。
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-bank-ai-service-scenario-simsun.png}
+    \includegraphics[width=0.92\linewidth]{image/fig-bank-ai-service-scenario-simsun.pdf}
     \caption{银行智能客服应用场景示意图}
 \end{figure}
 
-\section{课题目标与研究内容}
+\section{课题目标、研究内容与创新点}
 
 本课题的总体目标是设计并实现一个面向银行业务的智能客服机器人原型。课题重点研究自然语言交互、业务意图解析、对话状态管理、银行业务服务集成和前端交互优化等内容。系统以文本自然语言交互为主要方式，并补充语音转文字输入能力，围绕用户在个人银行业务中的高频需求提供智能化辅助。
 
@@ -118,7 +120,7 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
         \hline
         研究内容 & 本文实现方式 \\
         \hline
-        自然语言理解 & 通过 QwenClient 调用通义千问，将用户输入解析为 intent、时间范围、金额、收款人等结构化字段。 \\
+        自然语言理解 & 通过 QwenClient 调用通义千问，将用户输入解析为 intent 字段、时间范围、金额、收款人等结构化字段。 \\
         \hline
         对话管理 & 通过 pendingMap 和 pendingTxnQueryMap 维护待确认转账和待补全流水查询状态。 \\
         \hline
@@ -133,11 +135,45 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
 
 上述研究内容共同构成了系统的 AI 能力闭环。自然语言理解负责把用户原始输入转换为可执行的业务意图，对话管理负责处理缺失信息和高风险操作确认，业务系统集成负责保证返回数据来自真实数据库，交互优化负责将处理过程和业务结果以更清晰的形式展示给用户。本文后续章节围绕这一闭环展开论述，避免把 AI 功能写成脱离系统实现的概念性描述。
 
-课题研究范围需要明确边界。系统中的登录、注册，帐户验证等能力属于基础设施，不作为本文 AI 核心功能的重点，故不在本课题研究范围内。本文重点分析源码中已实现的语音输入、FAQ 知识库问答、异常情绪安抚、AI 查余额、AI 查流水、AI 账单统计与分析、AI 周报/月报和 AI 智能转账功能等AI集成特色功能。对于当前源码没有实现的消费品类识别、商户标签分析等能力，由于实现过于复杂且与AI集成不可控，仅在不足与展望中作为后续方向说明。
+\begin{table}[H]
+    \centering
+    \caption{本文创新点与后文章节对应关系}
+    \label{tab:innovation-chapter-map}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{|p{0.17\linewidth}|p{0.21\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|}
+        \hline
+        创新点或优化点 & 解决的问题 & 具体实现位置 & 验证位置 \\
+        \hline
+        自然语言业务入口与语音转文字输入 & 传统银行页面依赖菜单、表单和筛选条件，用户完成查询路径较长。 & 5.4 接口与交互设计；6.1 AI 请求处理总体流程；6.2 AI 语音输入功能实现。 & 7.4 功能测试 T1、T2、T11；7.5 用户体验测试 U1、U2、U5。 \\
+        \hline
+        大模型与后端确定性服务分工 & 大模型可能编造余额、流水、统计金额或业务结论。 & 3.1 大语言模型与自然语言意图识别；5.1 系统架构设计；5.2 AI 模块设计；6.5--6.8 查询与统计功能实现。 & 7.3 意图识别准确性测试；7.4 功能测试；7.7 测试结论。 \\
+        \hline
+        FAQ 知识库与查询日志 & 静态客服或纯大模型回答难以保证常见银行问题答案稳定、可维护。 & 5.3 数据库设计中的 faq\_knowledge、faq\_query\_log；6.4 FAQ 知识库问答功能实现。 & 7.4 FAQ 检索统计；附录 A.4、A.5、A.6、A.7。 \\
+        \hline
+        多轮对话状态管理 & 用户输入缺少月份、确认、取消等上下文时，单轮问答无法正确处理。 & 5.2 AI 模块设计；6.1 AI 请求处理总体流程；6.6 AI 查流水多轮补全；6.9 AI 智能转账。 & 7.4 功能测试 T3、T7、T8、T9。 \\
+        \hline
+        统计解释、图表展示与简报 & 传统流水表格需要用户自行理解和计算，统计结果不直观。 & 5.4 接口与交互设计；6.7 AI 账单统计与分析；6.8 AI 周报/月报。 & 7.4 功能测试 T4、T5、T6；7.5 用户体验测试 U6；7.6 交互优化设计分析。 \\
+        \hline
+        转账二次确认、账号脱敏和取消回退 & AI 直接执行资金操作存在误操作风险。 & 4.3 非功能性需求；6.9 AI 智能转账功能实现；表 6.5 安全控制设计。 & 7.4 功能测试 T7、T8、T9；7.5 用户体验测试 U7。 \\
+        \hline
+        过程展示、统计口径说明和能力边界控制 & 用户难以判断 AI 是否真正调用业务服务，也难以识别模型是否超出能力范围。 & 5.2 AI 模块设计；6.1 响应结构 trace/explain；6.7 统计 explain/exportUrl；7.6 交互优化设计分析。 & 7.4 功能测试 T10；7.6 交互优化设计分析；7.7 测试结论。 \\
+        \hline
+        匿名测试日志与反馈优化闭环 & 原测试部分容易停留在功能通过，缺少用户反馈和数据来源。 & 5.3 assistant\_test\_log 数据表；7.1--7.5 测试环境、日志说明和用户体验测试；附录 A.7。 & 7.5 用户体验测试与反馈分析；附录 A.8--A.10。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+表 \ref{tab:innovation-chapter-map} 将本文提出的主要创新点和交互优化措施与后文章节进行对应。可以看出，本文创新并非停留在概念层面，而是分别落实到系统架构、AI 模块、数据库设计、核心功能实现和测试验证中。第五章重点说明整体设计，第六章说明各项功能的具体实现，第七章通过意图识别、功能测试、FAQ 检索统计和匿名用户体验测试验证优化效果。
+
+本文创新性主要体现在四个方面。第一，将智能客服从普通问答窗口扩展为银行业务自然语言入口，用户可以通过文本或语音转文字输入发起余额查询、流水筛选、账单统计、FAQ 咨询和转账确认等操作。第二，提出“大模型理解与表达、后端确定性服务提供业务事实”的分工方式，使 Qwen 大模型主要承担意图解析和分析性表达生成，账户、流水、统计和转账结果由 Spring Boot 后端与 MySQL 数据库提供。第三，面向转账等高风险业务设计可确认、可取消、可追踪的多轮操作流程，将自然语言转账拆分为参数解析、后端校验、待确认、确认执行或取消回退等阶段。第四，建立“功能测试、日志记录、用户反馈、交互优化”的验证闭环，通过 assistant\_test\_log、自动化测试、意图测试、FAQ 检索统计和匿名用户体验测试补充系统效果证据。上述创新属于面向银行业务场景的系统设计和工程集成创新，而不是声称提出新的底层算法。
+
+课题研究范围需要明确边界。系统中的登录、注册、账户验证等能力属于基础设施，不作为本文 AI 核心功能的重点，故不在本课题研究范围内。本文重点分析源码中已实现的语音输入、FAQ 知识库问答、异常情绪安抚、AI 查余额、AI 查流水、AI 账单统计与分析、AI 周报/月报和 AI 智能转账功能等 AI 集成特色功能。对于当前源码没有实现的消费品类识别、商户标签分析等能力，由于实现过于复杂且与 AI 集成不可控，仅在不足与展望中作为后续方向说明。
 
 \section{本文组织结构}
 
-本文共分为九章。第一章介绍课题背景、研究意义、研究目标和论文结构。第二章分析银行管理系统智能化发展现状、行业 AI 实践和本文系统的优化问题。第三章介绍系统开发涉及的关键技术，包括大语言模型、Spring Boot、Vue、MyBatis、MySQL、ECharts 和 SSE 流式通信等。第四章对系统需求进行分析，重点说明 AI 智能客服的核心功能需求和非功能性需求。第五章给出系统总体设计，包括系统架构、AI 模块、数据库和接口设计。第六章详细阐述语音输入、FAQ 知识库问答、异常情绪安抚、AI 查余额、AI 查流水、AI 账单统计与分析、AI 周报/月报和 AI 智能转账功能的设计与实现。第七章从功能测试和交互优化角度分析系统效果。第八章总结全文工作，并提出不足与展望。第九章为结束语。
+本文共分为九章。第一章介绍课题背景、问题提出、研究目标、研究内容和论文结构。第二章分析银行管理系统智能化发展现状、行业 AI 实践和本文系统的优化问题。第三章介绍系统开发涉及的关键技术，包括大语言模型、Spring Boot、Vue、MyBatis、MySQL、ECharts 和 SSE 流式通信等。第四章对系统需求进行分析，重点说明 AI 智能客服的核心功能需求和非功能性需求。第五章给出系统总体设计，包括系统架构、AI 模块、数据库和接口设计。第六章详细阐述语音输入、FAQ 知识库问答、异常情绪安抚、AI 查余额、AI 查流水、AI 账单统计与分析、AI 周报/月报和 AI 智能转账功能的设计与实现。第七章从后端自动化测试、意图识别准确性测试、核心功能测试、FAQ 知识库检索统计、匿名用户体验测试和反馈优化分析等方面验证系统效果。第八章总结全文工作，并提出不足与展望。第九章为结束语。
 
 \chapter{相关研究与行业实践分析}
 
@@ -163,9 +199,9 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
 
 \section{银行 AI 系统面临的关键问题}
 
-银行场景中的智能化改造具有明显的双重性。一方面，AI 能够提升服务效率和交互体验；另一方面，银行业务涉及资金、身份和信用信息，错误回答和错误操作可能造成严重后果。国际清算银行关于 AI 可解释性的研究指出，可解释性关系到透明度、问责、监管合规和消费者信任\cite{bis2025explainability}。美国国家标准与技术研究院提出的 AI 风险管理框架也强调，可信 AI 应具备有效可靠、安全稳健、透明可问责、可解释、隐私增强和公平等特征\cite{nist2023airmf}。
+银行场景中的智能化改造具有明显的双重性。一方面，AI 能够提升服务效率和交互体验；另一方面，银行业务涉及资金、身份和信用信息，错误回答和错误操作可能造成严重后果。美国国家标准与技术研究院提出的 AI 风险管理框架强调，可信 AI 应具备有效可靠、安全稳健、透明可问责、可解释、隐私增强和公平等特征\cite{nist2023airmf}。
 
-在信贷和风险管理场景中，AI 的问题更加突出。世界银行信用评分指南指出，信用评分方法已经从传统统计技术发展到机器学习、随机森林、梯度提升和深度神经网络等方法，这些方法能够带来自动化、准确性和客户体验方面的改进，但也可能引发隐私、公平性、可解释性和历史偏差等问题\cite{worldbank2020creditscoring}。相关研究也表明，机器学习在银行风险管理中具有应用价值，但模型效果、数据质量和解释能力会直接影响其落地效果\cite{leo2019mlbanking}。
+在信贷和风险管理场景中，AI 的问题更加突出。世界银行信用评分指南指出，信用评分方法已经从传统统计技术发展到机器学习、随机森林、梯度提升和深度神经网络等方法，这些方法能够带来自动化、准确性和客户体验方面的改进，但也可能引发隐私、公平性、可解释性和历史偏差等问题\cite{worldbank2020creditscoring}。
 
 结合本文课题，银行 AI 系统至少需要面对以下问题。第一，业务事实不能由模型编造，余额、流水和转账结果必须来自确定性业务系统。第二，高风险操作不能由模型直接完成，转账等资金操作必须经过参数校验和用户确认。第三，AI 回复需要解释依据，尤其是统计总结、异常提醒和趋势分析，应明确时间范围、指标口径和数据来源。第四，系统需要控制能力边界，不能回答源码中没有实现的功能，也不能虚构消费品类、商户标签或授信结论。第五，智能交互需要和原有页面共存，避免为了引入 AI 而破坏传统业务系统的可维护性。
 
@@ -191,7 +227,7 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
         \hline
         风险控制 & 包含反欺诈、反洗钱、信贷评分和合规审计等体系 & 主要完成转账校验、二次确认和能力边界控制 & 将高风险操作设计为“AI 解析 + 后端校验 + 用户确认”流程 \\
         \hline
-        AI 治理 & 强调模型评估、审计、隐私保护和人工复核 & 在原型系统中实现过程展示、统计口径说明和安全兜底 & 使 AI 输出可解释、可检查，并避免超出已实现能力 \\
+        AI 治理 & 强调模型评估、审计、隐私保护和人工复核 & 在原型系统中实现过程展示、统计口径说明和安全回退 & 使 AI 输出可解释、可检查，并避免超出已实现能力 \\
         \hline
     \end{tabular}
 \end{table}
@@ -200,9 +236,9 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
 
 因此，本文的价值不在于声称系统达到商业银行平台水平，而在于借鉴行业 AI 应用思路，在本科毕业设计场景下形成一个边界清楚、实现完整、便于演示和验证的原型。通过该原型，可以观察大语言模型在银行业务系统中更适合承担哪些职责，也可以明确哪些职责仍必须由传统后端服务和用户确认机制承担。
 
-\section{本文针对课题问题的优化措施}
+\section{课题痛点与本文优化措施}
 
-针对传统银行管理系统交互路径较长、结果解释不足和智能化程度有限的问题，本文提出以下优化措施。
+针对传统银行管理系统交互路径较长、静态 FAQ 难以连接实时业务数据、大模型生成结果不可控以及资金操作风险较高等问题，本文没有把智能客服设计为独立闲聊模块，而是将其作为银行业务系统的自然语言辅助入口。具体优化措施如下。
 
 第一，增加智能交互入口。传统 Web 银行业务系统主要依赖菜单、表单和表格完成操作，用户需要主动寻找功能入口。本文在系统中提供 AI 助手面板，支持文本输入和语音转文字输入。用户可以直接输入“查询最近一周流水”“这个月支出了多少”“生成本周简报”等自然语言请求，系统通过大语言模型解析意图，并由后端服务执行对应业务查询。语音输入不单独改变业务逻辑，而是把用户语音转写为文本后复用原有 AI 请求链路，从而降低用户输入成本。
 
@@ -214,19 +250,51 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
 
 第五，增加可解释和过程展示机制。本文在 AI 回复中保留 trace、steps、explain、confidence、tool 和 status 等过程字段，前端可展示意图、处理步骤和统计口径。这样用户不只看到最终回答，也能看到系统为何这样回答、调用了哪类能力、统计范围是什么。对于银行智能客服而言，过程可见比单纯回复自然更重要，因为它能帮助用户判断结果是否可信。
 
-第六，建立能力边界和安全兜底。系统提示词中明确限制模型不得输出未实现能力，对于消费品类、商户标签、复杂风控结论等源码中不存在的数据，系统不把它写成已实现成果。同时，后端对模型输出进行结构化校验，并在模型服务不可用或输出异常时采用规则化兜底回复。这种设计使系统在演示和测试中更稳定，也符合银行业务系统对可控性的要求。
+第六，建立能力边界和安全回退机制。系统提示词中明确限制模型不得输出未实现能力，对于消费品类、商户标签、复杂风控结论等源码中不存在的数据，系统不把它写成已实现成果。同时，后端对模型输出进行结构化校验，并在模型服务不可用或输出异常时采用规则化后备回复。这种设计使系统在演示和测试中更稳定，也符合银行业务系统对可控性的要求。
 
 第七，设置可验证的优化评价方式。本文不使用行业案例中的效率数据来描述本系统效果，而是通过功能测试和交互分析验证原型是否达到设计目标。评价重点包括：自然语言请求能否被正确解析，余额和流水结果是否与数据库一致，统计口径是否清楚，转账是否经过二次确认，FAQ 问题是否能命中知识库，语音输入是否能进入原有文本链路，异常情绪表达是否触发安抚与人工客服引导，AI 回复是否避免未实现能力。通过这些指标，可以更客观地说明本文优化措施的有效性。
 
-综合来看，本文的创新点主要体现在三个方面。第一，在传统银行业务管理原型之上引入文本与语音自然语言入口，使系统从表单式操作扩展为自然语言辅助操作，并补充 FAQ 知识库问答、异常情绪安抚与人工客服引导能力。第二，将大语言模型与确定性后端服务分工，使 AI 负责理解和表达，业务服务负责事实和执行。第三，围绕银行业务安全要求设计过程展示、统计解释、知识库来源、二次确认和安全兜底机制，使智能客服不仅能回答问题，也能以可解释、可控制的方式辅助完成业务。
+\begin{table}[H]
+    \centering
+    \caption{优化措施与系统实现位置对应关系}
+    \label{tab:optimization-implementation-map}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{|p{0.18\linewidth}|p{0.28\linewidth}|p{0.22\linewidth}|p{0.22\linewidth}|}
+        \hline
+        优化措施 & 设计思路 & 具体实现章节 & 测试与评价章节 \\
+        \hline
+        增加智能交互入口 & 将菜单式操作扩展为自然语言和语音转文字输入。 & 5.4、6.1、6.2 & 7.4 T1、T2、T11；7.5 U1、U2、U5 \\
+        \hline
+        明确大模型与后端服务职责边界 & 大模型只做意图解析和表达组织，业务事实来自数据库和后端服务。 & 3.1、5.1、5.2、6.5--6.8 & 7.3、7.4、7.7 \\
+        \hline
+        优化统计解释与主动简报 & 将流水明细扩展为总额、趋势、图表、简报和快捷追问。 & 5.4、6.7、6.8 & 7.4 T4--T6；7.5 U6 \\
+        \hline
+        优化风险操作流程 & 转账采用“AI 解析 + 后端校验 + 用户确认 + 可取消”的流程。 & 4.3、6.9、表 6.5 & 7.4 T7--T9；7.5 U7 \\
+        \hline
+        增加可解释和过程展示机制 & 回复中保留 trace、steps、explain、chartData、exportUrl 等字段。 & 5.2、6.1、6.7、附录 A.2 & 7.6 图 7.1、图 7.2 \\
+        \hline
+        建立 FAQ 知识库与更新机制 & 常见问题从 faq\_knowledge 表返回，检索结果写入 faq\_query\_log。 & 5.3、6.4、附录 A.4、A.5 & 7.4 FAQ 检索统计；附录 A.6、A.7 \\
+        \hline
+        建立能力边界和安全回退机制 & 对未实现能力进行拦截，避免模型编造消费分类、商户标签等结果。 & 3.2、4.3、6.1、6.7 & 7.4 T10；7.7 \\
+        \hline
+        设置可验证评价方式 & 通过自动化测试、意图测试、功能测试、FAQ 统计、匿名测试日志验证系统效果。 & 5.3 assistant\_test\_log；7.1--7.5；附录 A.7 & 7.2--7.5；附录 A.8--A.10 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+因此，第二章提出的优化措施在后文并非孤立描述，而是分别在需求分析、总体设计、功能实现和测试验证中形成闭环。第四章侧重说明系统为什么需要这些约束，第五章侧重回答“如何设计”，第六章侧重回答“如何实现”，第七章侧重回答“实现效果如何”。
+
+综合来看，本文的创新点主要体现在四个方面。第一，在传统银行业务管理原型之上引入文本与语音自然语言入口，使系统从表单式操作扩展为自然语言辅助操作，并补充 FAQ 知识库问答、异常情绪安抚与人工客服引导能力。第二，将大语言模型与确定性后端服务分工，使 AI 负责理解和表达，业务服务负责事实和执行。第三，围绕银行业务安全要求设计过程展示、统计解释、知识库来源、二次确认、取消回退和安全回退机制，使智能客服不仅能回答问题，也能以可解释、可控制的方式辅助完成业务。第四，增加 assistant\_test\_log 和匿名反馈测试入口，将功能验证、日志记录和用户反馈结合起来，使原型系统具备更完整的测试与反馈闭环。
 
 \chapter{相关技术与理论基础}
 
 \section{大语言模型与自然语言意图识别}
 
-自然语言意图识别是智能客服系统的入口能力，其目标是从用户的自然语言表达中识别用户想要完成的任务，并抽取执行任务所需的关键槽位信息。传统方法通常采用规则匹配、关键词识别或监督学习分类模型。随着大语言模型的发展，模型能够更好地理解口语化表达和复杂句式，适合用于将用户输入转换为结构化的意图表示。
+自然语言意图识别是智能客服系统的入口能力，其目标是从用户的自然语言表达中识别用户想要完成的任务，并抽取执行任务所需的关键槽位信息。传统方法通常采用规则匹配、关键词识别或监督学习分类模型。Transformer 结构和大规模预训练语言模型的发展提升了模型对长文本、上下文和少样本任务的处理能力\cite{vaswani2017attention,brown2020language}，使大语言模型更适合用于将用户输入转换为结构化的意图表示。
 
-本系统通过 QwenClient 封装通义千问兼容 OpenAI Chat Completions 的调用方式。在 AssistantService 中，parseIntentByQwen 方法将用户输入和系统提示词发送给模型，要求模型返回严格 JSON。该 JSON 包含 intent、toAccountNo、payeeAlias、amount、description、txnType、timeRange、metric、groupBy 等字段。后端随后根据 intent 分发到不同业务处理方法。
+本系统通过 QwenClient 封装通义千问兼容 OpenAI Chat Completions 的调用方式\cite{dashscope}。在 AssistantService 中，parseIntentByQwen 方法将用户输入和系统提示词发送给模型，要求模型返回严格 JSON。该 JSON 包含 intent、toAccountNo、payeeAlias、amount、description、txnType、timeRange、metric、groupBy 等字段。后端随后根据 intent 字段分发到不同业务处理方法。
 
 需要强调的是，在银行业务场景下，大语言模型无法直接作为业务事实来源。本系统将大模型限定为意图解析器和分析文本生成器，余额、流水、统计值和转账执行均来自后端业务服务。这种设计能够保留自然语言交互的灵活性，同时降低模型幻觉带来的业务风险。
 
@@ -248,7 +316,7 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
         \hline
         方案 & 优点 & 不足 & 本文采用情况 \\
         \hline
-        关键词规则匹配 & 实现简单、结果可控、便于定位问题 & 对口语化表达、同义表达和复杂句式适应性较弱，规则数量增加后维护成本较高 & 用于不支持能力拦截和部分兜底判断 \\
+        关键词规则匹配 & 实现简单、结果可控、便于定位问题 & 对口语化表达、同义表达和复杂句式适应性较弱，规则数量增加后维护成本较高 & 用于不支持能力拦截和部分后备判断 \\
         \hline
         传统文本分类模型 & 可通过训练集计算准确率、召回率等指标，适合固定意图分类 & 需要标注语料，新增意图或槽位时需要重新训练或补充样本 & 未作为主方案 \\
         \hline
@@ -256,7 +324,7 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
         \hline
         大语言模型意图解析 & 对口语表达、复杂句式和多槽位抽取适应性较强，可直接输出结构化 JSON & 存在格式不稳定、幻觉和超出能力边界表达的风险 & 作为本文主方案 \\
         \hline
-        情感分析 & 可判断用户情绪，用于人工客服优先级或投诉识别 & 若作为复杂情绪分类模型，需要更多标注语料；但投诉、愤怒、焦虑等强表达可通过规则识别 & 采用轻量级规则检测，用于安抚和人工客服引导 \\
+        情感分析 & 可用于识别明显情绪倾向，辅助人工客服引导或投诉识别 & 若作为复杂情绪分类模型，需要更多标注语料；但投诉、愤怒、焦虑等强表达可通过规则识别 & 未训练复杂情感分析模型，仅采用轻量级关键词规则检测 \\
         \hline
     \end{tabular}
 \end{table}
@@ -265,9 +333,9 @@ BankCopilot 项目以银行智能客服为场景，实现了一个面向个人�
 
 检索式 FAQ 问答适合回答“如何开卡”“密码忘记怎么办”等常见问题，但本文系统的重点仍然是连接真实业务数据。余额、流水和统计结果必须来自数据库，转账必须经过后端校验和用户确认，单纯检索固定答案无法满足这些场景。因此，本文将 FAQ 检索定位为常见咨询补充模块：它不替代余额、流水、统计和转账服务，而是在业务意图为 other 时从数据库知识库表中检索标准答案或相似问题。
 
-综合比较后，本文采用“大语言模型意图解析 + 后端确定性服务 + FAQ 知识库 + 规则兜底”的混合方案。AssistantService 中的 parseIntentByQwen 方法要求通义千问输出严格 JSON，将用户输入解析为 intent、txnType、timeRange、amount、payeeAlias、metric 和 groupBy 等字段；后端再根据 intent 分发到余额、流水、统计、转账或 FAQ 知识库处理流程。对于消费分类、商户类型、场景标签等当前系统不支持的能力，后端通过规则拦截强制输出 other，避免模型把未实现能力说成已实现能力。
+综合比较后，本文采用“大语言模型意图解析 + 后端确定性服务 + FAQ 检索 + 规则化后备处理 + 情绪关键词检测”的混合方案。AssistantService 中的 parseIntentByQwen 方法要求通义千问输出严格 JSON，将用户输入解析为 intent、txnType、timeRange、amount、payeeAlias、metric 和 groupBy 等字段；后端再根据 intent 字段分发到余额、流水、统计、转账或 FAQ 知识库处理流程。对于消费分类、商户类型、场景标签等当前系统不支持的能力，后端通过规则拦截强制输出 other，避免模型把未实现能力说成已实现能力。
 
-本文没有单独训练情感分类模型，而是实现了面向客服场景的轻量级异常情绪检测。系统通过关键词规则识别“我要投诉”“服务太差”“生气”“焦虑”“担心”等较强情绪或投诉表达，触发安抚话术和人工客服引导。这样做的原因是，当前系统的核心业务仍然是账户查询、流水查询、统计分析和转账确认，情绪判断不应参与金额计算和资金操作决策；但在客服交互中，识别明显负面情绪并提示人工渠道能够提升服务完整性。因此，本文将情绪识别定位为交互优化辅助模块，而不是核心业务决策模型。
+本文没有单独训练情感分类模型，而是实现了面向客服场景的轻量级异常情绪关键词检测，同时，当关键词规则未命中而请求进入后备回答分支时，系统仍可生成较温和的安抚性回复。系统通过关键词规则识别“我要投诉”“服务太差”“生气”“焦虑”“担心”等较强情绪或投诉表达，触发安抚话术和人工客服引导。这样做的原因是，当前系统的核心业务仍然是账户查询、流水查询、统计分析和转账确认，情绪判断不应参与金额计算和资金操作决策；但在客服交互中，识别明显负面情绪并提示人工渠道能够提升服务完整性。因此，本文将该能力定位为交互优化辅助模块，而不是复杂情感分析模型或核心业务决策模型。
 
 \section{Spring Boot 后端技术}
 
@@ -279,7 +347,7 @@ Spring Boot 是系统后端的主体框架，用于快速构建 RESTful Web 服�
 
 \section{Vue 与前端交互技术}
 
-前端采用 Vue 3 构建组件化界面，使用 Element Plus 提供表单、按钮、抽屉、弹窗、表格等基础组件\cite{vue}。AI 助手界面主要由 AssistantPanel.vue 实现，该组件同时用于首页主面板和右上角智能客服抽屉。
+前端采用 Vue 3 构建组件化界面\cite{vue}，使用 Element Plus 提供表单、按钮、抽屉、弹窗、表格等基础组件。AI 助手界面主要由 AssistantPanel.vue 实现，该组件同时用于首页主面板和右上角智能客服抽屉。
 
 在 AI 交互方面，前端通过 fetch 调用 /assistant/chat/stream 接口，读取服务端发送事件流，并根据 trace、message、error、done 等事件更新界面。对于统计分析结果，前端根据 chartType 和 chartData 使用 ECharts 渲染柱状图、折线图、饼图和概览图\cite{echarts}。对于转账确认，前端根据 AI 回复内容显示“确认”和“取消”快捷按钮，从而降低用户输入成本。
 
@@ -291,13 +359,13 @@ Spring Boot 是系统后端的主体框架，用于快速构建 RESTful Web 服�
 
 系统使用 MySQL 存储用户、账户、收款人和交易流水数据。MyBatis 用于完成 SQL 映射\cite{mybatis}，TransactionMapper.xml 中定义了流水分页查询、总金额统计、笔数统计、最大交易查询、趋势聚合、收入支出对比、按对方账号聚合以及历史转账流水匹配等 SQL。
 
-统计分析功能由 StatisticsServiceImpl 负责，根据前端或 AI 解析出的 StatisticsQueryDTO 选择 sum、count、max、trend 等统计方式。对于支出金额，SQL 中使用 ABS(amount) 将支出负数转为正向统计值，便于用户理解。统计结果再由 AssistantService 组织为事实文本，交给大语言模型生成分析总结，或者在模型不可用时使用规则化兜底总结。
+统计分析功能由 StatisticsServiceImpl 负责，根据前端或 AI 解析出的 StatisticsQueryDTO 选择 sum、count、max、trend 等统计方式。对于支出金额，SQL 中使用 ABS(amount) 将支出负数转为正向统计值，便于用户理解。统计结果再由 AssistantService 组织为事实文本，交给大语言模型生成分析总结，或者在模型不可用时使用规则化后备总结。
 
 数据持久化层为多项 AI 功能提供事实依据。余额查询依赖账户表，流水查询和统计分析依赖交易流水表，智能转账依赖常用收款人表和账户表，历史金额复用依赖历史交易记录。不同功能虽然在前端都表现为聊天输入，但在后端对应的数据读取和更新路径并不相同。论文在设计与实现章节中将分别说明这些路径，体现该系统不是简单拼接模型接口，而是围绕银行业务数据建立完整功能链路。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-tech-stack.png}
+    \includegraphics[width=0.92\linewidth]{image/fig-tech-stack.pdf}
     \caption{系统技术栈结构图}
 \end{figure}
 
@@ -311,7 +379,7 @@ BankCopilot 面向银行个人用户，目标是通过智能客服机器人降�
 
 总体需求还体现在系统边界的划分上。AI 助手需要为用户提供更自然的入口，但不能替代后端业务规则。用户输入越口语化，系统越需要在后端建立明确的转换规则和校验逻辑。例如，用户可以说“这个月花了多少”，但后端必须把它转换为确定的起止时间、交易方向和统计指标；用户可以说“给弟弟转 300”，但后端必须识别收款人、校验金额、检查余额并等待确认。只有把自然语言表达和确定性业务规则结合起来，系统才能在银行场景中具备可用性。
 
-此外，系统需满足本科毕业设计展示和答辩评阅的需要，在查看系统时，不仅需要看到 AI 回复文本，还需要看到它调用了什么业务能力、依据了哪些数据、是否存在安全确认环节。因此，系统在需求层面就需要考虑处理过程展示、统计图表展示和快捷操作按钮。它们不是额外装饰，而是证明系统具有真实业务链路的重要交互证据。
+此外，为满足本科毕业设计展示和答辩评阅的需要，在查看系统时，不仅需要看到 AI 回复文本，还需要看到它调用了什么业务能力、依据了哪些数据、是否存在安全确认环节。因此，本系统在需求层面就需要考虑处理过程展示、统计图表展示和快捷操作按钮。它们不是额外装饰，而是证明系统具有真实业务链路的重要交互证据。
 
 \section{AI 核心功能需求}
 
@@ -348,7 +416,7 @@ BankCopilot 面向银行个人用户，目标是通过智能客服机器人降�
 
 安全性方面，系统必须保证用户只能查询自己的账户和流水数据，资金流动操作必须经过校验和二次确认。AI 转账不能在用户首次输入后直接扣款，必须先生成确认信息，待用户回复“确认”后才能执行。对方账号在聊天回复中应进行脱敏展示。
 
-准确性方面，系统中的账户余额、流水记录和统计金额必须来自数据库查询结果，不得由大模型直接编造。模型输出的统计总结应受到后端事实约束，若模型返回不合适内容，系统需要使用规则化总结兜底。
+准确性方面，系统中的账户余额、流水记录和统计金额必须来自数据库查询结果，不得由大模型直接编造。模型输出的统计总结应受到后端事实约束，若模型返回不合适内容，系统需要使用规则化后备总结。
 
 可用性方面，系统需要支持口语化输入，如“查一下我的余额”“看最近 7 天支出趋势”“给弟弟转 300 元”等。对于缺失关键信息的请求，系统应通过多轮对话引导用户补全，而不是直接报错。
 
@@ -358,7 +426,7 @@ BankCopilot 面向银行个人用户，目标是通过智能客服机器人降�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-ai-usecase.png}
+    \includegraphics[width=0.92\linewidth]{image/fig-ai-usecase.pdf}
     \caption{AI 智能客服用例图}
 \end{figure}
 
@@ -370,21 +438,23 @@ BankCopilot 面向银行个人用户，目标是通过智能客服机器人降�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.86\linewidth,trim=1.0cm 0 0 0,clip]{image/fig-system-architecture.png}
+    \includegraphics[width=0.86\linewidth,trim=1.0cm 0 0 0,clip]{image/fig-system-architecture.pdf}
     \caption{系统总体架构图}
     \label{fig:system-architecture}
 \end{figure}
 
-在该架构中，AI 助手并不是独立于业务系统之外的聊天模块，而是业务系统的一层自然语言交互入口。用户先通过自然语言输入页面操作，在前端应用的智能助手接入到后端应用的接口入口层，进行请求分发后进入AI编排层，通过DashScope进行意图分析出意图intent，通过intent分发业务，再调用帐户，流水，统计或收款人服务，查询MySQL数据库，将结果封装后返回前端。
-需要强调的是，大模型无法直接访问数据库，不执行资金操作，帐户流水，转账有后端业务控制。
+在该架构中，AI 助手并不是独立于业务系统之外的聊天模块，而是业务系统的一层自然语言交互入口。用户通过前端智能助手输入自然语言请求后，请求先进入后端接口层，再进入 AI 编排层；系统通过 DashScope 完成业务意图解析，并根据 intent 字段分发到账户、流水、统计或收款人服务，查询 MySQL 数据库后将结果封装返回前端。
+需要强调的是，大模型无法直接访问数据库，也不执行资金操作，账户、流水和转账均由后端业务服务控制。
+因此，系统架构层面的核心设计不是“在页面上增加一个聊天窗口”，而是把 AI 助手嵌入传统业务链路：前端负责收集自然语言输入和展示处理过程，AI 编排层负责把输入转换为可执行任务，业务服务层负责提供事实数据和执行结果。通过这种分层，系统既保留传统银行业务系统的确定性，又为高频查询和咨询提供更短的自然语言入口。
 
 \section{AI 模块设计}
 
-AI 模块由接口层、编排层、模型调用层、业务服务层、知识库服务层和前端展示层组成。接口层对应 AssistantController，提供 /assistant/chat、/assistant/chat/stream 和 /assistant/brief 三类接口。编排层对应 AssistantService，负责处理待确认状态、调用 parseIntentByQwen、分发不同 intent、封装 trace 和 explain。模型调用层由 QwenClient 实现，统一封装通义千问请求。业务服务层包括 AccountService、TransactionService、StatisticsService 和 PayeeService。知识库服务层由 FaqKnowledgeService 和 FaqKnowledgeMapper 实现，负责常见问题检索和查询日志记录。前端展示层由 AssistantPanel 负责，同时包含语音输入按钮和语音识别状态展示。
+AI 模块由接口层、编排层、模型调用层、业务服务层、知识库服务层和前端展示层组成。接口层对应 AssistantController，提供 /assistant/chat、/assistant/chat/stream 和 /assistant/brief 三类接口。编排层对应 AssistantService，负责处理待确认状态、调用 parseIntentByQwen、根据 intent 字段分发业务流程、封装 trace 和 explain。模型调用层由 QwenClient 实现，统一封装通义千问请求。业务服务层包括 AccountService、TransactionService、StatisticsService 和 PayeeService。知识库服务层由 FaqKnowledgeService 和 FaqKnowledgeMapper 实现，负责常见问题检索和查询日志记录。前端展示层由 AssistantPanel 负责，同时包含语音输入按钮和语音识别状态展示。
 
 这种模块划分的核心思想是“模型不直接接触数据库，业务不依赖模型自由发挥”。如图\ref{fig:ai-request-architecture}，AssistantService 处于 AI 模块的中心位置，它既要理解模型返回的意图字段，又要根据业务规则决定是否继续执行。对于普通查询，服务层可以直接调用账户或流水服务；对于缺少月份的流水查询，服务层会保存待补全状态并追问用户；对于转账请求，服务层会生成待确认对象并等待用户下一轮确认。不同业务路径虽然都从聊天输入开始，但后端处理策略并不相同。
 
 AI 模块还承担结果适配工作。业务服务返回的通常是对象、列表或聚合数据，而用户更希望看到简明文本、图表和下一步操作入口。因此 AssistantService 会把业务结果转换为 AssistantChatResponse，前端再根据 chartType、chartData、trace、explain 和 exportUrl 等字段决定如何展示。该设计使回复内容和展示形式解耦，可以在不破坏原有接口的基础上扩展，增加新的图表类型或统计指标。
+由此可见，AI 模块承担的是“业务入口、服务编排和表达适配”三类职责，而不是替代账户、流水、统计和转账服务本身。这种职责边界是本文系统设计创新的基础，也是后续安全控制、可解释展示和测试验证能够成立的前提。
 
 \begin{table}[H]
     \centering
@@ -396,7 +466,7 @@ AI 模块还承担结果适配工作。业务服务返回的通常是对象、�
         \hline
         AI 接口入口 & AssistantController.java & 接收聊天请求、流式聊天请求和简报请求。 \\
         \hline
-        AI 编排服务 & AssistantService.java & 意图解析、业务分发、多轮状态、FAQ 兜底、统计总结。 \\
+        AI 编排服务 & AssistantService.java & 意图解析、业务分发、多轮状态、FAQ 后备处理、统计总结。 \\
         \hline
         模型调用 & QwenClient.java & 调用通义千问 Chat Completions 接口。 \\
         \hline
@@ -411,14 +481,14 @@ AI 模块还承担结果适配工作。业务服务返回的通常是对象、�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-ai-request-architecture.png}
+    \includegraphics[width=0.92\linewidth]{image/fig-ai-request-architecture.pdf}
     \caption{AI 请求处理架构图}
     \label{fig:ai-request-architecture}
 \end{figure}
 
 \section{数据库设计}
 
-系统 AI 功能依赖的核心数据表包括 account、transaction\_record、payee\_contact、user、faq\_knowledge 和 faq\_query\_log。AI 查余额主要读取 account 表和 user 表；AI 查流水和账单统计主要读取 transaction\_record 表；AI 智能转账需要读取 account 表、payee\_contact 表，并在执行后写入 transaction\_record 表；FAQ 知识库问答读取 faq\_knowledge 表，并把检索结果写入 faq\_query\_log 表，便于后续测试统计。
+系统 AI 功能依赖的核心数据表包括 account、transaction\_record、payee\_contact、user、faq\_knowledge 和 faq\_query\_log。AI 查余额主要读取 account 表和 user 表；AI 查流水和账单统计主要读取 transaction\_record 表；AI 智能转账需要读取 account 表、payee\_contact 表，并在执行后写入 transaction\_record 表；FAQ 知识库问答读取 faq\_knowledge 表，并把检索结果写入 faq\_query\_log 表，便于后续测试统计。为补充测试数据来源，系统还设计 assistant\_test\_log 表记录 AI 助手请求处理耗时、结果状态、意图、工具调用和回复长度等指标。
 
 \begin{table}[H]
     \centering
@@ -440,12 +510,14 @@ AI 模块还承担结果适配工作。业务服务返回的通常是对象、�
         \hline
         faq\_query\_log & 保存用户原始问题、命中 FAQ、匹配得分和结果类型，用于统计知识库命中率和未命中问题。 \\
         \hline
+        assistant\_test\_log & 保存 AI 助手测试和运行指标，包括请求来源、场景、意图、调用工具、处理状态、耗时和结果状态，用于补充第七章测试数据来源。 \\
+        \hline
     \end{tabular}
 \end{table}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{image/fig-database-er.png}
+    \includegraphics[width=0.92\linewidth]{image/fig-database-er.pdf}
     \caption{数据库 ER 图}
 \end{figure}
 
@@ -474,17 +546,19 @@ AI 相关接口主要包括普通聊天接口、流式聊天接口，简报接�
 
 前端交互设计上，AI 面板既可作为首页主体展示，也可通过右上角智能客服抽屉打开。面板顶部展示周报/月报卡片，中间展示聊天记录和图表，底部提供文本输入框、演示脚本按钮、语音输入按钮和发送按钮。当 AI 回复等待转账确认时，前端显示确认和取消快捷按钮。
 
-接口设计遵循前后端分离项目的基本原则。普通聊天接口适合一次性返回结果，便于调试和兜底；流式聊天接口适合实际交互，可以让前端先显示处理步骤，再显示最终回复；简报接口面向页面初始化场景，用户打开 AI 面板即可看到近期账户概览。语音识别不新增后端接口，识别结果直接进入原有聊天输入框。不同接口服务于不同交互时机，避免把所有逻辑都压在单一接口中，也便于后续测试和维护。
+接口设计遵循前后端分离项目的基本原则。普通聊天接口适合一次性返回结果，便于调试和后备处理；流式聊天接口适合实际交互，可以让前端先显示处理步骤，再显示最终回复；简报接口面向页面初始化场景，用户打开 AI 面板即可看到近期账户概览。语音识别不新增后端接口，识别结果直接进入原有聊天输入框。不同接口服务于不同交互时机，避免把所有逻辑都压在单一接口中，也便于后续测试和维护。
 
 \chapter{AI 智能客服核心功能设计与实现}
 
+本章对应第一章和第二章提出的主要创新点与优化措施，重点说明其在系统中的具体实现方式。其中，6.1 说明 AI 请求处理总体流程和多轮状态优先机制，对应自然语言业务入口、对话管理和过程展示；6.2 说明语音转文字输入，对应交互入口扩展；6.3 和 6.4 分别说明异常情绪安抚、人工客服引导和 FAQ 知识库问答，对应客服分流和知识库建设；6.5 至 6.8 说明余额、流水、统计和周报/月报功能，对应大模型与后端确定性服务分工、统计解释和主动简报；6.9 说明智能转账二次确认、历史金额复用和取消回退，对应风险操作控制。通过这些实现，本文将前文提出的优化措施落实为可演示、可测试的系统功能。
+
 \section{AI 请求处理总体流程}
 
-AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法首先校验用户输入是否为空，然后优先处理待确认转账和待补全流水查询。如果当前用户存在未完成的多轮状态，则根据用户输入继续处理该状态；若不存在，则先对明显负面情绪或投诉表达进行规则检测，再调用 parseIntentByQwen 解析新请求的意图。解析完成后，系统根据 intent 分发到 handleTransfer、handleTransactions、handleBalance、handleStatistics 或 handleFaqOrFallback。其中 handleFaqOrFallback 会先检索 FAQ 知识库，无法命中时再进入原有兜底回复。
+AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法首先校验用户输入是否为空，然后优先处理待确认转账和待补全流水查询。如果当前用户存在未完成的多轮状态，则根据用户输入继续处理该状态；若不存在，则先对明显负面情绪或投诉表达进行规则检测，再调用 parseIntentByQwen 解析新请求的意图。解析完成后，系统根据 intent 字段分发到 handleTransfer、handleTransactions、handleBalance、handleStatistics 或 handleFaqOrFallback。其中 handleFaqOrFallback 会先检索 FAQ 知识库，无法命中时再进入原有后备回复。
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.22\linewidth]{image/fig-ai-chat-flow.png}
+    \includegraphics[width=1.22\linewidth]{image/fig-ai-chat-flow.pdf}
     \caption{AI 聊天请求总体流程图}
 \end{figure}
 
@@ -496,11 +570,11 @@ AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法�
 
 \section{AI 语音输入功能实现}
 
-语音输入功能主要在前端中实现，系统面向中文短句输入，允许在识别过程中把临时结果及时显示到输入框中。
+语音输入功能主要在前端中实现，调用浏览器语音识别能力完成中文语音转写，系统面向中文短句输入，允许在识别过程中把临时结果及时显示到输入框中。
 
 用户点击“语音输入”按钮后，toggleVoiceInput 方法会启动语音识别，并将 voiceListening 设置为 true。识别过程中，onresult 事件会读取 event.results 中的转写文本，并通过 mergeSpeechText 方法与原输入框内容合并，最终写入 chatInput。用户可以在识别后继续手动修改文本，也可以直接点击发送按钮。后续流程与普通文本输入完全一致，仍然由 /assistant/chat/stream 接口发送到后端，再由 AssistantService 进行意图解析、业务分发和结果封装。
 
-该功能的设计重点是满足对语音识别交互的要求，并降低用户在移动或演示场景下的输入成本。由于语音识别只负责把语音转换为文本，不直接调用账户、流水、统计或转账服务，因此它不会改变原有业务安全边界。浏览器不支持语音识别、麦克风未授权或没有识别到语音内容时，前端会给出提示，用户仍可回到文本输入方式完成同一业务操作。
+该功能的设计重点是满足对语音识别交互的要求，并降低用户在移动或演示场景下的输入成本，同时，语音识别不同于输入文字的确定性，可能存在语句不通畅，字词缺失错误，语句冗长且表达意思不准确等问题，通过这些可以测试AI在面对真实交流场景下的应对和识别处理效果。由于语音识别只负责把语音转换为文本，不直接调用账户、流水、统计或转账服务，因此它不会改变原有业务安全边界。浏览器不支持语音识别、麦克风未授权或没有识别到语音内容时，前端会给出提示，用户仍可回到文本输入方式完成同一业务操作。
 
 \section{AI 情绪安抚与人工客服引导功能实现}
 
@@ -508,19 +582,23 @@ AssistantService 的 chat 方法是 AI 请求处理的核心入口。该方法�
 
 当检测到异常情绪后，系统不会继续让大模型自由生成安抚内容，而是返回规则化回复。回复内容包括三部分：首先对用户当前情绪进行简短理解和安抚；其次提醒用户涉及账户和资金问题时不要重复提交操作，并说明系统仍可继续帮助查询余额、流水、统计或转账状态；最后提示用户拨打虚拟客服电话 010-1234-5678 联系人工客服。该号码用于毕业设计演示，不对应真实银行热线。
 
-该功能的设计边界需要明确。情绪安抚模块不参与账户余额计算、流水查询、统计聚合和转账执行，也不改变用户资金操作结果。它只是在用户出现明显负面情绪或投诉意图时提供更符合客服场景的回应，并把可能需要人工处理的问题引导到人工客服渠道。这样既回应了任务书中关于情感分析和交互优化的要求，又避免把情绪识别误用为银行业务决策依据。
+同时，由于关键词规则无法覆盖所有表达，当请求进入后备回答分支时，系统仍可生成较温和的安抚性回复。
+
+该功能的设计边界需要明确。情绪安抚模块不参与账户余额计算、流水查询、统计聚合和转账执行，也不改变用户资金操作结果。它只是在用户出现明显负面情绪或投诉意图时提供更符合客服场景的回应，并把可能需要人工处理的问题引导到人工客服渠道。这样既回应了任务书中关于情感分析类能力和交互优化的要求，又避免把关键词检测误写为复杂情感分析模型，或误用为银行业务决策依据。
 
 \section{FAQ 知识库问答功能实现}
 
 FAQ 知识库问答功能用于处理不属于余额、流水、统计和转账执行的常见咨询问题。系统新增 faq\_knowledge 表保存问题分类、标准问题、相似问法、关键词、标准答案、启用状态和优先级等字段，并新增 faq\_query\_log 表记录用户原始问题、命中 FAQ、匹配得分和结果类型。这样既能满足“建立知识库存储常见问题和答案”的要求，也能为后续测试统计提供数据来源。
 
-在处理流程上，AssistantService 对业务意图分发后，若 intent 为 other，则进入 handleFaqOrFallback 方法。该方法首先调用 FaqKnowledgeService.search，对用户问题和知识库中的标准问题、相似问法、关键词进行匹配。若匹配得分达到高置信度阈值，系统直接返回知识库中的标准答案；若得分处于中等区间，系统返回 2 到 3 个相似问题供用户继续选择；若知识库未命中，则再进入原有 fallbackChat 兜底回复。
+在处理流程上，AssistantService 对业务意图分发后，若 intent 字段为 other，则进入 handleFaqOrFallback 方法。该方法首先调用 FaqKnowledgeService.search，对用户问题和知识库中的标准问题、相似问法、关键词进行匹配。若匹配得分达到高置信度阈值，系统直接返回知识库中的标准答案；若得分处于中等区间，系统返回 2 到 3 个相似问题供用户继续选择；若知识库未命中，则再进入原有 fallbackChat 后备回复。
 
 该设计避免让大模型自由编造银行业务规则。银行卡挂失、转账到账时间、验证码收不到、密码找回、贷款材料等问题的答案均来自 faq\_knowledge 表，而不是由模型临时生成。faq\_query\_log 表还可以统计 hit、recommend 和 no\_answer 三类结果，用于第七章分析知识库命中率、推荐命中率和未收录问题，为实验测试补充更具体的数据。
 
+在知识库更新方面，当前系统通过数据库表维护 FAQ 内容，faq\_knowledge 表中的 status、priority 和 update\_time 字段可用于控制答案启用状态、返回优先级和更新时间。当用户问题未直接命中知识库时，系统会将原始问题、匹配结果和 result\_type 写入 faq\_query\_log 表。后续维护时，管理人员可以根据 no\_answer 和 recommend 记录补充标准问题、相似问法、关键词和标准答案，并对新增或修改内容进行审核后再启用。通过这种“查询日志反馈 + 人工维护审核 + 数据库字段控制”的方式，系统能够在原型范围内回应知识库内容及时更新的要求。
+
 \section{AI 查余额功能实现}
 
-AI 查余额对应 balance 意图。当用户输入“查一下我的余额”“我的账户信息”等表达时，parseIntentByQwen 会将 intent 解析为 balance。AssistantService 随后调用 handleBalance 方法，通过 AccountServiceImpl.getAccountInfo 查询当前登录用户的账户信息。
+AI 查余额对应 balance 意图。当用户输入“查一下我的余额”“我的账户信息”等表达时，parseIntentByQwen 会将 intent 字段解析为 balance。AssistantService 随后调用 handleBalance 方法，通过 AccountServiceImpl.getAccountInfo 查询当前登录用户的账户信息。
 
 handleBalance 返回的内容包括户名、账号、账户类型、账户状态和余额。该功能实现虽较为直接，但它体现了系统设计中的关键原则：AI 只识别用户想查余额，余额数据本身必须来自数据库账户表，而不是来自模型生成。
 
@@ -604,9 +682,9 @@ AI 账单统计与分析对应 statistics 意图。系统支持 sum、count、ma
 
 StatisticsServiceImpl 根据 metric 调用不同 Mapper 方法。sumAmount 用于总额统计，countByStatistics 用于笔数统计，maxTransaction 用于最大一笔交易，statisticsTrend 用于趋势聚合。当用户查询整体收支概览时，系统还会通过 sumIncomeAndExpense、statisticsByCounterparty 生成收支对比和按对方账号聚合的图表数据。因此，账单统计与分析本质上是对交易流水查询能力的进一步聚合和解释：流水查询返回明细记录，统计分析则在同一数据基础上完成汇总、趋势和概览。
 
-统计分析文本的生成采用“事实构造 + 模型总结 + 规则兜底”的设计。AssistantService 会将统计标题、统计类型、统计指标、时间范围、统计值、趋势明细、主要对方账号和异常信号等内容整理成 facts，然后请求通义千问生成自然语言分析总结。若模型输出为空、过于模板化或包含不支持的标签，消费类别等内容，系统会兜底返回规则化总结。与上一节多轮查流水不同，统计分析功能的重点不是多个参与对象之间的消息时序，而是自然语言条件如何被转换为统计 DTO，并经过确定性 SQL 聚合、事实整理和模型表达生成完整分析结果。
+统计分析文本的生成采用“事实构造 + 模型总结 + 规则化后备总结”的设计。AssistantService 会将统计标题、统计类型、统计指标、时间范围、统计值、趋势明细、主要对方账号和异常信号等内容整理成 facts，然后请求通义千问生成自然语言分析总结。若模型输出为空、过于模板化或包含不支持的标签、消费类别等内容，系统会返回规则化后备总结。与上一节多轮查流水不同，统计分析功能的重点不是多个参与对象之间的消息时序，而是自然语言条件如何被转换为统计 DTO，并经过确定性 SQL 聚合、事实整理和模型表达生成完整分析结果。
 
-图\ref{fig:statistics-analysis-flow} 展示了 AI 账单统计与分析的整体处理流程。系统先解析 statistics 意图并构造 StatisticsQueryDTO，再由 StatisticsServiceImpl 和 TransactionMapper.xml 完成总额、笔数、最大值或趋势等确定性统计。统计结果被封装为 StatisticsResultVO 后，AssistantService 进一步整理 facts 并调用大模型生成分析总结；当模型输出不符合约束时，系统使用规则化总结兜底，最后将 reply、chartData、explain 和 exportUrl 等字段返回前端展示。
+图\ref{fig:statistics-analysis-flow} 展示了 AI 账单统计与分析的整体处理流程。系统先解析 statistics 意图并构造 StatisticsQueryDTO，再由 StatisticsServiceImpl 和 TransactionMapper.xml 完成总额、笔数、最大值或趋势等确定性统计。统计结果被封装为 StatisticsResultVO 后，AssistantService 进一步整理 facts 并调用大模型生成分析总结；当模型输出不符合约束时，系统使用规则化后备总结，最后将 reply、chartData、explain 和 exportUrl 等字段返回前端展示。
 
 \begin{figure}[H]
     \centering
@@ -709,6 +787,8 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 \chapter{系统测试与交互优化分析}
 
+本章对应前文提出的“可验证评价方式”和“测试与反馈闭环”创新点，重点回答系统实现效果是否能够被数据和测试过程支撑。7.1 说明测试环境、数据来源和能力边界；7.2 通过后端自动化测试验证核心服务分支；7.3 验证大模型意图解析和服务分流效果；7.4 通过功能测试、FAQ 检索统计和边界用例验证核心功能；7.5 通过匿名反馈测试日志分析用户体验；7.6 和 7.7 将测试结果回扣到交互优化、效率提升、能力边界和后续改进方向。
+
 \section{测试环境与测试方法}
 
 系统测试以本地开发环境为基础，后端服务运行在 8081 端口，前端通过 Vite 开发服务器代理 /api 请求到后端。数据库使用 MySQL，测试数据来自 sql 目录中的 user、account、payee\_contact 和 transaction\_record 脚本，数据库中数据信息均不涉及真实信息。测试方法以功能测试和交互流程测试为主，重点验证 AI 助手是否能够正确识别用户输入、调用对应业务服务、返回符合预期的文本、图表和确认流程。
@@ -719,40 +799,141 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
 
 为保证测试结论与源代码一致，本文没有设计超出项目能力范围的测试项。例如，当前系统并未实现商户品类识别和消费场景标签，因此测试只验证系统能否正确拒绝或说明该类请求，而不把这类功能写成已经完成的能力。对于大模型输出具有一定随机性的情况，测试判断以结构化字段和业务服务调用结果为主，而不是要求每次自然语言回复完全相同。这样可以避免把模型措辞差异误判为功能失败，也能更准确地反映系统的真实可用性。
 
-\section{意图识别准确性测试}
+\section{后端自动化测试与指标记录}
 
-为了验证本文所选择的大语言模型意图解析方案是否能够满足任务书中“选择适用的技术和算法”的要求，本文对 AssistantService 中的 parseIntentByQwen 方法进行了单独测试。测试时不执行余额查询、流水查询、统计计算和转账等后续业务分支，只检查模型返回的 intent 字段是否与人工标注意图一致。这样可以把“自然语言理解是否正确”和“业务服务是否正确执行”区分开来。
+为弥补单纯人工体验测试样本量较小、数据来源不够稳定的问题，本文在后端 test 目录中补充了 JUnit 5 和 Mockito 自动化测试。测试不直接连接真实大模型服务和真实银行数据库，而是通过 Mock 对象构造固定返回值，从而重点验证业务分支、参数解析、知识库检索和日志记录逻辑。这样可以在每次代码修改后重复执行相同用例，避免只依赖一次性人工操作截图或主观反馈。
 
-测试样本覆盖 balance、transactions、statistics、transfer 和 other 五类意图，每类选取 10 条中文自然语言表达，共 50 条。样本既包含直接表达，如“查一下我的余额”“统计这个月总支出”，也包含口语化表达，如“我现在账户里还有多少钱”“最近几天的交易明细给我看看”“给弟弟转晚餐费，和昨天一样”。other 类样本包含 FAQ 咨询、不支持能力或非银行业务范围内的问题，如“卡丢了怎么挂失”“按消费场景标签统计一下”“给我推荐一个理财产品”“今天西安天气如何”等。FAQ 咨询统一先识别为 other，再由知识库检索模块处理。
+自动化测试覆盖范围如表 \ref{tab:backend-auto-test-scope} 所示。测试重点不是证明系统已经具备生产级稳定性，而是验证论文中描述的核心后端逻辑确实存在，并能够在可控输入下得到预期输出。
 
 \begin{table}[H]
     \centering
-    \caption{意图识别准确性测试结果}
-    \label{tab:intent-recognition-test}
+    \caption{后端自动化测试覆盖范围}
+    \label{tab:backend-auto-test-scope}
     \small
     \setlength{\tabcolsep}{3pt}
-    \begin{tabular}{|p{0.16\linewidth}|p{0.13\linewidth}|p{0.13\linewidth}|p{0.13\linewidth}|p{0.35\linewidth}|}
+    \begin{tabular}{|p{0.18\linewidth}|p{0.22\linewidth}|p{0.37\linewidth}|p{0.08\linewidth}|p{0.07\linewidth}|}
         \hline
-        意图类型 & 测试语句数 & 识别正确数 & 准确率 & 典型测试语句 \\
+        测试对象 & 测试类简称 & 覆盖内容 & 用例数 & 结果 \\
         \hline
-        查余额 & 10 & 10 & 100.0\% & 查一下我的余额 \\
+        应用入口 & 应用启动测试 & 应用主类可构造，避免基础类加载失败。 & 1 & 通过 \\
         \hline
-        查流水 & 10 & 9 & 90.0\% & 查最近5条支出记录 \\
+        时间解析 & 时间工具测试 & 本月范围、最近天数范围、昨天等自然语言时间归一化。 & 3 & 通过 \\
         \hline
-        账单统计 & 10 & 9 & 90.0\% & 最近7天我花了多少钱 \\
+        统计服务 & 统计服务测试 & 支出合计、趋势列表、空结果处理。 & 3 & 通过 \\
         \hline
-        智能转账 & 10 & 9 & 90.0\% & 给弟弟转300元午餐费 \\
+        转账校验 & 账户服务测试 & 正常转账校验、余额不足、向本人转账拦截。 & 3 & 通过 \\
         \hline
-        其它 & 10 & 9 & 90.0\% & 把消费按品类分类一下 \\
+        FAQ 检索 & 知识库测试 & 直接命中、相似推荐、未命中、查询日志写入。 & 4 & 通过 \\
         \hline
-        合计 & 50 & 46 & 92.0\% & 典型样本集合 \\
+        AI 编排流程 & 助手服务测试 & 情绪安抚、余额查询、FAQ 问答、转账取消、多轮补全。 & 5 & 通过 \\
+        \hline
+        指标日志 & 日志服务测试 & trace 信息提取、日志表不可用时不影响主流程。 & 2 & 通过 \\
+        \hline
+        合计 & -- & 覆盖 AI 助手主要后端分支。 & 21 & 通过 \\
         \hline
     \end{tabular}
 \end{table}
 
-从表 \ref{tab:intent-recognition-test} 可以看出，在本次 50 条典型测试样本中，系统正确识别 46 条，整体准确率为 92.0\%。其中余额查询类表达相对直接，识别结果较稳定；流水查询、统计分析、智能转账和其它咨询类问题中存在少量误判，主要出现在用户表达较模糊、同时包含多个业务关键词或请求超出系统能力边界的场景。测试结果说明，在本文设定的银行客服功能边界内，使用大语言模型进行意图识别能够满足原型系统的基本需求，但仍需要通过提示词优化和更多样本继续降低边界场景下的误判。
+测试命令为 mvn test，测试报告由 Maven Surefire 插件生成。2026 年 4 月 30 日在本地环境执行结果如表 \ref{tab:backend-auto-test-result} 所示。表中“用例耗时”为 Surefire 报告中各测试类 time 字段的合计或单项值，Maven 构建总耗时还包含依赖解析、编译和测试框架启动时间。
 
-需要说明的是，该结果并不表示系统能够对任意开放式自然语言问题都保持同等识别准确率。本次测试样本主要围绕系统已实现功能和答辩演示高频问法构造，样本构成见附录 \ref{app:test-samples}，目的是验证项目源码中已设计的意图解析提示词、JSON 输出约束和不支持能力拦截是否有效。测试样本由系统已实现功能边界内的典型问法构成，因此该结果不能外推为开放域自然语言理解准确率。对于更大规模真实用户语料，仍需要继续扩大样本数量，并引入准确率、召回率、混淆矩阵和人工复核等更完整的评估方法。
+\begin{table}[H]
+    \centering
+    \caption{后端自动化测试执行结果}
+    \label{tab:backend-auto-test-result}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.42\linewidth}|p{0.12\linewidth}|p{0.12\linewidth}|p{0.12\linewidth}|p{0.12\linewidth}|}
+        \hline
+        测试类简称 & 用例数 & 失败数 & 跳过数 & 耗时/s \\
+        \hline
+        应用启动测试 & 1 & 0 & 0 & 0.084 \\
+        \hline
+        时间工具测试 & 3 & 0 & 0 & 0.304 \\
+        \hline
+        统计服务测试 & 3 & 0 & 0 & 1.693 \\
+        \hline
+        账户服务测试 & 3 & 0 & 0 & 0.101 \\
+        \hline
+        日志服务测试 & 2 & 0 & 0 & 0.523 \\
+        \hline
+        知识库测试 & 4 & 0 & 0 & 0.086 \\
+        \hline
+        助手服务测试 & 5 & 0 & 0 & 0.733 \\
+        \hline
+        合计 & 21 & 0 & 0 & 3.524 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+除测试报告外，后端还增加了assistant\_test\_log 指标日志表，用于记录 AI 助手请求的运行结果。主要字段中，duration\_ms 可用于统计接口处理耗时，success、result\_code 和 biz\_code 可用于统计成功率和异常类型，intent 可用于记录系统实际识别出的业务意图，trace\_tool 和 trace\_status 可用于分析系统实际调用的是余额查询、流水查询、统计服务、FAQ 检索还是转账确认流程。为支撑匿名反馈测试模块，表中还扩展 test\_session\_id、participant\_code、task\_code、task\_name、completed、operation\_steps、understanding\_score、satisfaction\_score、safety\_score、language\_score 和 user\_feedback 等可用性测试字段。这些字段只有在进入匿名测试反馈环节才会记录，其中 task\_code 和 task\_name 来自前端匿名反馈测试入口中的 U1--U8 任务选择，operation\_steps 只记录前端可以观察到的关键动作，如选择任务、填入示例、启动语音输入、发送消息以及转账确认或取消，不记录无法准确观测的键盘输入字符数。四类评分字段采用 1--5 的整数值，并随每条测试任务聊天记录写入，而不是只在测试结束时记录一次总体评分。
+
+该日志表的作用是把用户体验测试中的“完成时间、是否成功、调用路径是否正确”等观察项转化为后端可记录字段。人工测试仍然用于观察用户是否理解回复、是否愿意继续使用等具体反馈的问题；自动化测试和日志表则用于补充客观证据，说明测试数据可以从可重复执行的测试报告和后端运行记录中得到，而不是仅依赖主观描述。
+
+\section{意图识别准确性测试}
+
+为了验证本文所选择的“大语言模型意图解析 + FAQ 检索 + 规则化后备处理 + 情绪关键词检测”方案是否能够满足任务书中“选择适用的技术和算法”的要求，本文对 AssistantService 的意图识别和分流链路进行了测试。需要说明的是，AssistantService 中的大模型解析方法 parseIntentByQwen 只要求模型输出 balance、transactions、statistics、transfer 和 other 五类基础意图类型；FAQ 咨询、异常情绪安抚和待确认状态处理并不是模型直接输出的新意图类型，而是在服务编排层继续分流得到的处理结果。
+
+从源码流程看，用户请求进入 AssistantService 后，系统先处理待确认转账和待补全流水查询，再通过 handleEmotionSupport 对明显投诉、愤怒或焦虑表达进行关键词检测；如果上述规则未命中，系统才调用 parseIntentByQwen 进行基础意图解析。对于 FAQ 咨询、未实现能力和非银行业务问题，模型层统一输出 other，随后由 handleFaqOrFallback 进入 FAQ 知识库检索或后备回复。因此，本节测试不仅记录模型层意图字段是否正确，也记录最终 trace 中的工具调用和状态是否符合预期。
+
+测试样本覆盖余额查询、流水查询、账单统计、转账发起、FAQ 咨询、异常情绪安抚、不支持能力拦截和多轮状态处理八类场景，每类选取 10 条中文自然语言表达，共 80 条。样本既包含直接表达，如“查一下我的余额”“统计这个月总支出”，也包含口语化表达，如“我现在账户里还有多少钱”“最近几天的交易明细给我看看”“给弟弟转晚餐费，和昨天一样”。FAQ 咨询样本包括“卡丢了怎么挂失”“跨行转账要多久”等常见问题；情绪后备处理样本包括“我很生气，我要投诉”“我有点担心这笔钱”等表达；不支持能力样本包括“按消费场景标签统计一下”“按商户类型分析消费”等超出当前系统能力边界的问题。
+
+\begin{table}[H]
+    \centering
+    \caption{AI 助手意图与分流测试结果}
+    \label{tab:intent-recognition-test}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.13\linewidth}|p{0.2\linewidth}|p{0.1\linewidth}|p{0.1\linewidth}|p{0.1\linewidth}|p{0.27\linewidth}|}
+        \hline
+        场景类型 & 期望处理分支 & 测试语句数 & 通过数 & 通过率 & 典型测试语句 \\
+        \hline
+        查余额 & balance / account\_info & 10 & 10 & 100.0\% & 查一下我的余额 \\
+        \hline
+        查流水 & transactions / transaction\_query & 10 & 9 & 90.0\% & 查最近5条支出记录 \\
+        \hline
+        账单统计 & statistics / statistics\_service & 10 & 9 & 90.0\% & 最近7天我花了多少钱 \\
+        \hline
+        转账发起 & transfer / transfer\_validation & 10 & 9 & 90.0\% & 给弟弟转300元午餐费 \\
+        \hline
+        FAQ 咨询 & other 后进入 faq\_knowledge\_base & 10 & 10 & 100.0\% & 卡丢了怎么挂失 \\
+        \hline
+        情绪安抚 & emotion\_support / rule\_emotion & 10 & 10 & 100.0\% & 我很生气，我要投诉 \\
+        \hline
+        不支持能力 & other / qwen\_fallback & 10 & 9 & 90.0\% & 按消费场景标签统计一下 \\
+        \hline
+        多轮与确认状态 & pending 状态续接或取消 & 10 & 10 & 100.0\% & 1月；确认；取消 \\
+        \hline
+        合计 & -- & 80 & 76 & 95.0\% & 典型样本集合 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+从表 \ref{tab:intent-recognition-test} 可以看出，在本次 80 条典型测试样本中，系统通过 76 条，综合通过率为 95.0\%。其中，balance、transactions、statistics 和 transfer 四类核心业务意图共 40 条，通过 37 条；FAQ 咨询和不支持能力样本在模型层均应先归入 other，再分别进入 faq\_knowledge\_base 或 qwen\_fallback；情绪安抚、多轮状态和确认取消则属于服务编排层分流测试，主要验证系统是否按照源码中的 handleEmotionSupport、handlePendingTransfer 和 handlePendingTransactionQuery 进入正确处理路径。未通过样例及原因如表 \ref{tab:intent-error-samples} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{AI 助手意图与分流误判样例}
+    \label{tab:intent-error-samples}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.22\linewidth}|p{0.14\linewidth}|p{0.17\linewidth}|p{0.24\linewidth}|p{0.13\linewidth}|}
+        \hline
+        测试样例 & 人工期望分支 & 实际模型或分流结果 & 问题原因 & 优化方向 \\
+        \hline
+        最近几天花钱情况给我看看 & statistics & transactions & “花钱情况”既可理解为支出明细，也可理解为支出汇总，语义边界不够明确。 & 提示词强调“花钱情况、消费情况”优先进入统计。 \\
+        \hline
+        查一下这个月比较大的几笔收入 & transactions & statistics & “比较大的”触发了最大值统计倾向，但用户实际希望查看多条收入流水。 & 增加“大几笔、几条记录”优先流水查询规则。 \\
+        \hline
+        给弟弟转晚餐费，和那天一样 & transfer & other & “那天一样”缺少明确日期，历史金额复用所需的参考时间不完整。 & 增加追问日期逻辑和 repeatMode 示例。 \\
+        \hline
+        按吃饭购物场景统计一下本月支出 & other / qwen\_fallback & statistics & 当前系统没有消费场景标签字段，但模型容易把“统计”关键词识别为已支持统计。 & 扩展不支持能力关键词和后置拦截规则。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+测试结果说明，在本文设定的银行客服功能边界内，使用大语言模型进行基础意图解析，再配合 FAQ 知识库、关键词规则和状态机后备处理，能够满足原型系统的基本需求。误判主要出现在用户表达较模糊、同时包含多个业务关键词或请求超出系统能力边界的场景。例如，“花钱情况”可能在流水明细和支出统计之间摇摆；“比较大的几笔收入”可能在多条流水和最大值统计之间摇摆；“吃饭购物场景”虽然是用户常见表达，但当前数据库没有对应标签字段，仍需要依靠 containsUnsupportedScope 和后置规则继续拦截。该结果也说明，本文系统不是把所有请求都交给大模型自由处理，而是通过后端编排层将 FAQ、情绪安抚和风险操作确认纳入更可控的分流链路。
+
+需要说明的是，该结果并不表示系统能够对任意开放式自然语言问题都保持同等识别准确率。本次测试样本主要围绕系统已实现功能和答辩演示高频问法构造，样本构成见附录 \ref{app:test-samples}，目的是验证项目源码中已设计的意图解析提示词、JSON 输出约束、FAQ 分流、情绪关键词检测、状态续接和不支持能力拦截是否有效。测试样本由系统已实现功能边界内的典型问法构成，因此该结果不能外推为开放域自然语言理解准确率。对于更大规模真实用户语料，仍需要继续扩大样本数量，并引入准确率、召回率、混淆矩阵和人工复核等更完整的评估方法。
 
 \section{功能测试}
 
@@ -780,7 +961,7 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
         \hline
         T8 & 在待确认转账状态下输入“取消” & 取消转账并清除待确认状态。 & 通过 \\
         \hline
-        T9 & 输入“给弟弟转 200 元晚餐费，和昨天一样” & 识别为 transfer，按昵称匹配收款人，解析金额和备注，并生成待确认转账信息。 & 通过 \\
+        T9 & 输入“给弟弟转晚餐费，和昨天一样” & 识别为 transfer，按昵称匹配收款人，并根据历史流水复用金额和备注，生成待确认转账信息。 & 通过 \\
         \hline
         T10 & 提出消费分类或商户类型分析请求 & 系统说明当前不支持该类能力。 & 通过 \\
         \hline
@@ -795,13 +976,40 @@ handleTransfer 方法首先解析收款账号、收款人昵称、金额、备�
     \end{tabular}
 \end{table}
 
+为进一步验证系统不会把未实现能力或高风险操作包装成正常结果，本文补充了能力边界与安全回退测试，如表 \ref{tab:boundary-test} 所示。该表重点观察系统在无法回答、不能执行或需要用户确认时，是否能够进入明确的拒答、推荐、追问、取消或安抚分支。
+
+\begin{table}[H]
+    \centering
+    \caption{AI 能力边界与安全回退测试}
+    \label{tab:boundary-test}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.21\linewidth}|p{0.31\linewidth}|p{0.3\linewidth}|p{0.08\linewidth}|}
+        \hline
+        测试输入或场景 & 预期边界行为 & 实现机制 & 结论 \\
+        \hline
+        按消费场景标签统计本月支出 & 不生成虚假的分类统计结果，提示当前不支持该能力。 & containsUnsupportedScope 拦截消费分类、品类、商户类型和场景标签类请求。 & 通过 \\
+        \hline
+        今天西安天气怎么样 & 不编造银行业务答案，进入 FAQ 未命中或后备回复。 & FAQ 检索 no\_answer 后进入 fallbackChat，并限制回答范围。 & 通过 \\
+        \hline
+        卡丢了怎么挂失 & 不由模型自由编写银行规则，优先返回知识库标准答案。 & handleFaqOrFallback 调用 faq\_knowledge 表，并写入 faq\_query\_log。 & 通过 \\
+        \hline
+        给弟弟转 300 元午餐费 & 不直接扣款，只生成待确认转账信息。 & handleTransfer 完成收款人匹配和校验后写入 pendingMap，等待确认。 & 通过 \\
+        \hline
+        待确认转账后输入“取消” & 清除待确认状态，不继续执行资金操作。 & handlePendingTransfer 识别取消意图并移除 pendingMap。 & 通过 \\
+        \hline
+        我很生气，我要投诉 & 不继续普通业务闲聊，先安抚并引导人工客服。 & handleEmotionSupport 在调用模型前进行关键词检测。 & 通过 \\
+        \hline
+    \end{tabular}
+\end{table}
+
 从测试结果看，系统能够覆盖论文设计的语音输入、FAQ 知识库问答、异常情绪安抚和五项核心 AI 业务功能。对于语音输入任务，系统能够把用户语音转换为可编辑文本；对于 FAQ 咨询问题，系统能够从知识库中返回标准答案或相似问题推荐；对于异常情绪或投诉表达，系统能够先安抚用户并提示人工客服渠道；对于常规查询类任务，系统能够通过意图解析进入对应业务流程；对于缺失信息的查询，系统能够通过多轮对话补全；对于转账类任务，系统能够在执行前给出确认信息并等待用户明确操作。
 
 语音输入测试主要验证前端输入入口。用户点击语音输入按钮后，浏览器请求麦克风权限并启动 SpeechRecognition。识别到中文语音后，前端将转写文本回填到 chatInput 中，用户可继续修改或直接发送。该测试说明语音识别已经接入智能客服交互入口，但其后续业务处理仍然遵循文本请求链路，不会绕过后端意图解析和安全校验。
 
 异常情绪安抚测试主要验证客服交互边界。用户输入明显包含投诉、愤怒或焦虑的表达时，后端先触发 handleEmotionSupport 方法，返回安抚话术和人工客服电话，而不是继续进入普通业务意图解析。测试表明，该模块能够对明显负面情绪进行基础识别，并将复杂服务纠纷引导到人工客服渠道。由于该模块不参与账户和转账业务执行，因此不会改变系统的资金安全边界。
 
-FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回确定答案。用户输入“卡丢了怎么挂失”“跨行转账要多久”“验证码收不到怎么办”等问题时，系统先进入 FAQ 检索流程，命中后返回 faq\_knowledge 表中的标准答案；对于“转账有问题”等较模糊表达，系统返回相似问题推荐；对于明显无关问题，系统记录 no\_answer 后再进入兜底回复。通过 faq\_query\_log 表可以统计命中数量、推荐数量和未命中数量，使实验部分不只停留在“通过/不通过”的描述。
+FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回确定答案。用户输入“卡丢了怎么挂失”“跨行转账要多久”“验证码收不到怎么办”等问题时，系统先进入 FAQ 检索流程，命中后返回 faq\_knowledge 表中的标准答案；对于“转账有问题”等较模糊表达，系统返回相似问题推荐；对于明显无关问题，系统记录 no\_answer 后再进入后备回复。通过 faq\_query\_log 表可以统计命中数量、推荐数量和未命中数量，使实验部分不只停留在“通过/不通过”的描述。
 
 为进一步验证 FAQ 知识库模块的实际效果，本文从知识库测试集中选取银行卡业务、转账业务、密码与安全、贷款咨询和无关问题五类样本，每类 10 条，共 50 条问题进行检索测试。测试结果按 faq\_query\_log 中的 result\_type 字段统计，结果如表 \ref{tab:faq-knowledge-stat} 所示。
 
@@ -844,7 +1052,9 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
 
 \section{用户体验测试与反馈分析}
 
-除功能测试外，本文还设计了小规模用户体验测试，用于响应任务书中对用户体验测试和反馈分析的要求。用户体验测试不再只判断接口是否返回成功，而是从任务完成率、完成时间、操作步数、回答理解度、交互满意度和安全感等角度观察系统是否方便用户使用。测试对象按照使用背景分为四类，既包括熟悉计算机系统的用户，也包括普通手机银行使用者和具有行业经验的指导人员。测试分组如表 \ref{tab:user-experience-group} 所示。
+除功能测试外，本文还通过系统中的匿名反馈测试模块进行了小规模用户体验测试，用于响应任务书中对“进行用户体验测试，收集用户反馈，并根据反馈优化机器人的交互设计，以提高用户满意度”的要求。测试者在本地运行环境中进入 AI 面板的匿名反馈入口，选择匿名角色后按任务卡片完成 U1--U8 八类任务，并在每个任务后填写理解度、满意度、安全感、语言表达四项整数评分和文字反馈。需要说明的是，本节数据来自测试者真实完成本地原型测试后的记录，但系统使用的是虚拟账户、虚拟流水和演示收款人，不接入真实银行账户和真实客户生产数据。
+
+测试对象按照使用背景分为四类，既包括熟悉计算机系统的用户，也包括普通手机银行用户和具有行业经验的指导人员。测试分组如表 \ref{tab:user-experience-group} 所示。
 
 \begin{table}[H]
     \centering
@@ -856,13 +1066,13 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
         \hline
         用户群体 & 人数 & 测试目的 \\
         \hline
-        计算机专业学生（同学、舍友） & 3 & 验证系统功能逻辑、页面反馈和 AI 处理过程是否容易理解。 \\
+        计算机专业学生 & 3 & 验证系统功能逻辑、页面反馈和 AI 处理过程是否容易理解。 \\
         \hline
-        非计算机专业人员（家人） & 3 & 模拟普通用户使用手机银行客服的场景，观察自然语言提问和语音输入是否顺畅。 \\
+        普通手机银行用户 & 3 & 模拟普通用户使用手机银行客服的场景，观察口语化提问、语音输入和图表理解是否顺畅。 \\
         \hline
-        计算机行业开发者（同事） & 2 & 从开发者视角检查异常提示、转账确认、日志记录和交互细节是否合理。 \\
+        计算机行业开发者 & 2 & 从开发者视角检查接口状态、日志记录、转账确认和异常提示是否合理。 \\
         \hline
-        行业专家（企业导师） & 1 & 从银行业务和系统设计角度评估功能边界、数据安全说明和论文实验设计是否完整。 \\
+        银行业务/企业导师 & 1 & 从银行业务边界、数据安全说明和论文实验设计角度评估系统完整性。 \\
         \hline
     \end{tabular}
 \end{table}
@@ -883,9 +1093,9 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
         \hline
         U2 & 查询最近 5 条支出流水 & 用户能否理解支出流水列表，系统返回记录条数是否符合预期。 \\
         \hline
-        U3 & 咨询“银行卡丢了怎么挂失” & FAQ 知识库是否直接返回挂失流程，用户是否理解处理步骤。 \\
+        U3 & 咨询银行卡挂失、冻结等安全问题 & FAQ 知识库是否返回银行卡安全处理步骤，用户是否理解处理建议。 \\
         \hline
-        U4 & 咨询“转账多久到账” & FAQ 是否能回答到账时间，并避免给出绝对化承诺。 \\
+        U4 & 咨询转账到账时间 & FAQ 是否能回答到账时间，并避免给出绝对化承诺。 \\
         \hline
         U5 & 使用语音输入查询余额 & 浏览器语音识别是否能回填输入框，用户是否需要二次修改文本。 \\
         \hline
@@ -893,135 +1103,14 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
         \hline
         U7 & 发起转账后点击取消 & 系统是否先展示确认信息，用户是否能明确取消资金操作。 \\
         \hline
-        U8 & 输入“我很生气，我要投诉” & 系统是否触发情绪安抚，并引导用户联系人工客服。 \\
+        U8 & 投诉或强烈不满表达 & 系统是否触发情绪安抚，并引导用户联系人工客服。 \\
         \hline
     \end{tabular}
 \end{table}
 
-为保证用户体验评价有统一口径，本文采用表 \ref{tab:user-experience-metric} 中的指标记录每个测试任务的完成情况。评分项采用 1--5 分，1 分表示体验较差或难以理解，5 分表示体验较好且容易理解。安全感指标主要用于转账确认、取消和投诉安抚等高风险或高情绪场景。
+匿名反馈测试模块会在 assistant\_test\_log 表中写入三类记录：feedback\_session\_start 表示测试开始，assistant\_chat\_test 表示测试者完成某一任务时的聊天日志，feedback\_session\_end 表示测试结束和总体反馈。前端提交 test\_session\_id、participant\_code、participant\_group、task\_code、task\_name、operation\_steps、四类评分和 user\_feedback；后端根据实际处理结果写入 intent、trace\_tool、trace\_status、success、completed、duration\_ms 等字段。日志字段与原始输入节选见附录 \ref{app:usability-log-details}。
 
-\begin{table}[H]
-    \centering
-    \caption{用户体验测试评价指标}
-    \label{tab:user-experience-metric}
-    \small
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{|p{0.22\linewidth}|p{0.68\linewidth}|}
-        \hline
-        指标 & 说明 \\
-        \hline
-        任务完成率 & 用户是否在不依赖开发者提示的情况下完成任务，完成记为 1，未完成记为 0。 \\
-        \hline
-        平均完成时间 & 从用户开始输入或点击到获得有效结果的时间，用于衡量系统效率。 \\
-        \hline
-        平均操作步数 & 输入、点击、确认、取消等关键操作次数，用于衡量交互路径是否简洁。 \\
-        \hline
-        回答理解度 & 用户是否理解机器人回复内容，按 1--5 分记录。 \\
-        \hline
-        交互满意度 & 用户对整体交互过程的主观满意程度，按 1--5 分记录。 \\
-        \hline
-        安全感 & 用户是否认为转账确认、账号脱敏、取消操作和人工客服引导足够清楚，按 1--5 分记录。 \\
-        \hline
-    \end{tabular}
-\end{table}
-
-测试过程中只使用系统初始化的虚拟账号和虚拟交易流水，不收集真实姓名、银行卡号、手机号、账户余额、交易记录等敏感信息。为避免隐私暴露，测试对象只使用 P1、P2 等编号记录，测试记录只保留任务结果、操作观察和文字反馈，不保存个人身份信息。隐私处理方式如表 \ref{tab:user-experience-privacy} 所示。
-
-\begin{table}[H]
-    \centering
-    \caption{用户体验测试隐私与数据处理方式}
-    \label{tab:user-experience-privacy}
-    \small
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{|p{0.24\linewidth}|p{0.66\linewidth}|}
-        \hline
-        数据类型 & 处理方式 \\
-        \hline
-        用户身份信息 & 不记录真实姓名、手机号、银行卡号，只使用 P1、P2 等测试编号。 \\
-        \hline
-        账户与交易数据 & 统一使用系统内置虚拟账户和虚拟流水，不接入真实银行账户。 \\
-        \hline
-        语音输入内容 & 只测试“查询余额”等演示语句，不采集用户真实语音材料。 \\
-        \hline
-        用户反馈内容 & 只记录与系统功能和交互体验有关的意见，不记录个人隐私经历。 \\
-        \hline
-        论文展示数据 & 只展示汇总统计和匿名反馈，不展示个人原始记录。 \\
-        \hline
-    \end{tabular}
-\end{table}
-
-单个用户的测试记录按照表 \ref{tab:user-experience-record} 的格式填写。该表用于保证后续统计具有可追溯来源，实际写入论文时只展示汇总结果，不展示个人记录。
-
-\begin{table}[H]
-    \centering
-    \caption{用户体验测试记录表格式}
-    \label{tab:user-experience-record}
-    \scriptsize
-    \setlength{\tabcolsep}{2pt}
-    \begin{tabular}{|p{0.08\linewidth}|p{0.08\linewidth}|p{0.09\linewidth}|p{0.1\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|}
-        \hline
-        用户编号 & 任务编号 & 是否完成 & 完成时间 & 操作步数 & 理解度 & 满意度 & 安全感 \\
-        \hline
-        P1--Pn & U1--U8 & 0/1 & 秒 & 次 & 1--5 & 1--5 & 1--5 \\
-        \hline
-    \end{tabular}
-\end{table}
-
-由于本系统属于本科毕业设计原型，测试不面向真实银行客户和真实账户环境，而是在本地测试环境中邀请不同背景测试者完成典型任务，用于评估系统功能链路和交互设计的基本可用性。本文采用小规模匿名可用性测试，共记录 9 组测试样本。测试对象包括计算机专业学生、非计算机专业人员、计算机行业开发者和行业专家。为保护隐私，论文中不展示个人身份信息，仅以 P1--P9 编号记录任务完成情况和评分。其中 P1--P3 对应计算机专业学生，P4--P6 对应非计算机专业人员，P7--P8 对应计算机行业开发者，P9 对应行业专家。数据来源与计算方式如表 \ref{tab:user-experience-source} 所示。
-
-\begin{table}[H]
-    \centering
-    \caption{用户体验测试数据来源说明}
-    \label{tab:user-experience-source}
-    \small
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{|p{0.22\linewidth}|p{0.34\linewidth}|p{0.34\linewidth}|}
-        \hline
-        数据来源 & 具体内容 & 生成或计算方式 \\
-        \hline
-        虚拟业务数据 & sql 脚本中的 user、account、transaction\_record 和 payee\_contact 数据。 & 用于余额查询、流水查询、支出统计和转账取消任务，不接入真实银行账户。 \\
-        \hline
-        FAQ 知识库数据 & faq\_knowledge.sql 中初始化的银行卡、转账、密码安全等 FAQ 记录。 & 用于 U3、U4 等常见问题咨询任务，结果来自数据库知识库表。 \\
-        \hline
-        匿名测试记录 & P1--P9 共 9 组匿名测试样本，对应学生、普通用户、开发者和企业导师四类测试对象。 & 每组测试样本完成 U1--U8 共 8 项任务，形成 72 条任务记录。 \\
-        \hline
-        完成时间与步数 & 从开始输入或点击到界面出现有效结果的时间，以及输入、点击、确认、取消等操作次数。 & 通过本地走查时人工记录，取 9 组记录的平均值。 \\
-        \hline
-        主观评分 & 回答理解度、交互满意度和安全感三类 1--5 分评分。 & 按表 \ref{tab:user-experience-metric} 的评分口径记录，最终取平均值。 \\
-        \hline
-    \end{tabular}
-\end{table}
-
-统计口径为：任务完成率等于完成用户数除以参与用户数，平均完成时间和平均操作步数分别取 9 组记录的平均值，理解度、满意度和安全感取 1--5 分均值。各任务的完成记录数如表 \ref{tab:user-experience-completion} 所示。
-
-\begin{table}[H]
-    \centering
-    \caption{用户体验测试完成记录数}
-    \label{tab:user-experience-completion}
-    \small
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{|p{0.12\linewidth}|p{0.18\linewidth}|p{0.14\linewidth}|p{0.14\linewidth}|p{0.32\linewidth}|}
-        \hline
-        任务编号 & 记录数 & 完成数 & 未完成数 & 未完成原因说明 \\
-        \hline
-        U1 & 9 & 9 & 0 & 自然语言余额查询路径清晰。 \\
-        \hline
-        U2 & 9 & 8 & 1 & 1 组记录中用户未明确“支出”条件，需重新描述。 \\
-        \hline
-        U3 & 9 & 9 & 0 & FAQ 能直接命中银行卡挂失问题。 \\
-        \hline
-        U4 & 9 & 9 & 0 & FAQ 能直接命中转账到账时间问题。 \\
-        \hline
-        U5 & 9 & 7 & 2 & 2 组记录受浏览器权限或语音识别误差影响，需要改为文字输入。 \\
-        \hline
-        U6 & 9 & 8 & 1 & 1 组记录中用户只阅读文字结果，未能及时理解图表含义。 \\
-        \hline
-        U7 & 9 & 9 & 0 & 转账确认和取消按钮反馈明确。 \\
-        \hline
-        U8 & 9 & 9 & 0 & 情绪安抚和人工客服引导能够正常触发。 \\
-        \hline
-    \end{tabular}
-\end{table}
+本次统计使用 assistant\_test\_log 表中 source=usability\_live 且 participant\_code 为 P1--P9 的记录。记录时间范围为 2026 年 4 月 21 日 12:40:00 至 2026 年 4 月 29 日 10:13:30，共 99 条日志，其中开始记录 9 条、测试聊天记录 81 条、结束反馈记录 9 条。U7“转账后取消”由“发起转账”和“取消转账”两条聊天日志构成，因此 8 个任务对应 9 条任务交互日志。统计口径为：完成率等于 completed 字段求和除以记录数，平均响应耗时等于 duration\_ms 字段均值除以 1000，平均操作步数取 operation\_steps 字段均值，理解度、满意度、安全感和语言表达分别取对应评分字段均值。评分均采用 1--5 分，分值越高表示体验越好。
 
 基于上述记录得到的用户体验测试结果如表 \ref{tab:user-experience-summary} 所示。
 
@@ -1031,32 +1120,80 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
     \label{tab:user-experience-summary}
     \scriptsize
     \setlength{\tabcolsep}{2pt}
-    \begin{tabular}{|p{0.07\linewidth}|p{0.17\linewidth}|p{0.08\linewidth}|p{0.09\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|}
+    \begin{tabular}{|p{0.06\linewidth}|p{0.14\linewidth}|p{0.07\linewidth}|p{0.07\linewidth}|p{0.07\linewidth}|p{0.07\linewidth}|p{0.07\linewidth}|p{0.07\linewidth}|p{0.07\linewidth}|}
         \hline
-        任务编号 & 任务名称 & 完成率 & 平均时间/s & 平均步数 & 理解度 & 满意度 & 安全感 \\
+        编号 & 任务名称 & 记录数 & 完成率 & 响应耗时/s & 步数 & 理解度 & 满意度 & 安全感 \\
         \hline
-        U1 & 查询账户余额 & 100.0\% & 18.6 & 2.1 & 4.8 & 4.7 & 4.7 \\
+        U1 & 查询账户余额 & 9 & 100.0\% & 2.72 & 2.3 & 4.7 & 4.3 & 4.7 \\
         \hline
-        U2 & 查询支出流水 & 88.9\% & 36.4 & 3.2 & 4.3 & 4.2 & 4.1 \\
+        U2 & 查询支出流水 & 9 & 100.0\% & 2.66 & 3.3 & 4.0 & 3.7 & 4.0 \\
         \hline
-        U3 & 银行卡挂失 FAQ & 100.0\% & 21.8 & 2.0 & 4.6 & 4.5 & 4.4 \\
+        U3 & 银行卡安全 FAQ & 9 & 100.0\% & 2.56 & 3.0 & 4.2 & 4.0 & 5.0 \\
         \hline
-        U4 & 转账到账 FAQ & 100.0\% & 19.5 & 2.0 & 4.5 & 4.4 & 4.3 \\
+        U4 & 转账到账 FAQ & 9 & 100.0\% & 2.61 & 3.0 & 4.0 & 4.0 & 4.0 \\
         \hline
-        U5 & 语音查询余额 & 77.8\% & 42.7 & 3.8 & 4.1 & 3.9 & 4.0 \\
+        U5 & 语音查询余额 & 9 & 100.0\% & 2.74 & 3.9 & 3.7 & 3.7 & 3.7 \\
         \hline
-        U6 & 支出统计图表 & 88.9\% & 48.5 & 4.2 & 4.4 & 4.2 & 4.2 \\
+        U6 & 支出统计图表 & 9 & 100.0\% & 6.90 & 3.3 & 3.8 & 3.7 & 4.0 \\
         \hline
-        U7 & 转账后取消 & 100.0\% & 39.6 & 5.1 & 4.7 & 4.5 & 4.8 \\
+        U7 & 转账后取消 & 18 & 100.0\% & 1.48 & 2.2 & 4.6 & 4.2 & 5.0 \\
         \hline
-        U8 & 投诉情绪安抚 & 100.0\% & 24.3 & 2.2 & 4.3 & 4.2 & 4.6 \\
+        U8 & 投诉情绪安抚 & 9 & 100.0\% & 0.18 & 3.0 & 4.1 & 4.0 & 5.0 \\
         \hline
     \end{tabular}
 \end{table}
 
-从表 \ref{tab:user-experience-summary} 可以看出，8 项任务共形成 72 次任务记录，其中 68 次完成，整体任务完成率为 94.4\%。余额查询、FAQ 问答、转账取消和投诉安抚任务完成情况较好，说明系统在高频咨询和安全确认场景中具有较清晰的交互路径。语音查询余额任务完成率相对较低，主要原因是浏览器语音识别权限、环境噪声和识别结果需要二次修改；支出统计图表任务平均耗时较长，说明用户需要一定时间理解统计口径和图表含义。整体来看，小规模可用性测试结果能够反映系统具备基本可用性，但语音输入稳定性、统计结果解释和 FAQ 同义问法覆盖仍有继续优化空间。
+从表 \ref{tab:user-experience-summary} 可以看出，余额查询、银行卡安全 FAQ、转账取消和投诉情绪安抚的理解度和安全感评分较高，说明用户能够较快理解系统回复，并认可资金操作确认、取消回退和人工客服引导等安全设计。U5 语音查询余额的评分相对较低，主要反馈集中在浏览器权限弹窗、环境噪声和语音转写后仍需确认文本。U6 支出统计图表的平均响应耗时最高，且理解度、满意度低于余额查询和转账取消，说明统计口径、图表含义和文字总结仍需要进一步优化。U2 支出流水查询虽能完成，但普通用户反馈中出现“筛选词不太会说”“希望默认突出支出”等意见，说明自然语言提示和结果展示还可以继续简化。
 
-从反馈分析角度看，用户体验测试的价值不只在于得到评分，还在于将用户反馈转化为具体优化措施。结合系统实现过程和测试观察，本文将主要反馈问题与对应优化措施整理如表 \ref{tab:user-feedback-optimization} 所示。
+按测试对象类型汇总后的结果如表 \ref{tab:user-experience-role-summary} 所示。不同群体的评分差异与测试观察基本一致：计算机专业学生和开发者更关注状态流转与日志可追溯性，普通手机银行用户更关注是否容易说清需求、是否能看懂图表和语音输入是否稳定，行业导师更关注业务边界和安全说明。
+
+\begin{table}[H]
+    \centering
+    \caption{不同测试对象的反馈汇总}
+    \label{tab:user-experience-role-summary}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.2\linewidth}|p{0.08\linewidth}|p{0.09\linewidth}|p{0.09\linewidth}|p{0.09\linewidth}|p{0.09\linewidth}|p{0.24\linewidth}|}
+        \hline
+        用户群体 & 人数 & 聊天记录 & 满意度 & 安全感 & 语言 & 主要反馈 \\
+        \hline
+        计算机专业学生 & 3 & 27 & 4.1 & 4.6 & 4.1 & 流程顺畅，口语输入基本能命中，统计解释可再简化。 \\
+        \hline
+        普通手机银行用户 & 3 & 27 & 3.7 & 4.3 & 3.6 & 能完成主要操作，但语音权限、噪声和图表理解存在门槛。 \\
+        \hline
+        计算机行业开发者 & 2 & 18 & 4.0 & 4.6 & 4.0 & 状态流转、日志字段、FAQ 边界和取消链路较清楚。 \\
+        \hline
+        银行业务/企业导师 & 1 & 9 & 4.2 & 4.6 & 4.0 & 业务边界、风险提示和实验口径基本一致，建议强化口径说明。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+为了进一步回应“提高客户服务效率，减少人工客服负担”的目标，本文通过实际用户体验的使用反馈，将传统页面操作路径与 AI 助手操作路径进行对照。该对照不用于夸大系统性能数据，而是从页面跳转、筛选设置、人工咨询和确认步骤角度，说明智能客服入口对高频业务的路径压缩作用，结果如表 \ref{tab:efficiency-path-comparison} 所示。
+
+\begin{table}[H]
+    \centering
+    \caption{传统页面操作与 AI 助手操作路径对照}
+    \label{tab:efficiency-path-comparison}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.18\linewidth}|p{0.31\linewidth}|p{0.27\linewidth}|p{0.14\linewidth}|}
+        \hline
+        任务 & 传统页面操作 & AI 助手操作 & 优化效果 \\
+        \hline
+        查询最近 5 条支出流水 & 进入流水页，选择支出类型，设置时间或条数条件后查询。 & 输入“查最近 5 条支出记录”或相近口语表达。 & 操作步数减少。 \\
+        \hline
+        查询本月总支出 & 打开流水页，筛选本月支出记录，再查看图表或人工汇总。 & 输入“统计这个月总支出”，由后端生成统计和图表。 & 查询路径缩短。 \\
+        \hline
+        银行卡安全咨询 & 查找菜单、帮助文档或转人工客服咨询挂失、冻结等处理流程。 & 输入“卡丢了怎么办”等问题，由 FAQ 知识库返回标准答案或推荐。 & 常见问题直接回答。 \\
+        \hline
+        转账取消 & 进入转账页，填写收款人与金额信息后返回或取消。 & AI 生成确认信息后点击取消按钮。 & 降低误操作风险。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+从表 \ref{tab:efficiency-path-comparison} 可以看出，AI 助手并不是替代全部传统页面，而是在用户目标明确、操作路径较长或问题高频重复的场景中提供更短入口。对于流水查询和账单统计，系统将页面筛选条件转换为自然语言意图和后端查询参数；对于银行卡挂失等 FAQ 咨询，系统优先通过知识库回答，减少用户查找菜单或等待人工客服的可能；对于转账取消，系统把高风险操作停留在确认阶段，并提供取消按钮，使用户能够在执行前明确终止操作。因此，本文的效率提升主要体现在查询路径缩短、重复咨询分流和风险操作确认三个方面。
+
+从反馈分析角度看，用户体验测试的价值不只在于得到评分，还在于将用户反馈转化为具体优化措施。结合 assistant\_test\_log 中的任务反馈和结束反馈，本文将主要反馈问题与对应优化措施整理如表 \ref{tab:user-feedback-optimization} 所示。
 
 \begin{table}[H]
     \centering
@@ -1068,36 +1205,36 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
         \hline
         用户反馈问题 & 对应优化措施 \\
         \hline
-        用户不知道可以问哪些问题 & 增加快捷追问，引导用户快速进入常见任务。 \\
+        普通用户不确定该如何描述支出筛选条件 & 在任务卡和快捷追问中增加“查最近 5 条支出”“本月支出汇总”等示例，引导用户使用更明确的表达。 \\
         \hline
-        统计结果只看文字不直观 & 增加 ECharts 图表展示，使支出趋势和收支结构更容易理解。 \\
+        语音输入受浏览器权限、环境噪声和转写误差影响 & 保留语音转写后的文本确认步骤，并在语音失败时允许用户直接改为文字输入。 \\
+        \hline
+        统计图表需要配合文字解释才能理解 & 在图表上方增加统计口径、时间范围和总额说明，减少用户单独理解图表的成本。 \\
         \hline
         转账流程担心误操作 & 增加确认/取消按钮和账号脱敏展示，在用户明确确认前不执行扣款。 \\
         \hline
-        常见业务问题不想查菜单 & 增加 FAQ 知识库问答，直接回答挂失、到账时间、密码找回等高频问题。 \\
+        常见业务问题不想查菜单 & 增加 FAQ 知识库问答，并通过 faq\_query\_log 记录未命中和推荐问题，便于后续补充知识库。 \\
         \hline
         投诉或焦虑问题不适合普通回答 & 增加情绪安抚和人工客服引导，避免系统继续输出普通闲聊式回答。 \\
-        \hline
-        等待 AI 回复时不确定是否处理中 & 增加 SSE 流式响应和 trace 过程展示，让用户看到系统正在识别和调用能力。 \\
         \hline
     \end{tabular}
 \end{table}
 
-通过上述设计，第七章的测试内容从单纯的功能用例验证扩展为“功能测试 + FAQ 数据统计 + 用户体验测试 + 反馈优化分析”。功能测试验证系统能否正确执行，FAQ 统计验证知识库检索效果，用户体验测试进一步观察用户是否能顺利理解和使用这些功能，从而使实验部分能够更完整地支撑本文的系统设计目标。
+匿名用户体验测试进一步观察用户是否能顺利理解和使用这些功能，从而使实验部分能够更完整地支撑本文的系统设计目标。
 
 \section{交互优化设计分析}
 
-第一，系统采用流式响应降低等待感。前端调用 /assistant/chat/stream 后，后端先返回 trace 事件，提示“请求已接收”和“正在识别业务意图”，最终再返回 message 事件。相比普通请求一次性返回结果，流式处理能让用户知道系统正在处理请求，减少等待过程中的不确定性。
+第一，系统采用流式响应降低等待感。如\ref{fig:trace-ui}界面图展示，前端调用 /assistant/chat/stream 后，后端先返回 trace 事件，提示“请求已接收”和“正在识别业务意图”，最终再返回 message 事件。相比普通请求一次性返回结果，流式处理能让用户知道系统正在处理请求，减少等待过程中的不确定性。
 
-第二，系统展示 AI 处理过程提升可解释性。AssistantChatResponse 中的 trace 字段包含 intent、tool、status、confidence 和 steps。前端将这些信息展示在聊天气泡中，使用户和答辩评阅者能够看到系统识别了什么意图、调用了什么能力以及处理状态。
+第二，系统展示 AI 处理过程提升可解释性。如\ref{fig:trace-ui}界面图展示，AssistantChatResponse 中的 trace 字段包含 intent、tool、status、confidence 和 steps。前端将这些信息展示在聊天气泡中，使用户和答辩评阅者能够看到系统识别了什么意图、调用了什么能力以及处理状态。
 
-第三，系统通过图表增强统计结果表达。对于趋势类统计，用户不仅能看到文字总结，还能看到柱状图或折线图。对于收支概览，系统能够展示收支对比和按对方账号聚合的饼图。图表展示降低了用户理解复杂流水数据的成本。
+第三，系统通过图表增强统计结果表达。如\ref{fig:statistics-ui}界面图展示，对于趋势类统计，用户不仅能看到文字总结，还能看到柱状图或折线图。对于收支概览，系统能够展示收支对比和按对方账号聚合的饼图。图表展示降低了用户理解复杂流水数据的成本。
 
 第四，系统提供语音输入减少文字输入成本。用户点击语音输入按钮后可以直接说出查询或转账需求，前端将语音识别结果填入输入框。该设计对演示场景较为直观，也使语音识别要求落到实际交互功能中。
 
 第五，系统提供情绪安抚与人工客服引导。对于明显包含投诉、焦虑或愤怒的输入，系统不直接进入普通闲聊，而是先返回安抚性说明，并提示用户拨打虚拟客服电话 010-1234-5678 联系人工客服。该设计使智能客服在处理业务查询之外，也具备基本的客服分流意识。
 
-第六，系统提供 FAQ 知识库问答。对于银行卡挂失、密码找回、转账到账时间等常见咨询问题，系统优先从数据库知识库返回标准答案，并记录查询日志，便于后续分析用户高频问题和未收录问题。
+第六，系统提供 FAQ 知识库问答。对于银行卡挂失、密码找回、转账到账时间等常见咨询问题，系统优先从数据库知识库返回标准答案；若没有达到直接命中阈值，则根据匹配得分给出相似问题并提示用户进一步提问，同时记录查询日志，便于后续分析用户高频问题和未收录问题。
 
 第七，系统提供快捷操作减少输入成本。简报卡片提供快捷追问按钮，用户可以一键继续查询；转账确认场景中显示“确认”和“取消”按钮，减少用户手动输入。
 
@@ -1123,7 +1260,7 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
 
 从测试结论看，本文系统已经完成了从自然语言输入到业务服务调用、知识库检索、再到结构化结果展示的闭环。其主要优势体现在三个方面：第一，系统没有把银行业务结果和常见问题答案完全交给大模型生成，而是以真实数据库、知识库表和后端服务为依据；第二，系统对查询、统计、FAQ 和转账采用不同交互策略，能够根据业务风险调整流程复杂度；第三，系统在展示层面保留 AI 处理过程和统计口径说明，便于用户理解系统为何给出某一结果。
 
-同时，测试也反映出当前系统仍属于原型验证阶段。测试数据规模较小，FAQ 知识库条目数量有限，尚不能覆盖真实银行系统中复杂的账户状态、异常交易、并发转账和风控规则。如果将系统扩展到更真实的业务环境，还需要补充自动化测试、压力测试、安全测试和异常恢复测试。本文在结论中将这些问题作为不足进行说明，避免夸大系统当前能力。
+同时，受项目周期、原型系统定位和企业业务数据保密要求限制，本文测试未接入真实银行生产数据，也未覆盖真实银行系统中的复杂账户状态、异常交易、并发转账和风控规则。测试数据规模较小，FAQ 知识库条目数量有限，自动化测试主要覆盖服务层核心分支，尚不能覆盖真实银行系统中复杂的账户状态、异常交易、并发转账和风控规则。如果将系统扩展到更真实的业务环境，还需要继续补充接口集成测试、压力测试、安全测试和异常恢复测试。本文在结论中将这些问题作为不足进行说明，避免夸大系统当前能力。
 
 \chapter{结论与展望}
 
@@ -1131,11 +1268,11 @@ FAQ 知识库测试主要验证常见咨询问题是否能够从数据库返回�
 
 本文围绕“智能客服机器人的设计与交互优化”这一课题，完成了 BankCopilot 银行智能客服机器人原型的设计与实现。作为本科计算机专业毕业设计，本系统的定位不是构建完整商业银行系统，而是在一个规模可控的银行管理系统中，验证 AI 能力如何与传统业务管理系统结合。系统整体功能不追求大而全，而是围绕语音输入、FAQ 知识库问答、异常情绪安抚、余额查询、流水查询、账单统计、周报/月报和智能转账等典型场景，形成一个小而完整、边界清晰、能够演示的 AI 业务闭环。
 
-从功能设计看，各项 AI 能力承担的业务角色并不重复。AI 语音输入主要体现自然语言输入方式的扩展，用户可以通过语音说出需求，再由前端转写为文本进入同一聊天链路。FAQ 知识库问答主要处理银行卡挂失、转账到账时间、密码找回等常见咨询，答案来自数据库知识库表。AI 情绪安抚主要体现客服场景中的情绪识别和人工客服引导，系统识别明显负面情绪后返回安抚话术和虚拟客服电话。AI 查余额主要体现自然语言到数据库单对象查询的转换，用户用口语化方式提出问题，后端仍然从账户表读取真实余额和账户状态。AI 查流水体现自然语言条件到列表查询条件的转换，系统需要识别交易方向、条数限制和时间范围。AI 账单统计与分析体现数据库聚合能力，系统将流水数据进一步转换为总额、笔数、趋势和对比结果。AI 周报/月报是在统计结果基础上的概览展示，强调主动汇总和快捷追问。AI 智能转账则对应传统管理系统中最典型的流程型操作，需要按照收款人匹配、金额解析、业务校验、待确认、确认执行或取消的步骤逐步完成。
+从功能设计看，各项 AI 能力承担的业务角色并不重复。AI 语音输入主要体现自然语言输入方式的扩展，用户可以通过语音说出需求，再由前端转写为文本进入同一聊天链路。FAQ 知识库问答主要处理银行卡挂失、转账到账时间、密码找回等常见咨询，答案来自数据库知识库表。AI 情绪安抚主要体现客服场景中的异常情绪关键词检测和人工客服引导，系统识别明显负面情绪后返回安抚话术和虚拟客服电话。AI 查余额主要体现自然语言到数据库单对象查询的转换，用户用口语化方式提出问题，后端仍然从账户表读取真实余额和账户状态。AI 查流水体现自然语言条件到列表查询条件的转换，系统需要识别交易方向、条数限制和时间范围。AI 账单统计与分析体现数据库聚合能力，系统将流水数据进一步转换为总额、笔数、趋势和对比结果。AI 周报/月报是在统计结果基础上的概览展示，强调主动汇总和快捷追问。AI 智能转账则对应传统管理系统中最典型的流程型操作，需要按照收款人匹配、金额解析、业务校验、待确认、确认执行或取消的步骤逐步完成。
 
 从系统实现看，AI 与传统管理系统结合时，关键不在于让模型直接完成所有业务，而在于明确模型和后端系统的职责边界。大语言模型适合完成自然语言理解、意图识别和结果表达，但账户数据、流水数据、统计结果和转账执行必须由 Spring Boot 后端和 MySQL 数据库提供确定性支持。对于银行业务这类需要准确性和可追溯性的场景，时间范围、统计指标、交易方向、金额、收款人和确认状态等条件都必须被明确约束，不能由模型自由推断。
 
-从论文创新性看，BankCopilot 的创新不在于提出新的大模型算法，而在于将大语言模型能力嵌入到一个传统银行管理系统的具体业务流程中，形成了较完整的工程化应用方案。第一，系统将 AI 定位为自然语言入口和交互增强层，用户可以通过文本或语音转文字方式触发查询、统计、FAQ 咨询和转账等操作，但最终业务结果和标准问答仍由后端服务、数据库和知识库表生成，避免了模型直接编造业务数据。第二，系统选取的功能具有层次差异：语音输入对应输入方式扩展，FAQ 知识库对应常见咨询问答，查余额对应基础数据查询，查流水对应条件查询，账单统计对应聚合计算，周报/月报对应结果组织和主动展示，智能转账对应有状态、有约束、有确认的流程型操作，能够比较完整地体现 AI 与管理系统结合时的不同业务形态。第三，系统在实现中引入了时间范围解析、知识库检索日志、统计口径解释、待确认状态、历史金额复用、账号脱敏和能力边界控制等机制，使自然语言交互不只是简单问答，而是能够落到可控、可追踪的业务执行流程中。对于本科毕业设计而言，这种创新更偏向系统设计和工程集成创新，体现了前后端分离、数据库设计、接口设计、自然语言解析、业务服务调用、图表展示和测试验证等计算机专业综合能力。
+从论文创新性看，BankCopilot 的创新不在于提出新的大模型算法，而在于围绕银行业务原型完成系统设计和工程集成创新。第一，系统面向银行高频业务构建自然语言辅助操作流程，将余额查询、流水查询、账单统计、FAQ 咨询和转账确认统一接入 AI 助手，使传统页面操作扩展为文本和语音转文字驱动的智能交互。第二，系统设计了大语言模型与确定性业务服务分离的集成方式，大模型只负责意图解析和分析性表达，账户、流水、统计和转账结果均由后端服务和数据库生成，从而降低模型幻觉对业务事实的影响。第三，系统围绕银行业务安全和用户理解成本，引入处理过程展示、统计口径说明、FAQ 日志、异常情绪分流、转账二次确认、取消回退和历史金额复用等机制，使智能客服具备可解释、可控制和可验证的业务辅助能力。
 
 \section{实践价值}
 
@@ -1147,7 +1284,7 @@ BankCopilot 的实践价值主要体现在智能客服能力与银行业务流�
 
 \section{不足与展望}
 
-受本人开发经验、项目周期和测试条件限制，当前系统仍然存在一些不足。首先，多轮对话状态主要保存在后端内存中，服务重启后会丢失，这种方式适合毕业设计原型展示，但距离长期稳定运行还有差距。其次，系统依赖外部大模型服务，当网络异常或模型接口不可用时，意图解析和分析总结能力会受到影响，虽然已有部分规则兜底，但还不够完善。再次，当前交易流水数据字段较简单，系统能够完成余额查询、流水查询、统计分析和转账确认，但还不能深入分析消费品类、商户类型和具体消费场景。
+受本人开发经验、项目周期和测试条件限制，当前系统仍然存在一些不足。首先，多轮对话状态主要保存在后端内存中，服务重启后会丢失，这种方式适合毕业设计原型展示，但距离长期稳定运行还有差距。其次，系统依赖外部大模型服务，当网络异常或模型接口不可用时，意图解析和分析总结能力会受到影响，虽然已有部分规则化后备处理，但还不够完善。再次，当前交易流水数据字段较简单，系统能够完成余额查询、流水查询、统计分析和转账确认，但还不能深入分析消费品类、商户类型和具体消费场景。
 
 如果后续有机会继续完善该系统，我认为可以从几个较实际的方向改进。第一，可以将待确认转账、待补全查询等会话状态保存到 Redis 或数据库中，提高系统重启后的恢复能力。第二，可以继续补充异常情况处理和测试用例，例如模型返回格式异常、网络请求失败、余额不足、收款人不存在等场景，使系统在演示之外更加稳定。第三，可以在交易流水中增加更丰富的字段，并在此基础上扩展消费分类、预算提醒和更细粒度的账单分析功能。通过这些改进，BankCopilot 可以在现有毕业设计原型的基础上进一步完善，但就本次毕业设计而言，系统已经完成了 AI 与传统银行管理系统结合的主要设计目标。
 
@@ -1241,98 +1378,37 @@ AI 聊天请求由 AssistantChatRequest 承载，核心字段为 message。用�
     \end{tabular}
 \end{table}
 
-\section{FAQ 知识库表结构}
-
-FAQ 知识库表 faq\_knowledge 用于保存银行客服常见问题的标准答案。系统运行时通过该表检索银行卡挂失、密码找回、转账到账时间、验证码收不到等常见咨询问题。
-
-\begin{table}[H]
-    \centering
-    \caption{faq\_knowledge 表字段说明}
-    \label{tab:faq-knowledge-structure}
-    \begin{tabular}{|p{0.22\linewidth}|p{0.24\linewidth}|p{0.44\linewidth}|}
-        \hline
-        字段 & 类型 & 说明 \\
-        \hline
-        id & BIGINT & 知识库记录主键，自增。 \\
-        \hline
-        category & VARCHAR(50) & 问题分类，如账户、转账、贷款、安全、网银等。 \\
-        \hline
-        standard\_question & VARCHAR(255) & 标准问题，用于展示和高置信度命中说明。 \\
-        \hline
-        aliases & TEXT & 相似问法，多个问法用分号分隔。 \\
-        \hline
-        keywords & VARCHAR(255) & 检索关键词，多个关键词用分号分隔。 \\
-        \hline
-        answer & TEXT & 标准答案，系统命中 FAQ 后直接返回。 \\
-        \hline
-        status & TINYINT & 启用状态，1 表示启用，0 表示停用。 \\
-        \hline
-        priority & INT & 优先级，匹配结果接近时优先返回高优先级问题。 \\
-        \hline
-        source & VARCHAR(255) & 答案来源或维护说明。 \\
-        \hline
-        create\_time & DATETIME & 创建时间。 \\
-        \hline
-        update\_time & DATETIME & 更新时间。 \\
-        \hline
-    \end{tabular}
-\end{table}
-
-\section{FAQ 查询日志结构}
-
-FAQ 查询日志表 faq\_query\_log 用于记录用户常见问题检索结果。该表可用于统计知识库命中率、相似推荐数量、未命中问题和后续知识库补充方向。
-
-\begin{table}[H]
-    \centering
-    \caption{faq\_query\_log 表字段说明}
-    \label{tab:faq-query-log-structure}
-    \begin{tabular}{|p{0.22\linewidth}|p{0.24\linewidth}|p{0.44\linewidth}|}
-        \hline
-        字段 & 类型 & 说明 \\
-        \hline
-        id & BIGINT & 查询日志主键，自增。 \\
-        \hline
-        user\_id & BIGINT & 提问用户 ID，用于区分不同登录用户。 \\
-        \hline
-        user\_query & TEXT & 用户原始问题文本。 \\
-        \hline
-        matched\_faq\_id & BIGINT & 命中的 FAQ 记录 ID，未命中时可为空。 \\
-        \hline
-        match\_score & DECIMAL(5,2) & 匹配得分，采用百分制记录。 \\
-        \hline
-        result\_type & VARCHAR(30) & 检索结果类型，包括 hit、recommend 和 no\_answer。 \\
-        \hline
-        user\_feedback & TINYINT & 用户反馈，1 表示满意，0 表示不满意，可为空。 \\
-        \hline
-        create\_time & DATETIME & 日志创建时间。 \\
-        \hline
-    \end{tabular}
-\end{table}
 
 \section{测试样本说明}
 \label{app:test-samples}
 
-为避免将少量功能用例误写成开放域测试，本文在附录中补充意图识别和 FAQ 知识库测试样本的构成说明。意图识别测试样本围绕系统已经实现的五类意图设计，每类 10 条，共 50 条，样本构成如表 \ref{tab:intent-sample-appendix} 所示。
+为避免将少量功能用例误写成开放域测试，本文在附录中补充意图识别和 FAQ 知识库测试样本的构成说明。意图与分流测试样本围绕系统已经实现的基础意图类型和服务编排分支设计，每类 10 条，共 80 条，样本构成如表 \ref{tab:intent-sample-appendix} 所示。
 
 \begin{table}[H]
     \centering
-    \caption{意图识别测试样本构成}
+    \caption{意图与分流测试样本构成}
     \label{tab:intent-sample-appendix}
     \small
     \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{|p{0.18\linewidth}|p{0.14\linewidth}|p{0.58\linewidth}|}
+    \begin{tabular}{|p{0.22\linewidth}|p{0.14\linewidth}|p{0.54\linewidth}|}
         \hline
-        意图类型 & 样本数量 & 典型样例 \\
+        测试类型 & 样本数量 & 典型样例 \\
         \hline
-        balance & 10 & 查一下我的余额；我现在账户里还有多少钱。 \\
+        balance 基础意图 & 10 & 查一下我的余额；我现在账户里还有多少钱。 \\
         \hline
-        transactions & 10 & 查最近 5 条支出记录；17 号收入记录给我看看。 \\
+        transactions 基础意图 & 10 & 查最近 5 条支出记录；17 号收入记录给我看看。 \\
         \hline
-        statistics & 10 & 统计这个月总支出；最近 7 天支出趋势。 \\
+        statistics 基础意图 & 10 & 统计这个月总支出；最近 7 天支出趋势。 \\
         \hline
-        transfer & 10 & 给弟弟转 300 元午餐费；给弟弟转晚餐费，和昨天一样。 \\
+        transfer 基础意图 & 10 & 给弟弟转 300 元午餐费；给弟弟转晚餐费，和昨天一样。 \\
         \hline
-        other & 10 & 卡丢了怎么挂失；给我推荐一个理财产品；今天西安天气如何。 \\
+        FAQ 咨询分流 & 10 & 卡丢了怎么挂失；跨行转账要多久；验证码收不到怎么办。 \\
+        \hline
+        情绪关键词后备处理 & 10 & 我很生气，我要投诉；我有点担心这笔钱；服务太差了。 \\
+        \hline
+        不支持能力拦截 & 10 & 按消费场景标签统计一下；按商户类型分析消费；给我推荐理财产品。 \\
+        \hline
+        多轮与确认状态 & 10 & 1月；确认；取消；不转了；重新查今年1月收入。 \\
         \hline
     \end{tabular}
 \end{table}
@@ -1354,6 +1430,90 @@ FAQ 知识库测试样本来自项目中的 \texttt{sql/faq\_test\_dataset.csv}�
         模糊问法 & 10 & recommend & 转账有问题；密码怎么办；贷款怎么办。 \\
         \hline
         无关或未收录问题 & 10 & no\_answer & 今天上海天气怎么样；帮我订一张机票；写一首诗。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{匿名反馈测试日志明细}
+\label{app:usability-log-details}
+
+本附录补充第七章用户体验测试的数据来源说明。匿名反馈测试记录保存在 assistant\_test\_log 表中，source 字段取值为 usability\_live。测试时间范围为 2026 年 4 月 21 日 12:40:00 至 2026 年 4 月 29 日 10:13:30。该数据由测试者在本地原型环境中完成匿名反馈测试后形成，账户、流水和转账对象均为系统演示数据，不包含真实银行客户生产数据。
+
+\begin{table}[H]
+    \centering
+    \caption{匿名反馈测试日志记录类型}
+    \label{tab:usability-log-scenario-appendix}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{0.24\linewidth}|p{0.16\linewidth}|p{0.5\linewidth}|}
+        \hline
+        场景类型 & 记录数 & 说明 \\
+        \hline
+        feedback\_session\_start & 9 & 记录测试开始时间、匿名角色、participant\_code 和 test\_session\_id。 \\
+        \hline
+        assistant\_chat\_test & 81 & 记录 U1--U8 任务中的用户原始输入、系统识别意图、调用工具、响应耗时、操作步数、四类评分和任务反馈。 \\
+        \hline
+        feedback\_session\_end & 9 & 记录测试结束时间和测试者对整个匿名反馈测试过程的总结性反馈。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{匿名反馈测试对象明细汇总}
+    \label{tab:usability-participant-appendix}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.06\linewidth}|p{0.16\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.08\linewidth}|p{0.28\linewidth}|}
+        \hline
+        编号 & 分组 & 聊天记录 & 任务数 & 响应/s & 满意度 & 安全感 & 结束反馈摘要 \\
+        \hline
+        P1 & 计算机专业学生 & 9 & 8 & 2.34 & 4.2 & 4.6 & 流程顺，转账前确认和取消让用户有底。 \\
+        \hline
+        P2 & 计算机专业学生 & 9 & 8 & 2.40 & 4.0 & 4.6 & 口语输入基本能命中，统计解释还能再短一点。 \\
+        \hline
+        P3 & 计算机专业学生 & 9 & 8 & 2.53 & 4.2 & 4.6 & 查询与投诉引导在线，语音入口比较好找。 \\
+        \hline
+        P4 & 普通手机银行用户 & 9 & 8 & 2.73 & 3.7 & 4.3 & 能完成主要操作，但模糊问法下需要更直白提示。 \\
+        \hline
+        P5 & 普通手机银行用户 & 9 & 8 & 2.91 & 3.7 & 4.3 & 语音权限和图表理解有门槛，文字总结更关键。 \\
+        \hline
+        P6 & 普通手机银行用户 & 9 & 8 & 3.00 & 3.7 & 4.3 & 噪声环境下语音容易偏，其他流程基本可完成。 \\
+        \hline
+        P7 & 计算机行业开发者 & 9 & 8 & 2.37 & 4.0 & 4.6 & 状态流转、日志字段和取消链路清晰，可用于排查。 \\
+        \hline
+        P8 & 计算机行业开发者 & 9 & 8 & 2.45 & 4.0 & 4.6 & 查询与转账确认链路稳定，FAQ 边界表达合理。 \\
+        \hline
+        P9 & 银行业务/企业导师 & 9 & 8 & 2.61 & 4.2 & 4.6 & 业务边界、风险提示与论文实验口径一致，建议继续强化口径说明。 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{匿名反馈测试原始输入与反馈节选}
+    \label{tab:usability-query-feedback-appendix}
+    \scriptsize
+    \setlength{\tabcolsep}{2pt}
+    \begin{tabular}{|p{0.06\linewidth}|p{0.06\linewidth}|p{0.32\linewidth}|p{0.44\linewidth}|}
+        \hline
+        编号 & 任务 & 原始输入 & 任务反馈 \\
+        \hline
+        P1 & U1 & 兄弟，帮我瞅一眼卡里还剩多少钱 & 余额结果直给，像平时查卡余额一样顺手。 \\
+        \hline
+        P1 & U2 & 把我最近花出去的5笔甩出来 & 能看懂，但要是默认突出支出会更省脑子。 \\
+        \hline
+        P1 & U3 & 卡可能丢了，我先干啥，挂失还是冻结 & FAQ 能先给步骤，再补风险说明，顺序对。 \\
+        \hline
+        P4 & U5 & 语音输入：我这个账户还有钱吗 & 语音能用，但有时要重新说一遍。 \\
+        \hline
+        P4 & U6 & 这个月总共花了多少钱，图也看一下 & 图表有帮助，不过解释再简单点更好。 \\
+        \hline
+        P7 & U7 & 发起向弟弟转账300元，验证待确认状态 & transfer\_validation 状态流转正确。 \\
+        \hline
+        P7 & U7 & 取消待确认转账 & 取消后 pending 状态清理正确。 \\
+        \hline
+        P9 & U8 & 用户情绪激动时，请执行转人工分流并保留安抚语 & 情绪分流策略清晰，符合服务规范。 \\
         \hline
     \end{tabular}
 \end{table}

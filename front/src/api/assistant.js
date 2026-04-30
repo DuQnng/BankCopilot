@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
-export function chatAssistantApi(message) {
-  return request.post('/assistant/chat', { message })
+export function chatAssistantApi(message, testSession = null) {
+  return request.post('/assistant/chat', { message, ...(testSession || {}) })
 }
 
 export function fetchAssistantBriefApi(period = 'week') {
@@ -16,7 +16,15 @@ function parseSseData(text) {
   }
 }
 
-export async function streamAssistantApi(message, handlers = {}) {
+export function startAnonymousFeedbackTestApi(data) {
+  return request.post('/assistant/test/start', data)
+}
+
+export function finishAnonymousFeedbackTestApi(data) {
+  return request.post('/assistant/test/end', data)
+}
+
+export async function streamAssistantApi(message, handlers = {}, testSession = null) {
   const loginUser = JSON.parse(localStorage.getItem('loginUser') || '{}')
   const token = loginUser?.token || ''
   const res = await fetch('/api/assistant/chat/stream', {
@@ -25,7 +33,7 @@ export async function streamAssistantApi(message, handlers = {}) {
       'Content-Type': 'application/json',
       ...(token ? { token } : {})
     },
-    body: JSON.stringify({ message })
+    body: JSON.stringify({ message, ...(testSession || {}) })
   })
 
   if (!res.ok || !res.body) {

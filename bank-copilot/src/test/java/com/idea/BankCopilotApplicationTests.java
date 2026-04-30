@@ -1,12 +1,13 @@
 package com.idea;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest
+import org.junit.jupiter.api.Test;
+
 class BankCopilotApplicationTests {
 
     @Test
-    void contextLoads() {
+    void applicationClassCanBeCreatedWithoutStartingExternalServices() {
+        assertDoesNotThrow(BankCopilotApplication::new);
     }
 }

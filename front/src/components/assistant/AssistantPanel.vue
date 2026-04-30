@@ -1,7 +1,13 @@
 <script setup>
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { ElMessage } from 'element-plus'
-import { chatAssistantApi, streamAssistantApi, fetchAssistantBriefApi } from '@/api/assistant'
+import {
+  chatAssistantApi,
+  streamAssistantApi,
+  fetchAssistantBriefApi,
+  startAnonymousFeedbackTestApi,
+  finishAnonymousFeedbackTestApi
+} from '@/api/assistant'
 import * as echarts from 'echarts'
 import request from '@/utils/request'
 
@@ -25,6 +31,103 @@ const chatBodyRef = ref(null)
 const selectedBriefPeriod = ref('month')
 const voiceSupported = ref(true)
 const voiceListening = ref(false)
+const feedbackSessionKey = 'assistantAnonymousFeedbackSession'
+const feedbackTestActive = ref(false)
+const feedbackStartVisible = ref(false)
+const feedbackEndVisible = ref(false)
+const feedbackStartLoading = ref(false)
+const feedbackEndLoading = ref(false)
+const feedbackSession = ref(null)
+const selectedFeedbackTaskCode = ref('U1')
+const feedbackTaskStats = ref({})
+const feedbackInputStepRecorded = ref(false)
+const feedbackGuideCollapsed = ref(false)
+const createDefaultFeedbackScores = () => ({
+  understandingScore: 5,
+  satisfactionScore: 5,
+  safetyScore: 5,
+  languageScore: 5,
+  userFeedback: ''
+})
+const feedbackTaskScores = ref({})
+const feedbackTaskScoreForm = ref(createDefaultFeedbackScores())
+const feedbackStartForm = ref({
+  participantGroup: '普通手机银行用户',
+  roleNote: ''
+})
+const feedbackEndForm = ref({
+  understandingScore: 5,
+  satisfactionScore: 5,
+  safetyScore: 5,
+  languageScore: 5,
+  feedback: ''
+})
+
+const participantGroupOptions = [
+  '计算机专业学生',
+  '普通手机银行用户',
+  '计算机行业开发者',
+  '银行业务/企业导师',
+  '其他'
+]
+
+const feedbackScoreItems = [
+  { field: 'understandingScore', label: '理解感' },
+  { field: 'satisfactionScore', label: '满足感' },
+  { field: 'safetyScore', label: '安全感' },
+  { field: 'languageScore', label: '语言表达' }
+]
+
+const feedbackTasks = [
+  {
+    taskCode: 'U1',
+    taskName: '查询账户余额',
+    guide: '用自己的话询问当前虚拟账户余额。',
+    examples: ['我卡里余额现在是多少', '帮我看一下现在账户还有多少钱']
+  },
+  {
+    taskCode: 'U2',
+    taskName: '查询最近5条支出流水',
+    guide: '询问最近几笔支出、消费或交易明细。',
+    examples: ['最近五条花出去的钱列出来', '给我最近5条支出交易']
+  },
+  {
+    taskCode: 'U3',
+    taskName: '银行卡安全FAQ',
+    guide: '咨询银行卡丢失、冻结、挂失等安全类问题。',
+    examples: ['银行卡疑似丢失怎么冻结', '卡不见了要不要先挂失']
+  },
+  {
+    taskCode: 'U4',
+    taskName: '转账到账FAQ',
+    guide: '咨询行内、跨行、夜间或节假日转账到账时间。',
+    examples: ['晚上转账会不会第二天才到', '跨行转账一般多久能到账']
+  },
+  {
+    taskCode: 'U5',
+    taskName: '语音查询余额',
+    guide: '点击语音输入，说出余额查询需求后发送。',
+    examples: ['语音输入：账户里还有多少钱', '语音输入：看一下我卡里余额']
+  },
+  {
+    taskCode: 'U6',
+    taskName: '支出统计图表',
+    guide: '询问本月支出总额，并观察文字统计和图表。',
+    examples: ['本月消费总数和图表给我看看', '这个月花费汇总一下']
+  },
+  {
+    taskCode: 'U7',
+    taskName: '转账后取消',
+    guide: '发起一笔转账，出现确认信息后点击取消。',
+    examples: ['给弟弟转300元午餐费', '转300给弟弟备注午餐费']
+  },
+  {
+    taskCode: 'U8',
+    taskName: '投诉情绪安抚',
+    guide: '输入带有投诉、焦虑或生气的表达，观察人工客服引导。',
+    examples: ['我现在很生气，想投诉这个服务', '我要投诉，刚才的处理让我不舒服']
+  }
+]
 
 let speechRecognition = null
 let voiceBaseInput = ''
@@ -98,6 +201,237 @@ const demoScripts = [
   '向6222000012345678转100元，备注午餐'
 ]
 
+const getActiveFeedbackPayload = () => {
+  if (!feedbackTestActive.value || !feedbackSession.value) return null
+  const task = getCurrentFeedbackTask()
+  const taskEvaluation = normalizeFeedbackScores(feedbackTaskScoreForm.value)
+  return {
+    testSessionId: feedbackSession.value.testSessionId,
+    participantCode: feedbackSession.value.participantCode,
+    participantGroup: feedbackSession.value.participantGroup,
+    taskCode: task.taskCode,
+    taskName: task.taskName,
+    operationSteps: getPendingFeedbackSteps(task.taskCode) + 1,
+    ...taskEvaluation
+  }
+}
+
+const getCurrentFeedbackTask = () => {
+  return feedbackTasks.find(item => item.taskCode === selectedFeedbackTaskCode.value) || feedbackTasks[0]
+}
+
+const getFeedbackTaskCount = (taskCode) => {
+  return feedbackTaskStats.value[taskCode]?.count || 0
+}
+
+const getPendingFeedbackSteps = (taskCode) => {
+  return feedbackTaskStats.value[taskCode]?.pendingSteps || 0
+}
+
+const getCompletedFeedbackCount = () => {
+  return feedbackTasks.filter(item => getFeedbackTaskCount(item.taskCode) > 0).length
+}
+
+const persistFeedbackState = () => {
+  if (!feedbackSession.value) return
+  localStorage.setItem(feedbackSessionKey, JSON.stringify({
+    ...feedbackSession.value,
+    selectedTaskCode: selectedFeedbackTaskCode.value,
+    taskStats: feedbackTaskStats.value,
+    taskScores: feedbackTaskScores.value,
+    guideCollapsed: feedbackGuideCollapsed.value
+  }))
+}
+
+const selectFeedbackTask = (taskCode) => {
+  saveFeedbackTaskScores()
+  selectedFeedbackTaskCode.value = taskCode
+  loadFeedbackTaskScores(taskCode)
+  addFeedbackTaskStep(taskCode)
+}
+
+const toggleFeedbackGuideCollapsed = () => {
+  feedbackGuideCollapsed.value = !feedbackGuideCollapsed.value
+  persistFeedbackState()
+}
+
+const fillFeedbackExample = (text, taskCode = selectedFeedbackTaskCode.value) => {
+  if (selectedFeedbackTaskCode.value !== taskCode) {
+    selectFeedbackTask(taskCode)
+  }
+  chatInput.value = text
+  feedbackInputStepRecorded.value = true
+  addFeedbackTaskStep(taskCode)
+}
+
+const normalizeFeedbackScores = (scores = {}) => {
+  const normalized = {}
+  feedbackScoreItems.forEach(({ field }) => {
+    const value = Number(scores[field])
+    normalized[field] = Number.isInteger(value) ? Math.min(5, Math.max(1, value)) : 5
+  })
+  normalized.userFeedback = (scores.userFeedback || '').trim()
+  return normalized
+}
+
+const loadFeedbackTaskScores = (taskCode = selectedFeedbackTaskCode.value) => {
+  feedbackTaskScoreForm.value = normalizeFeedbackScores(feedbackTaskScores.value[taskCode])
+}
+
+const saveFeedbackTaskScores = () => {
+  if (!/^U[1-8]$/.test(selectedFeedbackTaskCode.value || '')) return
+  feedbackTaskScores.value = {
+    ...feedbackTaskScores.value,
+    [selectedFeedbackTaskCode.value]: normalizeFeedbackScores(feedbackTaskScoreForm.value)
+  }
+  persistFeedbackState()
+}
+
+const handleFeedbackScoreChange = () => {
+  saveFeedbackTaskScores()
+}
+
+const markFeedbackInputEdited = () => {
+  if (!feedbackTestActive.value || feedbackInputStepRecorded.value || !chatInput.value.trim()) return
+  feedbackInputStepRecorded.value = true
+  addFeedbackTaskStep(selectedFeedbackTaskCode.value)
+}
+
+const addFeedbackTaskStep = (taskCode, amount = 1) => {
+  if (!feedbackTestActive.value || !/^U[1-8]$/.test(taskCode || '')) return
+  const current = feedbackTaskStats.value[taskCode] || { count: 0, pendingSteps: 0 }
+  feedbackTaskStats.value = {
+    ...feedbackTaskStats.value,
+    [taskCode]: {
+      ...current,
+      pendingSteps: (current.pendingSteps || 0) + amount
+    }
+  }
+  persistFeedbackState()
+}
+
+const markFeedbackTaskAttempt = (taskCode, operationSteps) => {
+  if (!/^U[1-8]$/.test(taskCode || '')) return
+  const current = feedbackTaskStats.value[taskCode] || { count: 0, pendingSteps: 0 }
+  feedbackTaskStats.value = {
+    ...feedbackTaskStats.value,
+    [taskCode]: {
+      ...current,
+      count: current.count + 1,
+      pendingSteps: 0,
+      lastOperationSteps: operationSteps
+    }
+  }
+  persistFeedbackState()
+}
+
+const appendAssistantNotice = async (content) => {
+  chatList.value.push({ role: 'assistant', content })
+  await scrollToBottom()
+}
+
+const restoreFeedbackSession = () => {
+  try {
+    const raw = localStorage.getItem(feedbackSessionKey)
+    if (!raw) return
+    const session = JSON.parse(raw)
+    if (session?.testSessionId && session?.participantCode) {
+      feedbackSession.value = session
+      feedbackTestActive.value = true
+      selectedFeedbackTaskCode.value = session.selectedTaskCode || 'U1'
+      feedbackTaskStats.value = session.taskStats || {}
+      feedbackTaskScores.value = session.taskScores || {}
+      loadFeedbackTaskScores(selectedFeedbackTaskCode.value)
+      feedbackGuideCollapsed.value = Boolean(session.guideCollapsed)
+    }
+  } catch (error) {
+    localStorage.removeItem(feedbackSessionKey)
+  }
+}
+
+const openFeedbackStart = () => {
+  feedbackStartVisible.value = true
+}
+
+const startFeedbackTest = async () => {
+  if (!feedbackStartForm.value.participantGroup) {
+    ElMessage.warning('请选择匿名测试角色')
+    return
+  }
+  try {
+    feedbackStartLoading.value = true
+    const res = await startAnonymousFeedbackTestApi(feedbackStartForm.value)
+    if (res.code && res.data) {
+      feedbackSession.value = res.data
+      feedbackTestActive.value = true
+      selectedFeedbackTaskCode.value = 'U1'
+      feedbackTaskStats.value = {}
+      feedbackTaskScores.value = {}
+      feedbackTaskScoreForm.value = createDefaultFeedbackScores()
+      feedbackGuideCollapsed.value = false
+      persistFeedbackState()
+      feedbackStartVisible.value = false
+      await appendAssistantNotice(
+        `已进入匿名反馈测试模式。\n匿名编号：${res.data.participantCode}\n角色：${res.data.participantGroup}\n测试期间的 AI 请求会写入 assistant_test_log，用于论文实验统计。`
+        + '\n请按 U1--U8 任务指引逐项测试，发送前先选择当前任务；全部任务完成后可点击“结束匿名反馈测试”，也可以先继续测试未完成任务。'
+      )
+    } else {
+      ElMessage.error(res.msg || '匿名反馈测试启动失败')
+    }
+  } catch (error) {
+    ElMessage.error('匿名反馈测试启动失败')
+  } finally {
+    feedbackStartLoading.value = false
+  }
+}
+
+const openFeedbackEnd = () => {
+  if (!feedbackSession.value) {
+    ElMessage.warning('当前没有进行中的匿名反馈测试')
+    return
+  }
+  feedbackEndVisible.value = true
+}
+
+const finishFeedbackTest = async () => {
+  if (!feedbackSession.value) return
+  try {
+    feedbackEndLoading.value = true
+    const completedTaskCount = getCompletedFeedbackCount()
+    const payload = {
+      ...feedbackSession.value,
+      ...feedbackEndForm.value
+    }
+    const res = await finishAnonymousFeedbackTestApi(payload)
+    if (res.code) {
+      const code = feedbackSession.value.participantCode
+      feedbackSession.value = null
+      feedbackTestActive.value = false
+      feedbackTaskStats.value = {}
+      feedbackTaskScores.value = {}
+      feedbackTaskScoreForm.value = createDefaultFeedbackScores()
+      selectedFeedbackTaskCode.value = 'U1'
+      feedbackGuideCollapsed.value = false
+      localStorage.removeItem(feedbackSessionKey)
+      feedbackEndVisible.value = false
+      await appendAssistantNotice(`匿名反馈测试已结束，${code} 的评分和反馈已写入 assistant_test_log。本次已记录 ${completedTaskCount}/8 个测试任务。`)
+      feedbackEndForm.value = {
+        understandingScore: 5,
+        satisfactionScore: 5,
+        safetyScore: 5,
+        languageScore: 5,
+        feedback: ''
+      }
+    } else {
+      ElMessage.error(res.msg || '匿名反馈提交失败')
+    }
+  } catch (error) {
+    ElMessage.error('匿名反馈提交失败')
+  } finally {
+    feedbackEndLoading.value = false
+  }
+}
+
 const mergeSpeechText = (base, transcript) => {
   const left = base.trim()
   const right = transcript.trim()
@@ -159,6 +493,7 @@ const toggleVoiceInput = () => {
 
   try {
     speechRecognition.start()
+    addFeedbackTaskStep(selectedFeedbackTaskCode.value)
   } catch (error) {
     ElMessage.warning('语音识别正在启动，请稍后再试')
   }
@@ -327,6 +662,10 @@ const handleBriefPeriodChange = async (period) => {
 const fillDemoScript = () => {
   const random = demoScripts[Math.floor(Math.random() * demoScripts.length)]
   chatInput.value = random
+  if (feedbackTestActive.value) {
+    feedbackInputStepRecorded.value = true
+    addFeedbackTaskStep(selectedFeedbackTaskCode.value)
+  }
 }
 
 const handleDownload = async (url) => {
@@ -386,6 +725,11 @@ const exportAssistantText = (m, idx) => {
 const sendChat = async (text) => {
   const msg = (text ?? chatInput.value).trim()
   if (!msg || chatLoading.value) return
+  if (feedbackTestActive.value) {
+    saveFeedbackTaskScores()
+  }
+  const feedbackPayload = getActiveFeedbackPayload()
+  let feedbackRequestLogged = false
 
   chatList.value.push({ role: 'user', content: msg })
   chatInput.value = ''
@@ -417,6 +761,7 @@ const sendChat = async (text) => {
             current.streamSteps.push(data.message)
           }
         } else if (event === 'message') {
+          feedbackRequestLogged = true
           current.content = data?.reply || '（机器人没有返回内容）'
           current.chartType = data?.chartType || null
           current.renderChartType = data?.chartType || null
@@ -427,16 +772,19 @@ const sendChat = async (text) => {
           current.streamSteps = normalizeTraceSteps(current.trace, current.streamSteps)
           await renderAssistantCharts(assistantIndex)
         } else if (event === 'error') {
+          feedbackRequestLogged = true
           current.content = data?.message || '流式请求失败，请稍后再试'
         } else if (event === 'done') {
+          feedbackRequestLogged = true
           current.isStreaming = false
         }
         await scrollToBottom()
       }
-    })
+    }, feedbackPayload)
   } catch (streamError) {
     try {
-      const res = await chatAssistantApi(msg)
+      const res = await chatAssistantApi(msg, feedbackPayload)
+      feedbackRequestLogged = true
       const current = chatList.value[assistantIndex]
       if (!current) return
       if (res.code) {
@@ -462,6 +810,10 @@ const sendChat = async (text) => {
     }
   } finally {
     chatLoading.value = false
+    if (feedbackPayload?.taskCode && feedbackRequestLogged) {
+      markFeedbackTaskAttempt(feedbackPayload.taskCode, feedbackPayload.operationSteps)
+    }
+    feedbackInputStepRecorded.value = false
     await scrollToBottom()
   }
 }
@@ -475,6 +827,7 @@ const needConfirm = () => {
 }
 
 onMounted(async () => {
+  restoreFeedbackSession()
   initSpeechRecognition()
   selectedBriefPeriod.value = resolveBriefPeriod()
   await loadAssistantBrief()
@@ -489,6 +842,128 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="assistant-panel" :class="{ home: mode === 'home' }">
+    <div class="feedback-test-bar" :class="{ active: feedbackTestActive }">
+      <div>
+        <div class="feedback-title">匿名反馈测试</div>
+        <div class="feedback-desc">
+          <template v-if="feedbackTestActive && feedbackSession">
+            当前匿名编号：{{ feedbackSession.participantCode }}，角色：{{ feedbackSession.participantGroup }}
+          </template>
+          <template v-else>
+            提示：进入后，本次 AI 对话和结束评分会记入数据库，用于论文测试统计。
+          </template>
+        </div>
+      </div>
+      <div class="feedback-actions">
+        <el-button v-if="!feedbackTestActive" type="primary" plain size="small" @click="openFeedbackStart">
+          进入匿名反馈测试
+        </el-button>
+        <el-button v-else type="warning" plain size="small" @click="openFeedbackEnd">
+          结束匿名反馈测试
+        </el-button>
+      </div>
+    </div>
+
+    <div v-if="feedbackTestActive" class="feedback-task-guide" :class="{ collapsed: feedbackGuideCollapsed }">
+      <div class="task-guide-head">
+        <div>
+          <div class="task-guide-title">测试任务指引</div>
+          <div class="task-guide-subtitle">
+            <template v-if="feedbackGuideCollapsed">
+              当前：{{ getCurrentFeedbackTask().taskCode }} {{ getCurrentFeedbackTask().taskName }}，已记录 {{ getCompletedFeedbackCount() }}/8 项。
+            </template>
+            <template v-else>
+              发送前请选择当前任务，系统会把任务编号、任务名称、请求耗时和处理结果写入 assistant_test_log。
+            </template>
+          </div>
+        </div>
+        <div class="task-guide-actions">
+          <el-tag type="warning" size="small">
+            已记录 {{ getCompletedFeedbackCount() }}/8 项
+          </el-tag>
+          <el-popover placement="bottom" width="330" trigger="click">
+            <template #reference>
+              <el-button size="small" plain>当前任务评分/反馈</el-button>
+            </template>
+            <div class="task-score-editor">
+              <div class="task-score-title">
+                {{ getCurrentFeedbackTask().taskCode }} {{ getCurrentFeedbackTask().taskName }}
+              </div>
+              <div
+                v-for="item in feedbackScoreItems"
+                :key="item.field"
+                class="task-score-row"
+              >
+                <span>{{ item.label }}</span>
+                <el-rate
+                  v-model="feedbackTaskScoreForm[item.field]"
+                  :max="5"
+                  show-score
+                  @change="handleFeedbackScoreChange"
+                />
+              </div>
+              <div class="task-feedback-row">
+                <div class="task-feedback-label">本任务反馈</div>
+                <el-input
+                  v-model="feedbackTaskScoreForm.userFeedback"
+                  type="textarea"
+                  :rows="3"
+                  maxlength="180"
+                  show-word-limit
+                  placeholder="可选：例如回答是否清楚、路径是否顺畅、哪里需要改进"
+                  @input="handleFeedbackScoreChange"
+                />
+              </div>
+              <div class="task-score-tip">
+                评分和反馈文字会随下一条当前任务请求写入 assistant_test_log，对应本条测试记录。
+              </div>
+            </div>
+          </el-popover>
+          <el-button size="small" text @click="toggleFeedbackGuideCollapsed">
+            {{ feedbackGuideCollapsed ? '展开任务指引' : '收起任务指引' }}
+          </el-button>
+        </div>
+      </div>
+      <div v-if="!feedbackGuideCollapsed" class="task-grid">
+        <div
+          v-for="task in feedbackTasks"
+          :key="task.taskCode"
+          class="task-card"
+          :class="{
+            active: selectedFeedbackTaskCode === task.taskCode,
+            done: getFeedbackTaskCount(task.taskCode) > 0
+          }"
+          role="button"
+          tabindex="0"
+          @click="selectFeedbackTask(task.taskCode)"
+          @keyup.enter="selectFeedbackTask(task.taskCode)"
+        >
+          <div class="task-card-main">
+            <span class="task-code">{{ task.taskCode }}</span>
+            <span class="task-name">{{ task.taskName }}</span>
+            <span v-if="getFeedbackTaskCount(task.taskCode) > 0" class="task-count">
+              已记录 {{ getFeedbackTaskCount(task.taskCode) }} 次
+            </span>
+          </div>
+          <div class="task-guide-text">{{ task.guide }}</div>
+          <div class="task-examples">
+            <el-button
+              v-for="example in task.examples"
+              :key="example"
+              size="small"
+              text
+              @click.stop="fillFeedbackExample(example, task.taskCode)"
+            >
+              {{ example }}
+            </el-button>
+          </div>
+        </div>
+      </div>
+      <div v-if="!feedbackGuideCollapsed" class="task-guide-footer">
+        当前任务：{{ getCurrentFeedbackTask().taskCode }} {{ getCurrentFeedbackTask().taskName }}。测试结束时可以直接提交评分，也可以关闭弹窗继续补测未完成任务。
+      </div>
+    </div>
+
     <div ref="chatBodyRef" class="chat-body">
       <div v-if="briefLoading" class="brief-card brief-loading">正在生成 AI 简报...</div>
 
@@ -611,6 +1086,7 @@ onBeforeUnmount(() => {
         type="textarea"
         :autosize="{ minRows: 2, maxRows: 4 }"
         placeholder="输入一句话，例如：给6222...转200"
+        @input="markFeedbackInputEdited"
         @keyup.enter.exact.prevent="sendChat()"
       />
       <div class="chat-send">
@@ -626,6 +1102,70 @@ onBeforeUnmount(() => {
         <el-button type="primary" @click="sendChat()" :loading="chatLoading">发送</el-button>
       </div>
     </div>
+
+    <el-dialog v-model="feedbackStartVisible" title="进入匿名反馈测试" width="420px">
+      <el-form label-width="96px">
+        <el-form-item label="你的角色">
+          <el-select v-model="feedbackStartForm.participantGroup" placeholder="请选择角色" style="width: 100%;">
+            <el-option
+              v-for="item in participantGroupOptions"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="补充说明">
+          <el-input
+            v-model="feedbackStartForm.roleNote"
+            maxlength="80"
+            show-word-limit
+            placeholder="可选，例如：经常使用手机银行 / 首次体验"
+          />
+        </el-form-item>
+      </el-form>
+      <div class="feedback-dialog-tip">
+        系统只生成匿名编号，不记录真实姓名、手机号或银行卡号。
+      </div>
+      <template #footer>
+        <el-button @click="feedbackStartVisible = false">取消</el-button>
+        <el-button type="primary" :loading="feedbackStartLoading" @click="startFeedbackTest">开始测试</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="feedbackEndVisible" title="结束匿名反馈测试" width="460px">
+      <el-form label-width="110px" class="feedback-score-form">
+        <el-form-item label="理解感">
+          <el-rate v-model="feedbackEndForm.understandingScore" :max="5" show-score />
+        </el-form-item>
+        <el-form-item label="满足感">
+          <el-rate v-model="feedbackEndForm.satisfactionScore" :max="5" show-score />
+        </el-form-item>
+        <el-form-item label="安全感">
+          <el-rate v-model="feedbackEndForm.safetyScore" :max="5" show-score />
+        </el-form-item>
+        <el-form-item label="语言表达">
+          <el-rate v-model="feedbackEndForm.languageScore" :max="5" show-score />
+        </el-form-item>
+        <el-form-item label="反馈意见">
+          <el-input
+            v-model="feedbackEndForm.feedback"
+            type="textarea"
+            :rows="3"
+            maxlength="300"
+            show-word-limit
+            placeholder="可选：记录你觉得清楚或需要改进的地方"
+          />
+        </el-form-item>
+      </el-form>
+      <div class="feedback-dialog-tip">
+        当前已记录 {{ getCompletedFeedbackCount() }}/8 个测试任务；每条任务评分已随聊天记录写入，下面为总体评分与反馈。如未完成，可点击“继续测试”返回任务指引。
+      </div>
+      <template #footer>
+        <el-button @click="feedbackEndVisible = false">继续测试</el-button>
+        <el-button type="primary" :loading="feedbackEndLoading" @click="finishFeedbackTest">提交并结束</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -640,6 +1180,218 @@ onBeforeUnmount(() => {
   height: calc(100vh - 170px);
   max-width: 980px;
   margin: 0 auto;
+}
+
+.feedback-test-bar {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fff7e6 0%, #f7fbff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.feedback-test-bar.active {
+  border-color: #e6a23c;
+  background: linear-gradient(135deg, #fff2d8 0%, #ecf5ff 100%);
+}
+
+.feedback-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.feedback-desc {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #606266;
+}
+
+.feedback-actions {
+  flex-shrink: 0;
+}
+
+.feedback-task-guide {
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ead7b7;
+  background: #fffaf1;
+}
+
+.feedback-task-guide.collapsed {
+  padding: 8px 12px;
+}
+
+.task-guide-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.feedback-task-guide.collapsed .task-guide-head {
+  margin-bottom: 0;
+  align-items: center;
+}
+
+.task-guide-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.task-score-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-score-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.task-score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: #606266;
+}
+
+.task-feedback-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-feedback-label {
+  font-size: 12px;
+  color: #606266;
+}
+
+.task-score-tip {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed #e4e7ed;
+  font-size: 12px;
+  color: #909399;
+  line-height: 1.5;
+}
+
+.task-guide-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.task-guide-subtitle {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #606266;
+  line-height: 1.5;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.task-card {
+  padding: 10px;
+  border: 1px solid #e4e7ed;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.task-card:hover,
+.task-card.active {
+  border-color: #e6a23c;
+  box-shadow: 0 4px 12px rgba(230, 162, 60, .16);
+}
+
+.task-card.active {
+  background: #fff7e6;
+}
+
+.task-card.done:not(.active) {
+  border-color: #b3e19d;
+  background: #f6ffed;
+}
+
+.task-card-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.task-code {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #303133;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.task-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.task-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: #67c23a;
+}
+
+.task-guide-text {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #606266;
+}
+
+.task-examples {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.task-guide-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed #ead7b7;
+  font-size: 12px;
+  color: #606266;
+}
+
+.feedback-dialog-tip {
+  margin-top: 4px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #f5f7fa;
+  color: #606266;
+  font-size: 12px;
+}
+
+.feedback-score-form :deep(.el-form-item) {
+  margin-bottom: 14px;
 }
 
 .chat-body {
@@ -880,5 +1632,20 @@ onBeforeUnmount(() => {
   margin-top: 10px;
   background: #fff;
   border-radius: 8px;
+}
+
+@media (max-width: 720px) {
+  .feedback-test-bar,
+  .task-guide-head {
+    flex-direction: column;
+  }
+
+  .feedback-task-guide.collapsed .task-guide-head {
+    align-items: flex-start;
+  }
+
+  .task-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
