@@ -612,9 +612,13 @@
   \fi
 }
 \newcommand{\makecover}{
+  \begingroup
+  \pagestyle{xdu@empty}
   \begin{titlepage}
+    \thispagestyle{xdu@empty}
     \xdu@titlepage
   \end{titlepage}
+  \endgroup
   \xdu@clearpage
   \thispagestyle{xdu@empty}
   \xdu@cheadpage

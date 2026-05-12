@@ -1,4 +1,0 @@
-INSERT INTO tlias.account (id, user_id, account_no, account_type, balance, status, create_time, update_time) VALUES (1, 1, '6222000012345678', '储蓄卡', 90700.67, '正常', '2026-01-11 17:20:48', '2026-04-23 12:03:02');
-INSERT INTO tlias.account (id, user_id, account_no, account_type, balance, status, create_time, update_time) VALUES (2, 2, '6222000098765432', '储蓄卡', 11276.50, '正常', '2026-01-11 17:25:12', '2026-04-23 12:03:02');
-INSERT INTO tlias.account (id, user_id, account_no, account_type, balance, status, create_time, update_time) VALUES (3, 3, '6222000043210987', '信用卡', 9900.00, '正常', '2026-01-11 17:30:05', '2026-04-23 11:48:09');
-INSERT INTO tlias.account (id, user_id, account_no, account_type, balance, status, create_time, update_time) VALUES (4, 3, '6222000076543210', '储蓄卡', 35273.00, '正常', '2026-01-11 17:35:20', '2026-04-23 11:06:08');

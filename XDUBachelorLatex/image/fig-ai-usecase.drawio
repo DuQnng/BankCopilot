@@ -34,7 +34,7 @@
         <mxCell id="c12" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontFamily=Songti SC;fontSize=14;shadow=0;" value="统计指标识别" vertex="1">
           <mxGeometry height="60" width="192" x="639" y="277.5" as="geometry" />
         </mxCell>
-        <mxCell id="c13" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontFamily=Songti SC;fontSize=14;shadow=0;" value="图表展示" vertex="1">
+        <mxCell id="c13" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontFamily=Songti SC;fontSize=14;shadow=0;" value="可视化展示" vertex="1">
           <mxGeometry height="60" width="220" x="820" y="300" as="geometry" />
         </mxCell>
         <mxCell id="c14" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontFamily=Songti SC;fontSize=14;shadow=0;" value="收支汇总" vertex="1">
@@ -67,7 +67,7 @@
         <mxCell id="e24" edge="1" parent="1" source="c4" style="endArrow=open;endFill=0;html=1;rounded=0;dashed=1;dashPattern=6 4;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC;fontSize=11;" target="c9" value="&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;include&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e25" edge="1" parent="1" source="c5" style="endArrow=open;endFill=0;html=1;rounded=0;dashed=1;dashPattern=6 4;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC;fontSize=11;" target="c10" value="&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;incluede&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;">
+        <mxCell id="e25" edge="1" parent="1" source="c5" style="endArrow=open;endFill=0;html=1;rounded=0;dashed=1;dashPattern=6 4;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC;fontSize=11;" target="c10" value="&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;include&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e26" edge="1" parent="1" source="c6" style="endArrow=open;endFill=0;html=1;rounded=0;dashed=1;dashPattern=6 4;strokeColor=#000000;strokeWidth=1.1;fontFamily=Songti SC;fontSize=11;" target="c12" value="&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;include&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;">

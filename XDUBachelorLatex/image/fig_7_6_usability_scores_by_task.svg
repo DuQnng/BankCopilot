@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:"Songti SC","SimSun",serif;fill:#111827;font-size:15px}.tick{font-size:13px}.label{font-size:15px}.legend{font-size:14px}.grid{stroke:#e5e7eb;stroke-width:1}.axis{stroke:#6b7280;stroke-width:1.2}</style>
+<line class="grid" x1="78" y1="444.00" x2="870" y2="444.00"/>
+<text class="tick" x="66" y="448.00" text-anchor="end">0</text>
+<line class="grid" x1="78" y1="371.17" x2="870" y2="371.17"/>
+<text class="tick" x="66" y="375.17" text-anchor="end">1</text>
+<line class="grid" x1="78" y1="298.34" x2="870" y2="298.34"/>
+<text class="tick" x="66" y="302.34" text-anchor="end">2</text>
+<line class="grid" x1="78" y1="225.51" x2="870" y2="225.51"/>
+<text class="tick" x="66" y="229.51" text-anchor="end">3</text>
+<line class="grid" x1="78" y1="152.68" x2="870" y2="152.68"/>
+<text class="tick" x="66" y="156.68" text-anchor="end">4</text>
+<line class="grid" x1="78" y1="79.85" x2="870" y2="79.85"/>
+<text class="tick" x="66" y="83.85" text-anchor="end">5</text>
+<line class="axis" x1="78" y1="58" x2="78" y2="444"/>
+<line class="axis" x1="78" y1="444" x2="870" y2="444"/>
+<rect x="103.00" y="101.70" width="10" height="342.30" fill="#1f77b4"/>
+<rect x="116.00" y="130.83" width="10" height="313.17" fill="#ff7f0e"/>
+<rect x="129.00" y="101.70" width="10" height="342.30" fill="#2ca02c"/>
+<rect x="142.00" y="145.40" width="10" height="298.60" fill="#9467bd"/>
+<text class="tick" x="127.50" y="468" text-anchor="middle">U1</text>
+<rect x="202.00" y="152.68" width="10" height="291.32" fill="#1f77b4"/>
+<rect x="215.00" y="174.53" width="10" height="269.47" fill="#ff7f0e"/>
+<rect x="228.00" y="152.68" width="10" height="291.32" fill="#2ca02c"/>
+<rect x="241.00" y="174.53" width="10" height="269.47" fill="#9467bd"/>
+<text class="tick" x="226.50" y="468" text-anchor="middle">U2</text>
+<rect x="301.00" y="138.11" width="10" height="305.89" fill="#1f77b4"/>
+<rect x="314.00" y="152.68" width="10" height="291.32" fill="#ff7f0e"/>
+<rect x="327.00" y="79.85" width="10" height="364.15" fill="#2ca02c"/>
+<rect x="340.00" y="152.68" width="10" height="291.32" fill="#9467bd"/>
+<text class="tick" x="325.50" y="468" text-anchor="middle">U3</text>
+<rect x="400.00" y="152.68" width="10" height="291.32" fill="#1f77b4"/>
+<rect x="413.00" y="152.68" width="10" height="291.32" fill="#ff7f0e"/>
+<rect x="426.00" y="152.68" width="10" height="291.32" fill="#2ca02c"/>
+<rect x="439.00" y="152.68" width="10" height="291.32" fill="#9467bd"/>
+<text class="tick" x="424.50" y="468" text-anchor="middle">U4</text>
+<rect x="499.00" y="174.53" width="10" height="269.47" fill="#1f77b4"/>
+<rect x="512.00" y="174.53" width="10" height="269.47" fill="#ff7f0e"/>
+<rect x="525.00" y="174.53" width="10" height="269.47" fill="#2ca02c"/>
+<rect x="538.00" y="174.53" width="10" height="269.47" fill="#9467bd"/>
+<text class="tick" x="523.50" y="468" text-anchor="middle">U5</text>
+<rect x="598.00" y="167.25" width="10" height="276.75" fill="#1f77b4"/>
+<rect x="611.00" y="174.53" width="10" height="269.47" fill="#ff7f0e"/>
+<rect x="624.00" y="152.68" width="10" height="291.32" fill="#2ca02c"/>
+<rect x="637.00" y="174.53" width="10" height="269.47" fill="#9467bd"/>
+<text class="tick" x="622.50" y="468" text-anchor="middle">U6</text>
+<rect x="697.00" y="108.98" width="10" height="335.02" fill="#1f77b4"/>
+<rect x="710.00" y="138.11" width="10" height="305.89" fill="#ff7f0e"/>
+<rect x="723.00" y="79.85" width="10" height="364.15" fill="#2ca02c"/>
+<rect x="736.00" y="145.40" width="10" height="298.60" fill="#9467bd"/>
+<text class="tick" x="721.50" y="468" text-anchor="middle">U7</text>
+<rect x="796.00" y="145.40" width="10" height="298.60" fill="#1f77b4"/>
+<rect x="809.00" y="152.68" width="10" height="291.32" fill="#ff7f0e"/>
+<rect x="822.00" y="79.85" width="10" height="364.15" fill="#2ca02c"/>
+<rect x="835.00" y="152.68" width="10" height="291.32" fill="#9467bd"/>
+<text class="tick" x="820.50" y="468" text-anchor="middle">U8</text>
+<text class="label" x="450.00" y="498" text-anchor="middle">任务编号</text>
+<text class="label" transform="translate(22 251.00) rotate(-90)" text-anchor="middle">平均评分/分</text>
+<rect x="271.00" y="13" width="10" height="12" fill="#1f77b4"/>
+<text class="legend" x="287.00" y="24" dominant-baseline="middle">理解度</text>
+<rect x="353.00" y="13" width="10" height="12" fill="#ff7f0e"/>
+<text class="legend" x="369.00" y="24" dominant-baseline="middle">满意度</text>
+<rect x="435.00" y="13" width="10" height="12" fill="#2ca02c"/>
+<text class="legend" x="451.00" y="24" dominant-baseline="middle">安全感</text>
+<rect x="517.00" y="13" width="10" height="12" fill="#9467bd"/>
+<text class="legend" x="533.00" y="24" dominant-baseline="middle">语言表达</text>
+</svg>

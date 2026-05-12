@@ -1,130 +1,140 @@
 <mxfile host="Electron" agent="ChatGPT">
-  <diagram id="bank-ai-service-scenario-simsun" name="银行智能客服典型应用场景">
-    <mxGraphModel dx="1178" dy="642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="560" math="0" shadow="0">
+  <diagram id="fig-bank-ai-service-scenario-simsun" name="应用场景与研究闭环">
+    <mxGraphModel dx="1664" dy="912" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1040" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="id3" parent="1" style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;fontFamily=Songti SC;fontSize=20;fontColor=#111111;fontStyle=1;align=center;verticalAlign=middle;" value="&lt;b&gt;银行智能客服典型应用场景&lt;/b&gt;" vertex="1">
-          <mxGeometry height="34" width="400" x="300" y="12" as="geometry" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;fontFamily=Songti SC;fontSize=21;fontColor=#0f172a;fontStyle=1;align=center;verticalAlign=middle;" value="&lt;b&gt;银行智能客服应用场景与研究闭环&lt;/b&gt;" vertex="1">
+          <mxGeometry height="34" width="510" x="245" y="12" as="geometry" />
         </mxCell>
-        <mxCell id="id4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=16;fontColor=#111111;fontStyle=0;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;个人银行用户&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;移动端 / 网页端&lt;br&gt;自然语言表达需求&lt;/span&gt;" vertex="1">
-          <mxGeometry height="115" width="155" x="10" y="212.5" as="geometry" />
+        <mxCell id="old-user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#eaf4ff;strokeColor=#2e75b6;strokeWidth=1.4;fontFamily=Songti SC;fontSize=15;fontColor=#0f3e66;fontStyle=0;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;个人银行用户&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;移动端 / 网页端&lt;br&gt;自然语言表达需求&lt;/span&gt;" vertex="1">
+          <mxGeometry height="100" width="150" x="35" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="id5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="" vertex="1">
-          <mxGeometry height="310" width="290" x="260" y="115" as="geometry" />
+        <mxCell id="old-chat-bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#f8fafc;strokeColor=#94a3b8;strokeWidth=1.4;fontFamily=Songti SC;fontSize=12;fontColor=#334155;fontStyle=0;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="" vertex="1">
+          <mxGeometry height="285" width="275" x="255" y="105" as="geometry" />
         </mxCell>
-        <mxCell id="id6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeWidth=1.15;fontFamily=Songti SC;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;&lt;font face=&quot;Times New Roman&quot;&gt;BankCopilot AI&lt;/font&gt;&lt;/span&gt; 助手聊天窗口&lt;/b&gt;" vertex="1">
-          <mxGeometry height="42" width="290" x="260" y="115" as="geometry" />
+        <mxCell id="old-chat-title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#eaf8ee;strokeColor=#2e8b57;strokeWidth=1.15;fontFamily=Songti SC;fontSize=14;fontColor=#14532d;fontStyle=1;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;font face=&quot;Times New Roman&quot;&gt;BankCopilot AI&lt;/font&gt; 助手聊天窗口&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="275" x="255" y="105" as="geometry" />
         </mxCell>
-        <mxCell id="id7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="&lt;b&gt;1.用户输入&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;“查最近 &lt;span style=&quot;&quot;&gt;5&lt;/span&gt; 条支出记录”&lt;/span&gt;" vertex="1">
-          <mxGeometry height="54" width="242" x="284" y="180" as="geometry" />
+        <mxCell id="old-input" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#eaf4ff;strokeColor=#2e75b6;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#0f3e66;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;1. 用户输入&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;“查最近 5 条支出记录”&lt;/span&gt;" vertex="1">
+          <mxGeometry height="52" width="220" x="282" y="165" as="geometry" />
         </mxCell>
-        <mxCell id="id8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#f8f8f8;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;2.&lt;font face=&quot;Times New Roman&quot;&gt;AI &lt;/font&gt;处理&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;识别意图、提取参数&lt;br&gt;并调用银行业务能力&lt;/span&gt;" vertex="1">
-          <mxGeometry height="70" width="242" x="284" y="252" as="geometry" />
+        <mxCell id="old-ai" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#eaf8ee;strokeColor=#2e8b57;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#14532d;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;2. &lt;font face=&quot;Times New Roman&quot;&gt;AI&lt;/font&gt; 处理&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;识别意图、提取参数&lt;br&gt;并调用银行业务能力&lt;/span&gt;" vertex="1">
+          <mxGeometry height="62" width="220" x="282" y="235" as="geometry" />
         </mxCell>
-        <mxCell id="id9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#f8f8f8;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;3.系统输出&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;可读结果或安全确认&lt;/span&gt;" vertex="1">
-          <mxGeometry height="54" width="242" x="284" y="340" as="geometry" />
+        <mxCell id="old-output" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#fdecf3;strokeColor=#b24c7c;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#6b2047;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;3. 系统输出&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;color:#333333&quot;&gt;可读结果或安全确认&lt;/span&gt;" vertex="1">
+          <mxGeometry height="52" width="220" x="282" y="315" as="geometry" />
         </mxCell>
-        <mxCell id="id10" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeColor=#222222;strokeWidth=1.2;fontFamily=Songti SC;" value="">
+        <mxCell id="old-inner-arrow-1" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeColor=#2e8b57;strokeWidth=1.3;fontFamily=Songti SC;" value="">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="405" y="234" as="sourcePoint" />
-            <mxPoint x="405" y="252" as="targetPoint" />
+            <mxPoint x="392" y="217" as="sourcePoint" />
+            <mxPoint x="392" y="235" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="id11" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeColor=#222222;strokeWidth=1.2;fontFamily=Songti SC;" value="">
+        <mxCell id="old-inner-arrow-2" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeColor=#b24c7c;strokeWidth=1.3;fontFamily=Songti SC;" value="">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="405" y="322" as="sourcePoint" />
-            <mxPoint x="405" y="340" as="targetPoint" />
+            <mxPoint x="392" y="297" as="sourcePoint" />
+            <mxPoint x="392" y="315" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="id12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;1.&lt;/span&gt; &lt;font&gt;余额查询&lt;/font&gt;&lt;/b&gt;&lt;font&gt;&lt;br&gt;&lt;span style=&quot;font-size: 11px; color: rgb(51, 51, 51);&quot;&gt;示例输入：查一下我的余额&lt;br&gt;输出：账户信息、余额、账户状态&lt;/span&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="40" as="geometry" />
+        <mxCell id="old-service-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#fff3e5;strokeColor=#cc7a00;strokeWidth=1.3;fontFamily=Songti SC;fontSize=12;fontColor=#7c3f00;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;1. 余额查询&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：查一下我的余额&lt;br&gt;输出：账户信息、余额、账户状态&lt;/span&gt;" vertex="1">
+          <mxGeometry height="62" width="220" x="705" y="74" as="geometry" />
         </mxCell>
-        <mxCell id="id14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;2.&lt;/span&gt; 流水查询&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：查最近 &lt;span style=&quot;&quot;&gt;5&lt;/span&gt; 条支出记录&lt;br&gt;输出：交易时间、金额、对方账号、备注&lt;/span&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="140" as="geometry" />
+        <mxCell id="old-service-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#fff3e5;strokeColor=#cc7a00;strokeWidth=1.3;fontFamily=Songti SC;fontSize=12;fontColor=#7c3f00;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;2. 流水查询&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：查最近 5 条支出记录&lt;br&gt;输出：交易时间、金额、对方账号、备注&lt;/span&gt;" vertex="1">
+          <mxGeometry height="62" width="220" x="705" y="146" as="geometry" />
         </mxCell>
-        <mxCell id="id16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;3.&lt;/span&gt; 账单统计与分析&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：统计这个月总支出&lt;br&gt;输出：总额、趋势图、收支分析、导出报表&lt;/span&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="240" as="geometry" />
+        <mxCell id="old-service-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#fff3e5;strokeColor=#cc7a00;strokeWidth=1.3;fontFamily=Songti SC;fontSize=12;fontColor=#7c3f00;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;3. 账单统计与分析&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：统计这个月总支出&lt;br&gt;输出：总额、趋势图、收支分析、导出报表&lt;/span&gt;" vertex="1">
+          <mxGeometry height="62" width="220" x="705" y="218" as="geometry" />
         </mxCell>
-        <mxCell id="id18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;4.&lt;/span&gt; 转账确认&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：给弟弟转 &lt;span style=&quot;&quot;&gt;300&lt;/span&gt; 元&lt;br&gt;输出：收款人匹配、余额校验&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;&lt;b&gt;二次确认后执行&lt;/b&gt;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="327.5" as="geometry" />
+        <mxCell id="old-service-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#fff3e5;strokeColor=#cc7a00;strokeWidth=1.3;fontFamily=Songti SC;fontSize=12;fontColor=#7c3f00;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;4. 转账确认&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：给弟弟转 300 元&lt;br&gt;输出：收款人匹配、余额校验&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;&lt;b&gt;二次确认后执行&lt;/b&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="70" width="220" x="705" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="id20" edge="1" parent="1" source="id4" style="endArrow=block;html=1;rounded=0;strokeColor=#222222;strokeWidth=1.6;fontFamily=Songti SC;fontSize=12;fontStyle=1;fontColor=#111111;labelBackgroundColor=#ffffff;" target="id5" value="自然语言输入">
+        <mxCell id="old-service-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#fff3e5;strokeColor=#cc7a00;strokeWidth=1.3;fontFamily=Songti SC;fontSize=12;fontColor=#7c3f00;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;5. 常见问题资讯&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：我的卡丢失了怎么办&lt;br&gt;输出：挂失、冻结等风险处理建议&lt;/span&gt;" vertex="1">
+          <mxGeometry height="62" width="220" x="705" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="old-arrow-user-chat" edge="1" parent="1" source="old-user" style="endArrow=block;html=1;rounded=0;strokeColor=#2e75b6;strokeWidth=1.7;fontFamily=Songti SC;fontSize=12;fontStyle=1;fontColor=#0f3e66;labelBackgroundColor=#eaf4ff;" target="old-chat-bg" value="自然语言输入">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="id25" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;自然语言入口&lt;/b&gt;" vertex="1">
-          <mxGeometry height="34" width="185" x="70" y="504" as="geometry" />
-        </mxCell>
-        <mxCell id="id26" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;AI&lt;/span&gt; 理解意图&lt;/b&gt;" vertex="1">
-          <mxGeometry height="34" width="185" x="300" y="504" as="geometry" />
-        </mxCell>
-        <mxCell id="id27" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;银行业务能力&lt;/b&gt;" vertex="1">
-          <mxGeometry height="34" width="185" x="530" y="504" as="geometry" />
-        </mxCell>
-        <mxCell id="id28" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;可读结果 / 安全确认&lt;/b&gt;" vertex="1">
-          <mxGeometry height="34" width="185" x="760" y="504" as="geometry" />
-        </mxCell>
-        <mxCell id="id29" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeColor=#222222;strokeWidth=1.2;fontFamily=Songti SC;" value="">
+        <mxCell id="old-arrow-chat-service" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;strokeColor=#d97706;strokeWidth=1.5;fontFamily=Songti SC;" value="">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="263" y="521" as="sourcePoint" />
-            <mxPoint x="292" y="521" as="targetPoint" />
+            <mxPoint x="530" y="250" as="sourcePoint" />
+            <mxPoint x="650" y="250" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="id30" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeColor=#222222;strokeWidth=1.2;fontFamily=Songti SC;" value="">
+        <mxCell id="old-arrow-label" connectable="0" parent="old-arrow-chat-service" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Songti SC;fontSize=12;fontColor=#7c3f00;labelBackgroundColor=#fff3e5;" value="识别意图并调用&lt;br&gt;银行业务能力" vertex="1">
+          <mxGeometry relative="1" x="-0.16" y="-1" as="geometry">
+            <mxPoint x="4" y="-18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="old-dash-1" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;strokeColor=#cc7a00;strokeWidth=1.3;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="old-service-1" value="">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="493" y="521" as="sourcePoint" />
-            <mxPoint x="522" y="521" as="targetPoint" />
+            <mxPoint x="650" y="250" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="id31" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;strokeColor=#222222;strokeWidth=1.2;fontFamily=Songti SC;" value="">
+        <mxCell id="old-dash-2" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;strokeColor=#cc7a00;strokeWidth=1.3;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="old-service-2" value="">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="723" y="521" as="sourcePoint" />
-            <mxPoint x="752" y="521" as="targetPoint" />
+            <mxPoint x="650" y="250" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FOj5eI_TSxbBXoZd7n4O-1" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="550" y="290" as="sourcePoint" />
-            <mxPoint x="640" y="290" as="targetPoint" />
+        <mxCell id="old-dash-3" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;strokeColor=#cc7a00;strokeWidth=1.3;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="old-service-3" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="250" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FOj5eI_TSxbBXoZd7n4O-2" connectable="0" parent="FOj5eI_TSxbBXoZd7n4O-1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="识别意图并调用&lt;br/&gt;银行业务能力" vertex="1">
-          <mxGeometry relative="1" x="-0.2148" y="-1" as="geometry">
-            <mxPoint x="5" y="-21" as="offset" />
+        <mxCell id="old-dash-4" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;strokeColor=#cc7a00;strokeWidth=1.3;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="old-service-4" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="250" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FOj5eI_TSxbBXoZd7n4O-4" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="id12" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="640" y="290" as="sourcePoint" />
-            <mxPoint x="440" y="240" as="targetPoint" />
+        <mxCell id="old-dash-5" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;strokeColor=#cc7a00;strokeWidth=1.3;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="old-service-5" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="250" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FOj5eI_TSxbBXoZd7n4O-5" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="id14" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="640" y="290" as="sourcePoint" />
-            <mxPoint x="740" y="290" as="targetPoint" />
+        <mxCell id="divider" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;strokeColor=#cbd5e1;strokeWidth=1.2;dashed=1;dashPattern=4 4;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="485" as="sourcePoint" />
+            <mxPoint x="960" y="485" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FOj5eI_TSxbBXoZd7n4O-6" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;entryX=-0.014;entryY=0.596;entryDx=0;entryDy=0;entryPerimeter=0;" target="id16" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="640" y="290" as="sourcePoint" />
-            <mxPoint x="730" y="340" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="loop-center" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#fff7d6;strokeColor=#d9a300;strokeWidth=1.6;fontFamily=Songti SC;fontSize=13;fontColor=#5b4300;fontStyle=1;align=center;verticalAlign=middle;" value="&lt;b&gt;BankCopilot&lt;/b&gt;&lt;br&gt;AI + 业务服务" vertex="1">
+          <mxGeometry height="110" width="110" x="445" y="666" as="geometry" />
         </mxCell>
-        <mxCell id="FOj5eI_TSxbBXoZd7n4O-7" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="id18" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="640" y="290" as="sourcePoint" />
-            <mxPoint x="727" y="399" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="loop-s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#eaf4ff;strokeColor=#2e75b6;strokeWidth=1.8;fontFamily=Songti SC;fontSize=13;fontColor=#0f3e66;fontStyle=0;align=left;verticalAlign=middle;spacing=8;" value="&lt;b&gt;1. 自然语言 / 语音输入&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#1f4f7a&quot;&gt;口语化提问与操作请求&lt;br&gt;示例：查最近 5 条支出&lt;br&gt;示例：给弟弟转 300 元&lt;/span&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="70" y="655" as="geometry" />
         </mxCell>
-        <mxCell id="SheeuRHjm88a9DuDW2Tg-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#ffffff;strokeColor=#222222;strokeWidth=1.15;fontFamily=Songti SC;fontSize=12;fontColor=#111111;fontStyle=0;align=left;verticalAlign=middle;spacing=6;shadow=0;" value="&lt;b&gt;&lt;span style=&quot;&quot;&gt;5.&lt;/span&gt;&amp;nbsp;常见问题资讯&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#333333&quot;&gt;示例输入：我的卡丢失了怎么办&lt;br&gt;输出：银行卡丢失后请立即办理挂失，避免资金风险...&lt;/span&gt;" vertex="1">
-          <mxGeometry height="82" width="210" x="700" y="422" as="geometry" />
+        <mxCell id="loop-s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#eaf8ee;strokeColor=#2e8b57;strokeWidth=1.8;fontFamily=Songti SC;fontSize=13;fontColor=#14532d;fontStyle=0;align=left;verticalAlign=middle;spacing=8;" value="&lt;b&gt;2. 大模型意图解析&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#1f6b3d&quot;&gt;识别意图与参数槽位&lt;br&gt;解析金额、时间、方向等条件&lt;br&gt;识别风险操作并触发校验流程&lt;/span&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="390" y="540" as="geometry" />
         </mxCell>
-        <mxCell id="SheeuRHjm88a9DuDW2Tg-2" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;dashed=1;dashPattern=1 2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SheeuRHjm88a9DuDW2Tg-1" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="640" y="290" as="sourcePoint" />
-            <mxPoint x="730" y="469" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="loop-s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#fff3e5;strokeColor=#cc7a00;strokeWidth=1.8;fontFamily=Songti SC;fontSize=13;fontColor=#7c3f00;fontStyle=0;align=left;verticalAlign=middle;spacing=8;" value="&lt;b&gt;3. 后端确定性服务 / FAQ 知识库&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#8b4d00&quot;&gt;账户、流水、统计等真实业务服务&lt;br&gt;FAQ 知识库提供标准化业务说明&lt;br&gt;数据来源可追溯、结果可审计&lt;/span&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="700" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-s4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#fdecf3;strokeColor=#b24c7c;strokeWidth=1.8;fontFamily=Songti SC;fontSize=13;fontColor=#6b2047;fontStyle=0;align=left;verticalAlign=middle;spacing=8;" value="&lt;b&gt;4. 图表展示 / 二次确认 / 日志记录&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#7a2f55&quot;&gt;返回可读文本、ECharts 图表与摘要&lt;br&gt;转账场景执行二次确认与可取消回退&lt;br&gt;记录 trace 与 assistant_test_log 指标&lt;/span&gt;" vertex="1">
+          <mxGeometry height="120" width="230" x="390" y="785" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-e12" edge="1" parent="1" source="loop-s1" style="curved=1;endArrow=block;endFill=1;html=1;rounded=1;strokeColor=#2e75b6;strokeWidth=2;fontFamily=Songti SC;" target="loop-s2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-e23" edge="1" parent="1" source="loop-s2" style="curved=1;endArrow=block;endFill=1;html=1;rounded=1;strokeColor=#2e8b57;strokeWidth=2;fontFamily=Songti SC;" target="loop-s3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-e34" edge="1" parent="1" source="loop-s3" style="curved=1;endArrow=block;endFill=1;html=1;rounded=1;strokeColor=#cc7a00;strokeWidth=2;fontFamily=Songti SC;" target="loop-s4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-e41" edge="1" parent="1" source="loop-s4" style="curved=1;endArrow=block;endFill=1;html=1;rounded=1;strokeColor=#b24c7c;strokeWidth=2;fontFamily=Songti SC;" target="loop-s1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-lbl1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;fontFamily=Songti SC;fontSize=11;fontColor=#2e75b6;align=center;verticalAlign=middle;" value="用户表达" vertex="1">
+          <mxGeometry height="20" width="82" x="302" y="627" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-lbl2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;fontFamily=Songti SC;fontSize=11;fontColor=#2e8b57;align=center;verticalAlign=middle;" value="意图落地" vertex="1">
+          <mxGeometry height="20" width="82" x="620" y="627" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-lbl3" parent="1" style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;fontFamily=Songti SC;fontSize=11;fontColor=#cc7a00;align=center;verticalAlign=middle;" value="结果返回" vertex="1">
+          <mxGeometry height="20" width="82" x="620" y="777" as="geometry" />
+        </mxCell>
+        <mxCell id="loop-lbl4" parent="1" style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;rounded=0;fontFamily=Songti SC;fontSize=11;fontColor=#b24c7c;align=center;verticalAlign=middle;" value="交互反馈" vertex="1">
+          <mxGeometry height="20" width="82" x="302" y="777" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

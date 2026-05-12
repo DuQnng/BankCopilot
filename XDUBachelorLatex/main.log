@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.4.27)  30 APR 2026 17:21
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.4.27)  8 MAY 2026 11:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -912,11 +912,57 @@ Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
 \backup@length=\skip85
 \ar@cellbox=\box65
 )
+(/usr/local/texlive/2026/texmf-dist/tex/xelatex/mathspec/mathspec.sty
+Package: mathspec 2016/12/22 v0.2b LaTeX Package (Mathematics font selection fo
+r XeLaTeX)
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2025/11/04 v2.10 package option processing (HA)
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/local/texlive/2026/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks33
+\XKV@tempa@toks=\toks34
+\XKV@tempb@toks=\toks35
+)
+\XKV@depth=\count349
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\c@eu@=\count350
+\c@eu@i=\count351
+\c@mkern=\count352
+)
+
+Package fontspec Info: 
+(fontspec)             Font family 'TimesNewRoman(1)' created for font 'Times
+(fontspec)             New Roman' with options
+(fontspec)             [Mapping=tex-text,WordSpace={1,0,0},HyphenChar=None,Punc
+tuationSpace=WordSpace].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->"Times New
+(fontspec)             Roman/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.: <->"Times New
+(fontspec)             Roman/B/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.: <->"Times New
+(fontspec)             Roman/I/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.: <->"Times New
+(fontspec)             Roman/BI/OT:script=latn;language=dflt;mapping=tex-text;"
+
+
+\symDigits:m:n=\mathgroup6
+\symLatin:m:n=\mathgroup7
+\symLatin:m:it=\mathgroup8
+\symGreek:m:n=\mathgroup9
+\symGreek:m:it=\mathgroup10
+
 (/usr/local/texlive/2026/texmf-dist/tex/xelatex/xecjk/xunicode-addon.sty
 Package: xunicode-addon 2022/08/05 v3.9.1 addon file for xunicode
 \l__xunadd_tmp_coffin=\box66
 \l__xunadd_circle_coffin=\box67
-\l_xunadd_slot_int=\count349
+\l_xunadd_slot_int=\count353
 )
 (/usr/local/texlive/2026/texmf-dist/tex/xelatex/xunicode/xunicode.sty
 File: xunicode.sty 2011/09/09 v0.981 provides access to latin accents and many 
@@ -2737,33 +2783,33 @@ LaTeX Encoding Info:    Redeclaring text command \textinterrobangdown (encoding
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 40.
-LaTeX Font Info:    Trying to load font information for T3+cmr on input line 40
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 43.
+LaTeX Font Info:    Trying to load font information for T3+cmr on input line 43
 .
  (/usr/local/texlive/2026/texmf-dist/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    ... okay on input line 43.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2025/01/14 v1.3e Standard LaTeX Color (DPC)
@@ -2774,7 +2820,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 Package color Info: Driver file: xetex.def on input line 149.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx))
-Package hyperref Info: Link coloring ON on input line 40.
+Package hyperref Info: Link coloring ON on input line 43.
 
 (./main.out) (./main.out)
 \@outlinefile=\write3
@@ -2785,89 +2831,23 @@ Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
 
-Package fontspec Info: 
-(fontspec)             Adjusting the maths setup (use [no-math] to avoid
-(fontspec)             this).
-
-\symlegacymaths=\mathgroup6
-LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 40.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 40.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 40.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 40.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 40.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 40.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 40.
-LaTeX Font Info:    Redeclaring math accent \check on input line 40.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 40.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 40.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 40.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 40.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 40.
-LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 40.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> TU/TimesNewRoman(0)/m/n on input line 4
-0.
-LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 40.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> TU/TimesNewRoman(0)/m/n on input line 
-40.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  TU/TimesNewRoman(0)/m/n --> TU/TimesNewRoman(0)/m/n on 
-input line 40.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> TU/TimesNewRoman(0)/m/it on input line
- 40.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> TU/TimesNewRoman(0)/b/n on input line 
-40.
-LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/Arial(0)/m/n on input line 40.
-LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/CourierNew(0)/m/n on input line 40.
-
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  TU/TimesNewRoman(0)/m/n --> TU/TimesNewRoman(0)/b/n on 
-input line 40.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> TU/TimesNewRoman(0)/b/it on input lin
-e 40.
-LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/Arial(0)/b/n on input line 40.
-LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/CourierNew(0)/b/n on input line 40.
-
-
-Underfull \hbox (badness 10000) detected at line 75
+Underfull \hbox (badness 10000) detected at line 78
 \TU/AdobeSongStd(0)/b/n/12.045 班 级
  []
 
-LaTeX Font Info:    Calculating math sizes for size <12.045> on input line 75.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 75.
+LaTeX Font Info:    Calculating math sizes for size <12.045> on input line 78.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 78.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 75.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 78.
 
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) detected at line 75
+Underfull \hbox (badness 10000) detected at line 78
 \TU/AdobeSongStd(0)/b/n/12.045 学 号
  []
 
@@ -2876,49 +2856,58 @@ File: xdubadge.eps Graphic file (type eps)
 File: xdlogo.eps Graphic file (type eps)
 <xdlogo.eps>
 
-Underfull \hbox (badness 10000) detected at line 75
+Underfull \hbox (badness 10000) detected at line 78
 \TU/AdobeSongStd(0)/b/n/15.05624 题 目
  []
 
-LaTeX Font Info:    Calculating math sizes for size <15.05624> on input line 75
+LaTeX Font Info:    Calculating math sizes for size <15.05624> on input line 78
 .
 
-Underfull \hbox (badness 10000) detected at line 75
+Underfull \hbox (badness 10000) detected at line 78
 \TU/AdobeSongStd(0)/b/n/15.05624 学 院
  []
 
 
-Underfull \hbox (badness 10000) detected at line 75
+Underfull \hbox (badness 10000) detected at line 78
 \TU/AdobeSongStd(0)/b/n/15.05624 专 业
  []
 
-[1
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1
 
 
-
-] [2
 
 ]
-Overfull \hbox (137.89114pt too wide) detected at line 75
+[2]
+Overfull \hbox (137.89114pt too wide) detected at line 78
 \TU/AdobeSongStd(0)/m/n/12.045 论 文 作 者：|           |（签 字）| 
  []
 
 
-Overfull \hbox (130.4875pt too wide) detected at line 75
-\TU/AdobeSongStd(0)/m/n/12.045 时 间：|     年   月   日
+Overfull \hbox (81.30374pt too wide) detected at line 78
+\TU/AdobeSongStd(0)/m/n/12.045 时 间：| \TU/TimesNewRoman(1)/m/n/12.045 2026 \TU/A
+dobeSongStd(0)/m/n/12.045 年 \TU/TimesNewRoman(1)/m/n/12.045 5 \TU/AdobeSongStd(
+0)/m/n/12.045 月 \TU/TimesNewRoman(1)/m/n/12.045 8 \TU/AdobeSongStd(0)/m/n/12.04
+5 日
  []
 
 
-Overfull \hbox (113.80115pt too wide) detected at line 75
+Overfull \hbox (113.80115pt too wide) detected at line 78
 \TU/AdobeSongStd(0)/m/n/12.045 指 导 教 师 已 阅：|         |（签 字）| 
  []
 
 
-Overfull \hbox (130.4875pt too wide) detected at line 75
-\TU/AdobeSongStd(0)/m/n/12.045 时 间：|     年   月   日
+Overfull \hbox (81.30374pt too wide) detected at line 78
+\TU/AdobeSongStd(0)/m/n/12.045 时 间：| \TU/TimesNewRoman(1)/m/n/12.045 2026 \TU/A
+dobeSongStd(0)/m/n/12.045 年 \TU/TimesNewRoman(1)/m/n/12.045 5 \TU/AdobeSongStd(
+0)/m/n/12.045 月 \TU/TimesNewRoman(1)/m/n/12.045 8 \TU/AdobeSongStd(0)/m/n/12.04
+5 日
  []
 
 [3
+
 
 
 ] [4
@@ -2928,6 +2917,186 @@ Overfull \hbox (130.4875pt too wide) detected at line 75
 ] [2
 
 ]
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+[]\TU/TimesNewRoman(1)/m/n/12.045 As personal banking moves to web and mobile c
+hannels, users still need to pass
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 through several pages and filtering forms when 
+checking balances, browsing transaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 records, reviewing income and expenditure, or a
+sking routine service questions. A static
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 FAQ module also cannot answer questions that de
+pend on real account and transaction
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 data. In addition, balances, transaction detail
+s, and fund transfers are sensitive business
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 facts, so allowing a large language model to di
+rectly produce these facts or trigger
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 operations may introduce hallucinated results a
+nd mistaken execution. This thesis
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 therefore designs and implements BankCopilot, a
+n intelligent customer service robot
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 prototype for personal banking. The front end i
+s built with Vue 3, Element Plus, and
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 ECharts, while the back end uses Spring Boot, M
+yBatis, and MySQL. The system
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 also integrates the Qwen model for intent parsi
+ng and analytical response generation.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 The main design idea is to separate model under
+standing from deterministic business
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 execution: the model converts user utterances i
+nto structured intents such as balance
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 inquiry, transaction inquiry, bill statistics, 
+FAQ consultation, or transfer, while account
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 data, transaction records, statistical results,
+ and transfer execution are handled by
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 back-end services and the database. BankCopilot
+ supports text input, speech-to-text
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 input, balance inquiry, transaction inquiry, bi
+ll statistics and analysis, weekly or monthly
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 briefs, FAQ knowledge-base answering, emotional
+ support, human-service guidance,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 and two-step confirmation for intelligent trans
+fer. Its interaction design includes SSE
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 streaming responses, process tracing, statistic
+al charts, quick actions, and export links.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 In testing, all 21 back-end automated test case
+s passed; 80 intent and routing samples
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 achieved a pass rate of 95.0%; the FAQ knowledg
+e base returned standard answers or
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 similar recommendations for banking-related que
+stions and routed irrelevant questions
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 to the no-answer branch; and nine anonymous tes
+ters produced 81 task chat records
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 in a local prototype environment with virtual d
+emonstration data, with all core tasks
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 completed. These results suggest that BankCopil
+ot can shorten high-frequency inquiry
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 paths, supplement FAQ routing, and improve the 
+explainability and controllability of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(1)/m/n/12.045 intelligent customer service without letting th
+e model directly determine business facts
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+[] \TU/TimesNewRoman(0)/b/n/12.045 intelligent customer service robot large lan
+guage model natural
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+\TU/TimesNewRoman(0)/b/n/12.045 language processing banking service bill analys
+is interaction
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [3]
@@ -2948,19 +3117,48 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 ]
-File: image/fig-bank-ai-service-scenario-simsun.pdf Graphic file (type pdf)
-<use image/fig-bank-ai-service-scenario-simsun.pdf>
+File: image/fig-bank-ai-service-scenario-simsun.png Graphic file (type bmp)
+<image/fig-bank-ai-service-scenario-simsun.png>
 
-[2]
-LaTeX Font Info:    Calculating math sizes for size <10.5> on input line 119.
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Underfull \hbox (badness 10000) in paragraph at lines 153--153
-[]|\TU/TimesNewRoman(0)/m/n/8 5.3 \TU/AdobeSongStd(0)/m/n/8 数 据 库 设 计 中 的
+ [2]
+LaTeX Font Info:    Calculating math sizes for size <10.5> on input line 122.
+
+Underfull \hbox (badness 10000) in paragraph at lines 130--131
+[]|\TU/AdobeSongStd(0)/m/n/10.5 调 用 \TU/TimesNewRoman(1)/m/n/10.5 AccountServic
+e\TU/AdobeSongStd(0)/m/n/10.5 、| \TU/TimesNewRoman(1)/m/n/10.5 TransactionServi
+ce\TU/AdobeSongStd(0)/m/n/10.5 、| \TU/TimesNewRoman(1)/m/n/10.5 StatisticsServi
+ce \TU/AdobeSongStd(0)/m/n/10.5 和
  []
 
 
-Underfull \hbox (badness 1436) in paragraph at lines 163--163
-[]|\TU/TimesNewRoman(0)/m/n/8 5.3 assistant_test_log \TU/AdobeSongStd(0)/m/n/8 
+Underfull \hbox (badness 10000) in paragraph at lines 156--156
+[]|\TU/TimesNewRoman(1)/m/n/8 5.3 \TU/AdobeSongStd(0)/m/n/8 数 据 库 设 计 中 的
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 164--164
+[]|\TU/TimesNewRoman(1)/m/n/8 5.2 AI \TU/AdobeSongStd(0)/m/n/8 模 块 设 计；| \TU/Ti
+mesNewRoman(1)/m/n/8 6.1 \TU/AdobeSongStd(0)/m/n/8 响 应
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 164--164
+\TU/AdobeSongStd(0)/m/n/8 结 构 \TU/TimesNewRoman(1)/m/n/8 trace/explain\TU/Adobe
+SongStd(0)/m/n/8 ；| \TU/TimesNewRoman(1)/m/n/8 6.7 \TU/AdobeSongStd(0)/m/n/8 统 
+计
+ []
+
+
+Underfull \hbox (badness 3250) in paragraph at lines 164--164
+\TU/TimesNewRoman(1)/m/n/8 explain/exportUrl\TU/AdobeSongStd(0)/m/n/8 ；| \TU/Ti
+mesNewRoman(1)/m/n/8 7.6 \TU/AdobeSongStd(0)/m/n/8 交 互 优
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 166--166
+[]|\TU/TimesNewRoman(1)/m/n/8 5.3 assistant_test_log \TU/AdobeSongStd(0)/m/n/8 
 数 据 表；|
  []
 
@@ -2977,7 +3175,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [8]
-Overfull \hbox (7.3182pt too wide) in paragraph at lines 218--233
+Overfull \hbox (7.3182pt too wide) in paragraph at lines 221--236
  [][] 
  []
 
@@ -2991,9 +3189,15 @@ Underfull \vbox (badness 4699) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11]
-Underfull \hbox (badness 4108) in paragraph at lines 282--282
-[]|\TU/TimesNewRoman(0)/m/n/8 5.3 assistant_test_log\TU/AdobeSongStd(0)/m/n/8 ；
-| \TU/TimesNewRoman(0)/m/n/8 7.1–
+Underfull \hbox (badness 1112) in paragraph at lines 281--281
+[]|\TU/AdobeSongStd(0)/m/n/8 常 见 问 题 从 \TU/TimesNewRoman(1)/m/n/8 faq_knowledge
+ \TU/AdobeSongStd(0)/m/n/8 表 返
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 285--285
+[]|\TU/TimesNewRoman(1)/m/n/8 5.3 assistant_test_log\TU/AdobeSongStd(0)/m/n/8 ；
+| \TU/TimesNewRoman(1)/m/n/8 7.1–
  []
 
 [12]
@@ -3006,12 +3210,18 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [15]
+Underfull \hbox (badness 1412) in paragraph at lines 365--366
+[]\TU/AdobeSongStd(0)/m/n/12.045 统 计 分 析 由 \TU/TimesNewRoman(1)/m/n/12.045 Stat
+isticsServiceImpl \TU/AdobeSongStd(0)/m/n/12.045 负 责，|  它 根 据 前 端 或 \TU/TimesNe
+wRoman(1)/m/n/12.045 AI \TU/AdobeSongStd(0)/m/n/12.045 解 析 出 的
+ []
+
+File: image/fig-tech-stack.png Graphic file (type bmp)
+<image/fig-tech-stack.png>
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [16]
-File: image/fig-tech-stack.pdf Graphic file (type pdf)
-<use image/fig-tech-stack.pdf>
-
 [17] [18
 
 ]
@@ -3019,40 +3229,49 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [19]
 [20]
-File: image/fig-ai-usecase.pdf Graphic file (type pdf)
-<use image/fig-ai-usecase.pdf>
+File: image/fig-ai-usecase.png Graphic file (type bmp)
+<image/fig-ai-usecase.png>
  [21] [22
 
 ]
-File: image/fig-system-architecture.pdf Graphic file (type pdf)
-<use image/fig-system-architecture.pdf>
+File: image/fig-system-architecture.png Graphic file (type bmp)
+<image/fig-system-architecture.png>
+
+Underfull \vbox (badness 1917) has occurred while \output is active []
+
  [23]
-Overfull \hbox (0.51575pt too wide) in paragraph at lines 473--473
-[]|\TU/TimesNewRoman(0)/m/n/10.5 FaqKnowledgeService.java| 
+Overfull \hbox (0.51575pt too wide) in paragraph at lines 476--476
+[]|\TU/TimesNewRoman(1)/m/n/10.5 FaqKnowledgeService.java| 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [24]
-File: image/fig-ai-request-architecture.pdf Graphic file (type pdf)
-<use image/fig-ai-request-architecture.pdf>
+File: image/fig-ai-request-architecture.png Graphic file (type bmp)
+<image/fig-ai-request-architecture.png>
 
 [25]
-File: image/fig-database-er.pdf Graphic file (type pdf)
-<use image/fig-database-er.pdf>
+File: image/fig-database-er.png Graphic file (type bmp)
+<image/fig-database-er.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [26]
+Underfull \hbox (badness 10000) in paragraph at lines 539--540
+[]|\TU/AdobeSongStd(0)/m/n/10.5 普 通 \TU/TimesNewRoman(1)/m/n/10.5 AI \TU/AdobeS
+ongStd(0)/m/n/10.5 聊 天 请 求，|  返 回 完 整
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [27]
 [28]
-File: image/fig-ai-chat-flow.pdf Graphic file (type pdf)
-<use image/fig-ai-chat-flow.pdf>
+File: image/fig-ai-chat-flow.png Graphic file (type bmp)
+<image/fig-ai-chat-flow.png>
 
-Overfull \hbox (93.8946pt too wide) in paragraph at lines 561--562
+Overfull \hbox (93.8946pt too wide) in paragraph at lines 564--565
  [][] 
  []
 
@@ -3069,7 +3288,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [32]
-Overfull \hbox (7.31819pt too wide) in paragraph at lines 611--620
+Overfull \hbox (7.31819pt too wide) in paragraph at lines 614--623
  [][] 
  []
 
@@ -3077,36 +3296,64 @@ Overfull \hbox (7.31819pt too wide) in paragraph at lines 611--620
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [33]
+Underfull \hbox (badness 10000) in paragraph at lines 629--630
+[]\TU/TimesNewRoman(1)/m/n/12.045 handleTransactions \TU/AdobeSongStd(0)/m/n/12
+.045 根 据 解 析 结 果 构 造 \TU/TimesNewRoman(1)/m/n/12.045 TransactionQueryDTO\TU/Ado
+beSongStd(0)/m/n/12.045 ，|
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 629--630
+\TU/AdobeSongStd(0)/m/n/12.045 并 调 用 \TU/TimesNewRoman(1)/m/n/12.045 Time.fillT
+imeRange \TU/AdobeSongStd(0)/m/n/12.045 填 充 \TU/TimesNewRoman(1)/m/n/12.045 sta
+rtTime \TU/AdobeSongStd(0)/m/n/12.045 和 \TU/TimesNewRoman(1)/m/n/12.045 endTime
+\TU/AdobeSongStd(0)/m/n/12.045 。|  随 后 系 统
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 629--630
+\TU/AdobeSongStd(0)/m/n/12.045 调 用 \TU/TimesNewRoman(1)/m/n/12.045 TransactionS
+erviceImpl.getTransactions \TU/AdobeSongStd(0)/m/n/12.045 查 询 流 水，|  底 层 \TU/Ti
+mesNewRoman(1)/m/n/12.045 SQL \TU/AdobeSongStd(0)/m/n/12.045 由
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 629--630
+\TU/TimesNewRoman(1)/m/n/12.045 TransactionMapper.xml \TU/AdobeSongStd(0)/m/n/1
+2.045 中 的 \TU/TimesNewRoman(1)/m/n/12.045 selectTransactions \TU/AdobeSongStd(0
+)/m/n/12.045 完 成。|  查 询 结 果 再 由
+ []
+
 File: image/fig-transaction-multiturn.png Graphic file (type bmp)
 <image/fig-transaction-multiturn.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [34]
-Underfull \hbox (badness 10000) in paragraph at lines 649--649
-[]|\TU/TimesNewRoman(0)/m/n/10.5 txnType= \TU/AdobeSongStd(0)/m/n/10.5 支 出\TU/T
-imesNewRoman(0)/m/n/10.5 , limit=3,
+Underfull \hbox (badness 10000) in paragraph at lines 652--652
+[]|\TU/TimesNewRoman(1)/m/n/10.5 txnType= \TU/AdobeSongStd(0)/m/n/10.5 支 出\TU/T
+imesNewRoman(1)/m/n/10.5 , limit=3,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 653--653
-[]|\TU/TimesNewRoman(0)/m/n/10.5 txnType= \TU/AdobeSongStd(0)/m/n/10.5 支 出\TU/T
-imesNewRoman(0)/m/n/10.5 ,
+Underfull \hbox (badness 10000) in paragraph at lines 656--656
+[]|\TU/TimesNewRoman(1)/m/n/10.5 txnType= \TU/AdobeSongStd(0)/m/n/10.5 支 出\TU/T
+imesNewRoman(1)/m/n/10.5 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 653--653
-\TU/TimesNewRoman(0)/m/n/10.5 timeRange=recent_days,
+Underfull \hbox (badness 10000) in paragraph at lines 656--656
+\TU/TimesNewRoman(1)/m/n/10.5 timeRange=recent_days,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 655--655
-[]|\TU/TimesNewRoman(0)/m/n/10.5 txnType= \TU/AdobeSongStd(0)/m/n/10.5 收 入\TU/T
-imesNewRoman(0)/m/n/10.5 , day=17, need-
+Underfull \hbox (badness 10000) in paragraph at lines 658--658
+[]|\TU/TimesNewRoman(1)/m/n/10.5 txnType= \TU/AdobeSongStd(0)/m/n/10.5 收 入\TU/T
+imesNewRoman(1)/m/n/10.5 , day=17,
  []
 
 
-Overfull \hbox (7.31819pt too wide) in paragraph at lines 668--681
+Overfull \hbox (7.31819pt too wide) in paragraph at lines 671--684
  [][] 
  []
 
@@ -3124,113 +3371,171 @@ Overfull \vbox (56.55319pt too high) has occurred while \output is active []
 
 
 [37]
+Underfull \hbox (badness 3525) in paragraph at lines 699--700
+[]\TU/AdobeSongStd(0)/m/n/12.045 前 端 根 据 \TU/TimesNewRoman(1)/m/n/12.045 Assist
+antChatResponse \TU/AdobeSongStd(0)/m/n/12.045 中 的 \TU/TimesNewRoman(1)/m/n/12.
+045 chartType \TU/AdobeSongStd(0)/m/n/12.045 和 \TU/TimesNewRoman(1)/m/n/12.045 
+chartData \TU/AdobeSongStd(0)/m/n/12.045 渲 染 图 表。|
+ []
+
+File: image/fig-ai-statistics-chart-ui.png Graphic file (type bmp)
+<image/fig-ai-statistics-chart-ui.png>
+[38]
 File: image/fig-ai-brief-card.png Graphic file (type bmp)
 <image/fig-ai-brief-card.png>
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \hbox (badness 1596) in paragraph at lines 755--756
+[]\TU/TimesNewRoman(1)/m/n/12.045 handleTransfer \TU/AdobeSongStd(0)/m/n/12.045
+ 首 先 解 析 收 款 账 号、|  收 款 人 昵 称、|  金 额、|  备 注 和
+ []
 
- [38]
+[39]
 File: image/fig-ai-transfer-flow.png Graphic file (type bmp)
 <image/fig-ai-transfer-flow.png>
+File: image/fig-ai-transfer-confirm-ui.png Graphic file (type bmp)
+<image/fig-ai-transfer-confirm-ui.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [39]
+ [40]
 File: image/fig-reference-transfer-flow.png Graphic file (type bmp)
 <image/fig-reference-transfer-flow.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [40]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
  [41]
-[42]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [43
+ [42]
+[43] [44
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [44]
-Underfull \vbox (badness 7649) has occurred while \output is active []
-
  [45]
-Underfull \hbox (badness 10000) in paragraph at lines 892--892
-[]|\TU/TimesNewRoman(0)/m/n/8 transactions / transac-
+[46] [47]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [48]
+File: image/fig_7_3_backend_test_cases_time.pdf Graphic file (type pdf)
+<use image/fig_7_3_backend_test_cases_time.pdf>
+
+[49]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [50]
+Underfull \hbox (badness 10000) in paragraph at lines 1023--1023
+[]|\TU/TimesNewRoman(1)/m/n/8 transactions /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 894--894
-[]|\TU/TimesNewRoman(0)/m/n/8 statistics / statis-
+Underfull \hbox (badness 10000) in paragraph at lines 1025--1025
+[]|\TU/TimesNewRoman(1)/m/n/8 statistics /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 896--896
-[]|\TU/TimesNewRoman(0)/m/n/8 transfer / trans-
+Underfull \hbox (badness 10000) in paragraph at lines 1027--1027
+[]|\TU/TimesNewRoman(1)/m/n/8 transfer /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 898--898
-[]|\TU/TimesNewRoman(0)/m/n/8 other \TU/AdobeSongStd(0)/m/n/8 后 进 入
+Underfull \hbox (badness 10000) in paragraph at lines 1029--1029
+[]|\TU/TimesNewRoman(1)/m/n/8 other \TU/AdobeSongStd(0)/m/n/8 后 进 入
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 900--900
-[]|\TU/TimesNewRoman(0)/m/n/8 emotion_support /
+Underfull \hbox (badness 10000) in paragraph at lines 1031--1031
+[]|\TU/TimesNewRoman(1)/m/n/8 emotion_support /
  []
 
-[46]
-Underfull \hbox (badness 1708) in paragraph at lines 927--928
-\TU/AdobeSongStd(0)/m/n/8 逻 辑 和 \TU/TimesNewRoman(0)/m/n/8 repeat-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 929--929
-[]|\TU/TimesNewRoman(0)/m/n/8 other /
+File: image/fig_7_4_intent_routing_pass_rate.pdf Graphic file (type pdf)
+<use image/fig_7_4_intent_routing_pass_rate.pdf>
+[51]
+Underfull \hbox (badness 7631) in paragraph at lines 1071--1072
+[]|\TU/AdobeSongStd(0)/m/n/8 增 加 追 问 日
  []
 
 
-Overfull \hbox (7.3247pt too wide) in paragraph at lines 944--977
+Underfull \hbox (badness 10000) in paragraph at lines 1071--1072
+\TU/AdobeSongStd(0)/m/n/8 期 逻 辑 和
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1071--1072
+\TU/TimesNewRoman(1)/m/n/8 repeatMode \TU/AdobeSongStd(0)/m/n/8 示
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1073--1073
+[]|\TU/TimesNewRoman(1)/m/n/8 other /
+ []
+
+
+Overfull \hbox (7.3247pt too wide) in paragraph at lines 1088--1121
  [][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [47]
-Underfull \hbox (badness 1509) in paragraph at lines 993--993
-[]|\TU/TimesNewRoman(0)/m/n/8 FAQ \TU/AdobeSongStd(0)/m/n/8 检 索 \TU/TimesNewRom
-an(0)/m/n/8 no_answer \TU/AdobeSongStd(0)/m/n/8 后 进 入 \TU/TimesNewRoman(0)/m/n/
-8 fall-
+ [52]
+Underfull \hbox (badness 1337) in paragraph at lines 1135--1135
+[]|\TU/TimesNewRoman(1)/m/n/8 containsUnsupportedScope \TU/AdobeSongStd(0)/m/n/
+8 拦 截 消 费
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 995--995
-[]|\TU/TimesNewRoman(0)/m/n/8 handleFaqOrFallback \TU/AdobeSongStd(0)/m/n/8 调 用
+Underfull \hbox (badness 10000) in paragraph at lines 1137--1137
+[]|\TU/TimesNewRoman(1)/m/n/8 FAQ \TU/AdobeSongStd(0)/m/n/8 检 索 \TU/TimesNewRom
+an(1)/m/n/8 no_answer \TU/AdobeSongStd(0)/m/n/8 后 进 入
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1139--1139
+[]|\TU/TimesNewRoman(1)/m/n/8 handleFaqOrFallback \TU/AdobeSongStd(0)/m/n/8 调 用
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 995--995
-\TU/TimesNewRoman(0)/m/n/8 faq_knowledge \TU/AdobeSongStd(0)/m/n/8 表，|  并 写 入
+Underfull \hbox (badness 10000) in paragraph at lines 1139--1139
+\TU/TimesNewRoman(1)/m/n/8 faq_knowledge \TU/AdobeSongStd(0)/m/n/8 表，|  并 写 入
  []
 
-[48] [49] [50]
+[53] [54]
+File: image/fig_7_5_faq_retrieval_distribution.pdf Graphic file (type pdf)
+<use image/fig_7_5_faq_retrieval_distribution.pdf>
+ [55]
+Underfull \vbox (badness 7326) has occurred while \output is active []
+
+ [56]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [51]
-[52]
-Underfull \hbox (badness 3343) in paragraph at lines 1125--1125
+ [57]
+Underfull \hbox (badness 3536) in paragraph at lines 1281--1282
+[]\TU/AdobeSongStd(0)/m/n/12.045 匿 名 反 馈 测 试 模 块 会 在 \TU/TimesNewRoman(1)/m/n/1
+2.045 assistant_test_log \TU/AdobeSongStd(0)/m/n/12.045 表 中 写 入 三 类 记 录：|
+ []
+
+[58]
+Underfull \hbox (badness 3343) in paragraph at lines 1297--1297
 []|\TU/AdobeSongStd(0)/m/n/8 响 应 耗
  []
 
-[53]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [54]
-[55]
+Underfull \hbox (badness 3343) in paragraph at lines 1297--1298
+[]|\TU/AdobeSongStd(0)/m/n/8 语 言 表
+ []
+
+File: image/fig_7_10_usability_scores_grouped_bar.pdf Graphic file (type pdf)
+<use image/fig_7_10_usability_scores_grouped_bar.pdf>
+
+Underfull \vbox (badness 3323) has occurred while \output is active []
+
+ [59]
+File: image/fig_7_7_response_time_steps_trend.pdf Graphic file (type pdf)
+<use image/fig_7_7_response_time_steps_trend.pdf>
+
+[60] [61] [62]
 File: image/fig-trace-ui.png Graphic file (type bmp)
 <image/fig-trace-ui.png>
 File: image/fig-statistics-ui.png Graphic file (type bmp)
@@ -3238,71 +3543,150 @@ File: image/fig-statistics-ui.png Graphic file (type bmp)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [56]
+ [63]
+[64]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [57]
-[58]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [59
+ [65
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [60]
-[61] [62
+ [66]
+[67] [68
 
-] [63] [64
+] [69] [70
 
-] (./main.bbl [65] [66
+] (./main.bbl [71] [72
 
 ]
-Underfull \hbox (badness 2285) in paragraph at lines 36--42
-[]\TU/TimesNewRoman(0)/m/n/10.5 Bank of America.  A decade of AI innovation: Bo
-fA’s virtual assistant erica sur-
+Underfull \hbox (badness 10000) in paragraph at lines 24--27
+[]\TU/TimesNewRoman(1)/m/n/10.5 ALCAZAR J, BAIRD S, CRONENWETH E, et al.  Core 
+banking systems and options for
  []
 
 
-Underfull \hbox (badness 5939) in paragraph at lines 36--42
-\TU/TimesNewRoman(0)/m/n/10.5 passes 3 billion client interactions[M/OL].  Char
-lotte: Bank of America News-
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
+[]\TU/TimesNewRoman(1)/m/n/10.5 CRISANTO J C, LEUTERIO C B, PRENIO J, et al.  R
+egulating AI in the financial
  []
 
 
-Underfull \hbox (badness 1400) in paragraph at lines 44--49
-[]\TU/TimesNewRoman(0)/m/n/10.5 JPMorgan Chase & Co.  2016 annual report[M/OL].
-  New York: JPMorgan Chase
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
+\TU/TimesNewRoman(1)/m/n/10.5 sector: recent developments and main challenges: 
+FSI Insights No. 63[R].  Basel: Bank
  []
 
-) [67] [68
 
-] [69]
+Underfull \hbox (badness 10000) in paragraph at lines 36--42
+[]\TU/TimesNewRoman(1)/m/n/10.5 Bank of America.  A decade of AI innovation: Bo
+fA’s virtual assistant erica surpasses
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 36--42
+\TU/TimesNewRoman(1)/m/n/10.5 3 billion client interactions[M/OL].  Charlotte: 
+Bank of America Newsroom, 2025.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 36--42
+[][]$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][][][][][][][] [] [][]
+[] [] [][][][][][][] [] [][][][][][][][] [] [][][][][][][][][][][][][][][] [] [
+][][][] [] [][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--49
+[]\TU/TimesNewRoman(1)/m/n/10.5 JPMorgan Chase & Co.  2016 annual report[M/OL].
+  New York: JPMorgan Chase &
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--49
+\TU/TimesNewRoman(1)/m/n/10.5 Co., 2017.  [][]$[][][][][] [] [] [] [][][] [] []
+[][][][][][][][][][][][] [] [][][] [] [][][][][][][] [] [][][] [] [][][][] [] [
+][][][][][][][][][][][][][][][][][][][][][][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--62
+[]\TU/TimesNewRoman(1)/m/n/10.5 National Institute of Standards and Technology.
+  Artificial intelligence risk management
+ []
+
+
+Underfull \hbox (badness 4608) in paragraph at lines 58--62
+\TU/TimesNewRoman(1)/m/n/10.5 framework: AI RMF 1.0: NIST AI 100-1[R].  Gaither
+sburg: National Institute of Standards
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 65--68
+[]\TU/TimesNewRoman(1)/m/n/10.5 International Committee on Credit Reporting.  C
+redit scoring approaches guidelines[R].
+ []
+
+
+Underfull \hbox (badness 3219) in paragraph at lines 71--75
+[]\TU/TimesNewRoman(1)/m/n/10.5 VASWANI A, SHAZEER N, PARMAR N, et al.  Attenti
+on is all you need[C]//Advances in
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 80--84
+[]\TU/TimesNewRoman(1)/m/n/10.5 BROWN T B, MANN B, RYDER N, et al.  Language mo
+dels are few-shot learners[C]//
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--108
+[]\TU/TimesNewRoman(1)/m/n/10.5 Apache ECharts Team.  Apache ECharts documentat
+ion[M/OL].  Wilmington: Apache
+ []
+
+) [73] [74
+
+] [75]
+Underfull \hbox (badness 1215) in paragraph at lines 1596--1596
+[]|\TU/TimesNewRoman(1)/m/n/10.95 transactions \TU/AdobeSongStd(0)/m/n/10.95 基 
+础 意
+ []
+
 
 Package xeCJK Warning: Unknown CJK family `\CJKttdefault' is being ignored.
 (xeCJK)                
 (xeCJK)                Try to use `\setCJKmonofont[<...>]{<...>}' to define
 (xeCJK)                it.
 
-[70] [71] (./main.aux)
+[76]
+Underfull \hbox (badness 10000) in paragraph at lines 1649--1650
+[]|\TU/AdobeSongStd(0)/m/n/10.95 记 录 测 试 开 始 时 间、|  匿 名 角 色、|
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [77]
+[78] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/08/05>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 56A62F05DAE99FFE5B19EE98BC966FC7;7458.
+(rerunfilecheck)             Checksum: F44051BC3FE3621DED354F0B0559193B;7558.
  )
 (\end occurred inside a group at level 1)
 
-### semi simple group (level 1) entered at line 75 (\begingroup)
+### semi simple group (level 1) entered at line 78 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 22321 strings out of 468168
- 458854 string characters out of 5432815
- 882175 words of memory out of 5000000
- 50701 multiletter control sequences out of 15000+600000
- 648666 words of font info for 205 fonts, out of 8000000 for 9000
+ 23061 strings out of 468168
+ 478158 string characters out of 5432815
+ 905364 words of memory out of 5000000
+ 51405 multiletter control sequences out of 15000+600000
+ 648786 words of font info for 220 fonts, out of 8000000 for 9000
  1349 hyphenation exceptions out of 8191
- 89i,10n,120p,2713b,732s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,10n,120p,2428b,837s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (81 pages).
+Output written on main.xdv (88 pages, 1316464 bytes).
